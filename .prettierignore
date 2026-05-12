@@ -1,0 +1,9 @@
+.next
+node_modules
+out
+dist
+.env*
+src/data/sources/*.pdf
+review.md
+playwright-report
+test-results

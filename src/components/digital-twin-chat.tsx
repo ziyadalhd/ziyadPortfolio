@@ -1,10 +1,24 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import {
+  FormEvent,
+  KeyboardEvent,
+  memo,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
-type Message = {
-  role: "user" | "assistant";
-  content: string;
+import type { ChatMessage } from "@/types/chat";
+
+import { MessageContent } from "./DigitalTwinChat/renderMessageContent";
+
+type ChatStatus = "idle" | "sending" | "success" | "error";
+
+type UiMessage = ChatMessage & {
+  id: string;
+  isSeed?: boolean;
 };
 
 const starterPrompts = [
@@ -13,78 +27,122 @@ const starterPrompts = [
   "What type of opportunities is he looking for?",
 ];
 
-function renderMessageContent(content: string) {
-  const cleaned = content
-    .replace(/\r\n/g, "\n")
-    .replace(/\u00a0/g, " ")
-    .replace(/```/g, "")
-    .replace(/\*\*(.*?)\*\*/g, "$1")
-    .replace(/__(.*?)__/g, "$1")
-    .replace(/`([^`]+)`/g, "$1")
-    .replace(/[ \t]+\n/g, "\n")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim();
+const STORAGE_KEY = "ziyad-digital-twin-chat:v1";
+const SEED_GREETING =
+  "Hi, I am Ziyad's Digital Twin. Feel free to ask about my background, projects, skills, and career direction.";
+const canUseStreamingResponses =
+  typeof ReadableStream !== "undefined" && typeof TextDecoder !== "undefined";
 
-  const blocks = cleaned
-    .split(/\n{2,}/)
-    .map((block) => block.trim())
-    .filter(Boolean);
-
-  return (
-    <div className="twin-content">
-      {blocks.map((block, index) => {
-        const lines = block
-          .split("\n")
-          .map((line) => line.trim())
-          .filter(Boolean);
-
-        if (lines.length > 0 && lines.every((line) => /^[-*•]\s+/.test(line))) {
-          return (
-            <ul key={`ul-${index}`}>
-              {lines.map((line, lineIndex) => (
-                <li key={`ul-line-${lineIndex}`}>
-                  {line.replace(/^[-*•]\s+/, "")}
-                </li>
-              ))}
-            </ul>
-          );
-        }
-
-        if (lines.length > 0 && lines.every((line) => /^\d+[.)]\s+/.test(line))) {
-          return (
-            <ol key={`ol-${index}`}>
-              {lines.map((line, lineIndex) => (
-                <li key={`ol-line-${lineIndex}`}>
-                  {line.replace(/^\d+[.)]\s+/, "")}
-                </li>
-              ))}
-            </ol>
-          );
-        }
-
-        return <p key={`p-${index}`}>{lines.join(" ")}</p>;
-      })}
-    </div>
-  );
+function createMessage(message: ChatMessage, isSeed = false): UiMessage {
+  return {
+    ...message,
+    id: createId(),
+    isSeed,
+  };
 }
 
+function createSeedMessages() {
+  return [
+    createMessage(
+      {
+        role: "assistant",
+        content: SEED_GREETING,
+      },
+      true,
+    ),
+  ];
+}
+
+function createId() {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+
+  return `message-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+function loadStoredMessages() {
+  if (typeof window === "undefined") return createSeedMessages();
+
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return createSeedMessages();
+
+    const parsed = JSON.parse(raw) as UiMessage[];
+    const validMessages = parsed.filter(
+      (message) =>
+        typeof message.id === "string" &&
+        (message.role === "user" || message.role === "assistant") &&
+        typeof message.content === "string" &&
+        message.content.trim().length > 0,
+    );
+
+    return validMessages.length > 0 ? validMessages : createSeedMessages();
+  } catch {
+    return createSeedMessages();
+  }
+}
+
+const MessageBubble = memo(function MessageBubble({
+  message,
+}: {
+  message: UiMessage;
+}) {
+  return (
+    <div
+      className={`twin-message ${
+        message.role === "user" ? "twin-user" : "twin-assistant"
+      }`}
+    >
+      <span className="twin-role">
+        {message.role === "user" ? "You" : "Digital Twin"}
+      </span>
+      <MessageContent content={message.content} />
+    </div>
+  );
+});
+
 export function DigitalTwinChat() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: "assistant",
-      content:
-        "Hi, I am Ziyad's Digital Twin. Feel free to ask about my background, projects, skills, and career direction.",
-    },
-  ]);
+  const [messages, setMessages] = useState<UiMessage[]>(createSeedMessages);
   const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<ChatStatus>("idle");
   const [error, setError] = useState<string | null>(null);
+  const [lastUserPrompt, setLastUserPrompt] = useState<string | null>(null);
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
+  const messagesRef = useRef(messages);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const storageReadyRef = useRef(false);
+
+  const loading = status === "sending";
 
   const canSubmit = useMemo(
     () => input.trim().length > 0 && !loading,
     [input, loading],
   );
+
+  const hasUserMessage = useMemo(
+    () => messages.some((message) => message.role === "user"),
+    [messages],
+  );
+
+  const lastMessageContentLength =
+    messages[messages.length - 1]?.content.length ?? 0;
+
+  useEffect(() => {
+    messagesRef.current = messages;
+    if (!storageReadyRef.current) return;
+
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+  }, [messages]);
+
+  useEffect(() => {
+    const storedMessages = loadStoredMessages();
+    storageReadyRef.current = true;
+    queueMicrotask(() => {
+      messagesRef.current = storedMessages;
+      setMessages(storedMessages);
+    });
+  }, []);
 
   useEffect(() => {
     const container = messagesContainerRef.current;
@@ -93,25 +151,82 @@ export function DigitalTwinChat() {
       top: container.scrollHeight,
       behavior: "auto",
     });
-  }, [messages.length, loading]);
+  }, [messages.length, lastMessageContentLength, loading]);
 
-  async function sendMessage(content: string) {
-    const userMessage: Message = { role: "user", content };
-    const history = [...messages, userMessage].filter(
-      (msg) => msg.role !== "assistant" || msg.content !== messages[0]?.content,
-    );
+  useEffect(() => {
+    return () => abortControllerRef.current?.abort();
+  }, []);
 
-    setMessages((prev) => [...prev, userMessage]);
+  async function sendMessage(content: string, appendUserMessage = true) {
+    abortControllerRef.current?.abort();
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+
+    const userMessage = createMessage({ role: "user", content });
+    const nextMessages = appendUserMessage
+      ? [...messagesRef.current, userMessage]
+      : messagesRef.current;
+    const history = nextMessages
+      .filter((message) => !message.isSeed)
+      .map(({ role, content }) => ({ role, content }));
+
+    if (appendUserMessage) {
+      setMessages(nextMessages);
+    }
+
+    setLastUserPrompt(content);
     setInput("");
     setError(null);
-    setLoading(true);
+    setStatus("sending");
 
     try {
       const response = await fetch("/api/digital-twin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: history }),
+        body: JSON.stringify({
+          messages: history,
+          stream: canUseStreamingResponses,
+        }),
+        signal: abortController.signal,
       });
+
+      const contentType = response.headers?.get("content-type") ?? "";
+      if (
+        canUseStreamingResponses &&
+        response.ok &&
+        response.body &&
+        contentType.includes("text/plain")
+      ) {
+        const assistantMessage = createMessage({
+          role: "assistant",
+          content: "",
+        });
+
+        setMessages((prev) => [...prev, assistantMessage]);
+        const streamedReply = await readTextStream(response.body, (content) => {
+          setMessages((prev) =>
+            prev.map((message) =>
+              message.id === assistantMessage.id
+                ? { ...message, content }
+                : message,
+            ),
+          );
+        });
+
+        if (!streamedReply) {
+          throw new Error("The AI service returned an empty response.");
+        }
+
+        setMessages((prev) =>
+          prev.map((message) =>
+            message.id === assistantMessage.id
+              ? { ...message, content: streamedReply }
+              : message,
+          ),
+        );
+        setStatus("success");
+        return;
+      }
 
       const payload = (await response.json()) as {
         reply?: string;
@@ -124,14 +239,22 @@ export function DigitalTwinChat() {
 
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: payload.reply as string },
+        createMessage({ role: "assistant", content: payload.reply as string }),
       ]);
+      setStatus("success");
     } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") {
+        return;
+      }
+
       const message =
         err instanceof Error ? err.message : "Unexpected request error.";
       setError(message);
+      setStatus("error");
     } finally {
-      setLoading(false);
+      if (abortControllerRef.current === abortController) {
+        abortControllerRef.current = null;
+      }
     }
   }
 
@@ -141,54 +264,86 @@ export function DigitalTwinChat() {
     await sendMessage(input.trim());
   }
 
+  function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
+    if (
+      event.key !== "Enter" ||
+      event.shiftKey ||
+      event.nativeEvent.isComposing
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+    if (canSubmit) {
+      void sendMessage(input.trim());
+    }
+  }
+
   async function handleStarter(prompt: string) {
     if (loading) return;
     await sendMessage(prompt);
   }
 
+  function resetChat() {
+    abortControllerRef.current?.abort();
+    const seedMessages = createSeedMessages();
+    setMessages(seedMessages);
+    messagesRef.current = seedMessages;
+    setInput("");
+    setError(null);
+    setLastUserPrompt(null);
+    setStatus("idle");
+  }
+
+  function retryLastMessage() {
+    if (!lastUserPrompt || loading) return;
+    void sendMessage(lastUserPrompt, false);
+  }
+
   return (
     <div className="twin-shell">
       <div className="twin-header">
-        <h3>Digital Twin Chat</h3>
-        <p>Ask about projects, skills, education, and career journey.</p>
+        <div>
+          <h3>Digital Twin Chat</h3>
+          <p>Ask about projects, skills, education, and career journey.</p>
+        </div>
+        <button type="button" className="twin-reset" onClick={resetChat}>
+          Reset chat
+        </button>
       </div>
 
-      <div className="twin-prompts">
-        {starterPrompts.map((prompt) => (
-          <button
-            key={prompt}
-            type="button"
-            onClick={() => void handleStarter(prompt)}
-            className="twin-prompt"
-          >
-            {prompt}
-          </button>
+      {!hasUserMessage ? (
+        <div className="twin-prompts">
+          {starterPrompts.map((prompt) => (
+            <button
+              key={prompt}
+              type="button"
+              onClick={() => void handleStarter(prompt)}
+              className="twin-prompt"
+            >
+              {prompt}
+            </button>
+          ))}
+        </div>
+      ) : null}
+
+      <div
+        className="twin-messages"
+        aria-live="polite"
+        aria-busy={loading}
+        role="log"
+        ref={messagesContainerRef}
+      >
+        {messages.map((message) => (
+          <MessageBubble key={message.id} message={message} />
         ))}
       </div>
 
-      <div className="twin-messages" aria-live="polite" ref={messagesContainerRef}>
-        {messages.map((message, index) => (
-          <div
-            key={`${message.role}-${index}-${message.content.slice(0, 24)}`}
-            className={`twin-message ${
-              message.role === "user" ? "twin-user" : "twin-assistant"
-            }`}
-          >
-            <span className="twin-role">
-              {message.role === "user" ? "You" : "Digital Twin"}
-            </span>
-            {renderMessageContent(message.content)}
-          </div>
-        ))}
-        {loading ? (
-          <div className="twin-message twin-assistant">
-            <span className="twin-role">Digital Twin</span>
-            <div className="twin-content">
-              <p>Thinking...</p>
-            </div>
-          </div>
-        ) : null}
-      </div>
+      {loading ? (
+        <p className="twin-status" role="status">
+          Digital Twin is thinking...
+        </p>
+      ) : null}
 
       <form className="twin-form" onSubmit={handleSubmit}>
         <label htmlFor="digital-twin-input" className="sr-only">
@@ -198,6 +353,7 @@ export function DigitalTwinChat() {
           id="digital-twin-input"
           value={input}
           onChange={(event) => setInput(event.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder="Ask about experience, skills, projects, education, or goals..."
           rows={3}
           disabled={loading}
@@ -207,7 +363,40 @@ export function DigitalTwinChat() {
         </button>
       </form>
 
-      {error ? <p className="twin-error">{error}</p> : null}
+      {error ? (
+        <div className="twin-error" role="alert">
+          <p>{error}</p>
+          {lastUserPrompt ? (
+            <button type="button" onClick={retryLastMessage} disabled={loading}>
+              Retry
+            </button>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
+}
+
+async function readTextStream(
+  body: ReadableStream<Uint8Array>,
+  onContent: (content: string) => void,
+) {
+  const reader = body.getReader();
+  const decoder = new TextDecoder();
+  let content = "";
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    content += decoder.decode(value, { stream: true });
+    onContent(content);
+  }
+
+  const trimmed = content.trim();
+  if (trimmed !== content) {
+    onContent(trimmed);
+  }
+
+  return trimmed;
 }
