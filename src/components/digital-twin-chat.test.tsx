@@ -5,15 +5,27 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { DigitalTwinChat } from "./digital-twin-chat";
 
 // In happy-dom, ReadableStream and TextDecoder are available, so supportsStreaming()
-// returns true and the component sends stream: true. Both tests below use a JSON
-// content-type response so the component falls through to the JSON (non-streaming)
-// path regardless.
+// returns true and the component sends stream: true. JSON-content-type responses fall
+// through to the non-streaming path; text/plain responses use the streaming reader.
 function makeJsonFetch(reply: string) {
   return vi.fn().mockResolvedValue({
     ok: true,
     headers: new Headers({ "content-type": "application/json" }),
     body: null,
     json: async () => ({ reply }),
+  });
+}
+
+function makeEmptyStreamFetch() {
+  return vi.fn().mockResolvedValue({
+    ok: true,
+    headers: new Headers({ "content-type": "text/plain; charset=utf-8" }),
+    body: new ReadableStream({
+      start(controller) {
+        controller.close();
+      },
+    }),
+    json: async () => ({}),
   });
 }
 
@@ -64,6 +76,56 @@ describe("DigitalTwinChat", () => {
     expect(
       screen.getByText(/Hi, I am Ziyad's Digital Twin/i),
     ).toBeInTheDocument();
+  });
+
+  it("removes empty streaming bubble when the stream returns no content", async () => {
+    const fetchMock = makeEmptyStreamFetch();
+    vi.stubGlobal("fetch", fetchMock);
+
+    const user = userEvent.setup();
+    render(<DigitalTwinChat />);
+
+    await user.type(
+      screen.getByLabelText(/ask about ziyad/i),
+      "test question{Enter}",
+    );
+
+    await waitFor(() =>
+      expect(screen.getByRole("alert")).toBeInTheDocument(),
+    );
+
+    // The empty streaming bubble must have been removed; only the seed greeting
+    // has a "Digital Twin" label — there should be exactly one.
+    expect(screen.getAllByText("Digital Twin")).toHaveLength(1);
+  });
+
+  it("retry after streaming failure does not include empty messages in history", async () => {
+    const fetchMock = makeEmptyStreamFetch();
+    vi.stubGlobal("fetch", fetchMock);
+
+    const user = userEvent.setup();
+    render(<DigitalTwinChat />);
+
+    await user.type(
+      screen.getByLabelText(/ask about ziyad/i),
+      "What skills?{Enter}",
+    );
+
+    await waitFor(() =>
+      expect(screen.getByRole("alert")).toBeInTheDocument(),
+    );
+
+    await user.click(screen.getByRole("button", { name: /retry/i }));
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+
+    const [, retryInit] = fetchMock.mock.calls[1] as [string, RequestInit];
+    const retryBody = JSON.parse(retryInit.body as string) as {
+      messages: { role: string; content: string }[];
+    };
+    expect(
+      retryBody.messages.every((m) => m.content.trim().length > 0),
+    ).toBe(true);
   });
 
   it("submits a suggested question when tapped", async () => {

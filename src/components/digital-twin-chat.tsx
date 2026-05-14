@@ -11,7 +11,10 @@ import {
 } from "react";
 
 import type { ChatMessage } from "@/types/chat";
-import { MAX_MESSAGE_CONTENT_LENGTH } from "@/lib/request-validation";
+import {
+  MAX_HISTORY_MESSAGES,
+  MAX_MESSAGE_CONTENT_LENGTH,
+} from "@/lib/request-validation";
 
 import { MessageContent } from "./DigitalTwinChat/renderMessageContent";
 
@@ -115,6 +118,7 @@ export function DigitalTwinChat() {
   const [status, setStatus] = useState<ChatStatus>("idle");
   const [error, setError] = useState<string | null>(null);
   const [lastUserPrompt, setLastUserPrompt] = useState<string | null>(null);
+  const [showDelayMessage, setShowDelayMessage] = useState(false);
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
   const messagesRef = useRef(messages);
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -168,6 +172,15 @@ export function DigitalTwinChat() {
     return () => abortControllerRef.current?.abort();
   }, []);
 
+  useEffect(() => {
+    if (!loading) {
+      setShowDelayMessage(false);
+      return;
+    }
+    const timer = setTimeout(() => setShowDelayMessage(true), 8_000);
+    return () => clearTimeout(timer);
+  }, [loading]);
+
   async function sendMessage(content: string, appendUserMessage = true) {
     abortControllerRef.current?.abort();
     const abortController = new AbortController();
@@ -178,7 +191,8 @@ export function DigitalTwinChat() {
       ? [...messagesRef.current, userMessage]
       : messagesRef.current;
     const history = nextMessages
-      .filter((message) => !message.isSeed)
+      .filter((message) => !message.isSeed && message.content.trim().length > 0)
+      .slice(-MAX_HISTORY_MESSAGES)
       .map(({ role, content }) => ({ role, content }));
 
     if (appendUserMessage) {
@@ -189,6 +203,8 @@ export function DigitalTwinChat() {
     setInput("");
     setError(null);
     setStatus("sending");
+
+    let pendingStreamingMsgId: string | null = null;
 
     try {
       const streamingEnabled = supportsStreaming();
@@ -214,6 +230,7 @@ export function DigitalTwinChat() {
           content: "",
         });
 
+        pendingStreamingMsgId = assistantMessage.id;
         setMessages((prev) => [...prev, assistantMessage]);
         const streamedReply = await readTextStream(response.body, (content) => {
           setMessages((prev) =>
@@ -229,6 +246,7 @@ export function DigitalTwinChat() {
           throw new Error("The AI service returned an empty response.");
         }
 
+        pendingStreamingMsgId = null;
         setMessages((prev) =>
           prev.map((message) =>
             message.id === assistantMessage.id
@@ -255,6 +273,12 @@ export function DigitalTwinChat() {
       ]);
       setStatus("success");
     } catch (err) {
+      if (pendingStreamingMsgId !== null) {
+        const msgId = pendingStreamingMsgId;
+        setMessages((prev) => prev.filter((m) => m.id !== msgId));
+        pendingStreamingMsgId = null;
+      }
+
       if (err instanceof DOMException && err.name === "AbortError") {
         return;
       }
@@ -353,7 +377,9 @@ export function DigitalTwinChat() {
 
       {loading ? (
         <p className="twin-status" role="status">
-          Digital Twin is thinking...
+          {showDelayMessage
+            ? "Still working — the AI service may be experiencing delays."
+            : "Digital Twin is thinking..."}
         </p>
       ) : null}
 

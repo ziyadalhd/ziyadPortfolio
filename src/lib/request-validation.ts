@@ -12,7 +12,7 @@ const chatMessageSchema = z.object({
 });
 
 const requestSchema = z.object({
-  messages: z.array(chatMessageSchema).min(1).max(MAX_HISTORY_MESSAGES),
+  messages: z.array(chatMessageSchema).min(1),
   stream: z.boolean().optional(),
 });
 
@@ -31,6 +31,8 @@ const promptInjectionPatterns = [
   /disregard (your|all) (instructions?|rules?)/i,
   /new (instructions?|system prompt|rules)/i,
   /override (your|the) (instructions?|system|rules)/i,
+  /\bact as\b/i,
+  /from now on/i,
 ];
 
 export type ValidationResult =
@@ -68,6 +70,7 @@ export function validateRequestBodyText(bodyText: string): ValidationResult {
   }
 
   // Silently truncate to the tail so a large-history client can't inflate cost.
+  // The schema has no upper-bound constraint; this slice is the enforced limit.
   const messages = result.data.messages.slice(-MAX_HISTORY_MESSAGES);
 
   if (!messages.some((message) => message.role === "user")) {

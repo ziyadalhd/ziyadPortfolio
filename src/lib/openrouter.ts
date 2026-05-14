@@ -5,9 +5,8 @@ import { normalizeWhitespace } from "./text";
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 const DEFAULT_MODEL = "openai/gpt-oss-120b:free";
 const MODEL_TEMPERATURE = 0.5;
-const MAX_TOKENS = 600;
-const STREAM_CHUNK_TIMEOUT_MS = 10_000;
-const REQUEST_TIMEOUT_MS = 20_000;
+const MAX_TOKENS = 450;
+const REQUEST_TIMEOUT_MS = 30_000;
 const MAX_RETRIES = 1;
 
 type OpenRouterResponse = {
@@ -250,56 +249,45 @@ async function waitWithJitter() {
   await new Promise((resolve) => setTimeout(resolve, delayMs));
 }
 
+// Uses a push-based TransformStream instead of a pull-based ReadableStream.
+// Next.js (Turbopack dev server) buffers pull-based streams until they close
+// before forwarding to the HTTP client; with TransformStream, each write is
+// flushed immediately as it is produced.
 function transformOpenRouterStream(body: ReadableStream<Uint8Array>) {
+  const { readable, writable } = new TransformStream<Uint8Array, Uint8Array>();
+  const writer = writable.getWriter();
   const reader = body.getReader();
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
   let buffer = "";
 
-  return new ReadableStream<Uint8Array>({
-    async pull(controller) {
-      let timedOut = false;
-
-      const timeoutId = setTimeout(() => {
-        timedOut = true;
-        reader.cancel().catch(() => {});
-        controller.error(
-          new OpenRouterError("The AI service stopped responding.", 504),
-        );
-      }, STREAM_CHUNK_TIMEOUT_MS);
-
-      try {
+  void (async () => {
+    try {
+      while (true) {
         const { done, value } = await reader.read();
-        clearTimeout(timeoutId);
-
-        if (timedOut) return;
 
         if (done) {
-          flushBufferedLines(buffer, controller, encoder);
-          controller.close();
+          flushBufferedLinesToWriter(buffer, writer, encoder);
+          await writer.close();
           return;
         }
 
         buffer += decoder.decode(value, { stream: true });
         const lines = buffer.split("\n");
         buffer = lines.pop() ?? "";
-        flushBufferedLines(lines.join("\n"), controller, encoder);
-      } catch (error) {
-        clearTimeout(timeoutId);
-        if (!timedOut) {
-          controller.error(error);
-        }
+        await flushBufferedLinesToWriter(lines.join("\n"), writer, encoder);
       }
-    },
-    cancel() {
-      return reader.cancel();
-    },
-  });
+    } catch {
+      await writer.abort().catch(() => {});
+    }
+  })();
+
+  return readable;
 }
 
-function flushBufferedLines(
+async function flushBufferedLinesToWriter(
   rawLines: string,
-  controller: ReadableStreamDefaultController<Uint8Array>,
+  writer: WritableStreamDefaultWriter<Uint8Array>,
   encoder: TextEncoder,
 ) {
   for (const rawLine of rawLines.split("\n")) {
@@ -313,10 +301,11 @@ function flushBufferedLines(
       const parsed = JSON.parse(payload) as OpenRouterStreamChunk;
       const token = parsed.choices?.[0]?.delta?.content;
       if (token) {
-        controller.enqueue(encoder.encode(token));
+        await writer.write(encoder.encode(token));
       }
     } catch {
       console.warn("Skipping malformed OpenRouter stream chunk.");
     }
   }
 }
+

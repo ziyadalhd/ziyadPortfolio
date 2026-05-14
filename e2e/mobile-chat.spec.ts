@@ -1,11 +1,15 @@
 import { expect, test } from "@playwright/test";
 
+// Use JSON (non-streaming) to keep E2E mocks reliable across browsers.
+// Streaming behaviour is covered by the component unit tests.
 test.beforeEach(async ({ page }) => {
-  await page.route("**/api/digital-twin", async (route) => {
+  await page.route(/\/api\/digital-twin/, async (route) => {
     await route.fulfill({
       status: 200,
-      contentType: "text/plain; charset=utf-8",
-      body: "Ziyad focuses on mobile engineering, API integration, and clean architecture.",
+      contentType: "application/json",
+      body: JSON.stringify({
+        reply: "Ziyad focuses on mobile engineering, API integration, and clean architecture.",
+      }),
     });
   });
 });
@@ -13,6 +17,11 @@ test.beforeEach(async ({ page }) => {
 test("loads styled and interactive on iPhone Safari/WebKit", async ({
   page,
 }) => {
+  page.on("console", (msg) =>
+    console.log(`[PAGE ${msg.type().toUpperCase()}]`, msg.text()),
+  );
+  page.on("pageerror", (err) => console.error("[PAGE ERROR]", err.message));
+
   await page.goto("/");
 
   await expect(
@@ -30,7 +39,11 @@ test("loads styled and interactive on iPhone Safari/WebKit", async ({
     name: "What are Ziyad's strongest technical skills?",
   });
   await expect(prompt).toBeVisible();
-  await prompt.click();
+  // Wait for both the click and the API response to complete before asserting.
+  await Promise.all([
+    prompt.click(),
+    page.waitForResponse(/\/api\/digital-twin/),
+  ]);
   await expect(
     page.getByText(/Ziyad focuses on mobile engineering/i),
   ).toBeVisible();
@@ -41,8 +54,10 @@ test("loads styled and interactive on iPhone Safari/WebKit", async ({
   await page
     .getByLabel(/Ask about Ziyad's career/i)
     .fill("What kind of roles is Ziyad looking for?");
-  await page.getByRole("button", { name: /Ask Digital Twin/i }).click();
-
+  await Promise.all([
+    page.getByRole("button", { name: /Ask Digital Twin/i }).click(),
+    page.waitForResponse(/\/api\/digital-twin/),
+  ]);
   await expect(
     page.getByText(/Ziyad focuses on mobile engineering/i),
   ).toBeVisible();
