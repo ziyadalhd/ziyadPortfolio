@@ -1,12 +1,23 @@
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX_REQUESTS = 6;
 
+// NOTE: This limiter is in-memory and resets on every process restart.
+// On serverless runtimes (Vercel, etc.) it resets per cold start and is
+// therefore not a reliable production guard. Replace with a persistent
+// store (e.g. Upstash Redis / @vercel/kv) for real rate limiting.
+
 type Bucket = {
   count: number;
   resetAt: number;
 };
 
 const buckets = new Map<string, Bucket>();
+
+function purgeExpiredBuckets(now: number) {
+  for (const [key, bucket] of buckets) {
+    if (bucket.resetAt <= now) buckets.delete(key);
+  }
+}
 
 export type RateLimitResult =
   | { allowed: true }
@@ -27,6 +38,7 @@ export function getClientIp(req: Request) {
 
 export function checkRateLimit(identifier: string): RateLimitResult {
   const now = Date.now();
+  purgeExpiredBuckets(now);
   const existing = buckets.get(identifier);
 
   if (!existing || existing.resetAt <= now) {

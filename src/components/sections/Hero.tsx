@@ -1,10 +1,10 @@
-import { valuePillars } from "@/data/portfolio";
+import { personalInfo, valuePillars } from "@/data/portfolio";
 
 import { Metric } from "../ui/Metric";
 
 export function Hero() {
   return (
-    <section className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+    <section id="hero" className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
       <div className="space-y-6">
         <p className="inline-flex rounded-full border border-cyan-300/30 bg-cyan-500/10 px-4 py-2 text-xs uppercase tracking-[0.28em] text-cyan-200">
           Enterprise meets edgy
@@ -31,7 +31,7 @@ export function Hero() {
         </ul>
         <div className="flex flex-wrap gap-4">
           <a
-            href="https://www.linkedin.com/in/ziyad-alhdriti"
+            href={personalInfo.linkedin}
             target="_blank"
             rel="noreferrer"
             className="button-primary"
@@ -39,7 +39,7 @@ export function Hero() {
             View LinkedIn
           </a>
           <a
-            href="https://github.com/ziyadalhd"
+            href={personalInfo.github}
             target="_blank"
             rel="noreferrer"
             className="button-secondary"
@@ -52,10 +52,10 @@ export function Hero() {
       <aside className="rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5 p-6 shadow-2xl shadow-cyan-700/10">
         <p className="eyebrow text-slate-300">Snapshot</p>
         <div className="mt-6 space-y-5">
-          <Metric label="Expected Graduation" value="2027" />
-          <Metric label="GPA" value="3.73 / 4.00" />
-          <Metric label="Verified Volunteer Hours" value="262+" />
-          <Metric label="Location" value="Makkah, Saudi Arabia" />
+          <Metric label="Expected Graduation" value={personalInfo.expectedGraduation} />
+          <Metric label="GPA" value={personalInfo.gpa} />
+          <Metric label="Verified Volunteer Hours" value={personalInfo.volunteerHours} />
+          <Metric label="Location" value={personalInfo.location} />
         </div>
         <p className="mt-6 rounded-xl border border-emerald-300/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
           Open to mobile engineering opportunities and high-growth teams.

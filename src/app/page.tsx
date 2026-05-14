@@ -11,9 +11,9 @@ export default function Home() {
   return (
     <main
       id="main-content"
-      className="relative min-h-screen overflow-hidden bg-[#070b14] text-slate-100"
+      className="relative min-h-screen overflow-hidden bg-base text-slate-100"
     >
-      <a href="#main-content" className="skip-link">
+      <a href="#hero" className="skip-link">
         Skip to content
       </a>
 

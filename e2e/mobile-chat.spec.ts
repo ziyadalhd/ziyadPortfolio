@@ -30,18 +30,18 @@ test("loads styled and interactive on iPhone Safari/WebKit", async ({
     name: "What are Ziyad's strongest technical skills?",
   });
   await expect(prompt).toBeVisible();
-  await prompt.tap();
+  await prompt.click();
   await expect(
     page.getByText(/Ziyad focuses on mobile engineering/i),
   ).toBeVisible();
 
-  await page.getByRole("button", { name: /Reset chat/i }).tap();
+  await page.getByRole("button", { name: /Reset chat/i }).click();
   await expect(page.getByText(/Hi, I am Ziyad's Digital Twin/i)).toBeVisible();
 
   await page
     .getByLabel(/Ask about Ziyad's career/i)
     .fill("What kind of roles is Ziyad looking for?");
-  await page.getByRole("button", { name: /Ask Digital Twin/i }).tap();
+  await page.getByRole("button", { name: /Ask Digital Twin/i }).click();
 
   await expect(
     page.getByText(/Ziyad focuses on mobile engineering/i),

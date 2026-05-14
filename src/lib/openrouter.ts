@@ -5,7 +5,8 @@ import { normalizeWhitespace } from "./text";
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 const DEFAULT_MODEL = "openai/gpt-oss-120b:free";
 const MODEL_TEMPERATURE = 0.5;
-const MAX_TOKENS = 450;
+const MAX_TOKENS = 600;
+const STREAM_CHUNK_TIMEOUT_MS = 10_000;
 const REQUEST_TIMEOUT_MS = 20_000;
 const MAX_RETRIES = 1;
 
@@ -37,6 +38,8 @@ export class OpenRouterError extends Error {
 
 export function getOpenRouterConfig(req: Request) {
   const apiKey = process.env.OPENROUTER_API_KEY;
+  // Prefer the env var; the Origin header fallback is attacker-controlled
+  // and used only for OpenRouter attribution (no security boundary).
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL ??
     req.headers.get("origin") ??
@@ -139,41 +142,58 @@ export async function requestOpenRouterChatStream({
   systemPrompt: string;
   messages: ChatMessage[];
 }) {
-  try {
-    const response = await fetchOpenRouter({
-      apiKey,
-      model,
-      siteUrl,
-      systemPrompt,
-      messages,
-      stream: true,
-    });
-
-    if (!response.ok || !response.body) {
-      const upstreamBody = await response.text().catch(() => "");
-      console.error("OpenRouter streaming request failed", {
-        status: response.status,
-        body: upstreamBody,
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt += 1) {
+    try {
+      const response = await fetchOpenRouter({
+        apiKey,
+        model,
+        siteUrl,
+        systemPrompt,
+        messages,
+        stream: true,
       });
+
+      if (!response.ok || !response.body) {
+        const upstreamBody = await response.text().catch(() => "");
+        console.error("OpenRouter streaming request failed", {
+          status: response.status,
+          body: upstreamBody,
+        });
+
+        if (response.status >= 500 && attempt < MAX_RETRIES) {
+          await waitWithJitter();
+          continue;
+        }
+
+        throw new OpenRouterError("The AI service is temporarily unavailable.");
+      }
+
+      return transformOpenRouterStream(response.body);
+    } catch (error) {
+      if (isAbortError(error)) {
+        throw new OpenRouterError(
+          "The AI service took too long to respond.",
+          504,
+        );
+      }
+
+      if (error instanceof OpenRouterError) throw error;
+
+      if (attempt < MAX_RETRIES) {
+        console.warn(
+          "OpenRouter streaming request failed; retrying once.",
+          error,
+        );
+        await waitWithJitter();
+        continue;
+      }
+
+      console.error("OpenRouter streaming request failed unexpectedly", error);
       throw new OpenRouterError("The AI service is temporarily unavailable.");
     }
-
-    return transformOpenRouterStream(response.body);
-  } catch (error) {
-    if (isAbortError(error)) {
-      throw new OpenRouterError(
-        "The AI service took too long to respond.",
-        504,
-      );
-    }
-
-    if (error instanceof OpenRouterError) {
-      throw error;
-    }
-
-    console.error("OpenRouter streaming request failed unexpectedly", error);
-    throw new OpenRouterError("The AI service is temporarily unavailable.");
   }
+
+  throw new OpenRouterError("The AI service is temporarily unavailable.");
 }
 
 async function fetchOpenRouter({
@@ -238,17 +258,38 @@ function transformOpenRouterStream(body: ReadableStream<Uint8Array>) {
 
   return new ReadableStream<Uint8Array>({
     async pull(controller) {
-      const { done, value } = await reader.read();
-      if (done) {
-        flushBufferedLines(buffer, controller, encoder);
-        controller.close();
-        return;
-      }
+      let timedOut = false;
 
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split("\n");
-      buffer = lines.pop() ?? "";
-      flushBufferedLines(lines.join("\n"), controller, encoder);
+      const timeoutId = setTimeout(() => {
+        timedOut = true;
+        reader.cancel().catch(() => {});
+        controller.error(
+          new OpenRouterError("The AI service stopped responding.", 504),
+        );
+      }, STREAM_CHUNK_TIMEOUT_MS);
+
+      try {
+        const { done, value } = await reader.read();
+        clearTimeout(timeoutId);
+
+        if (timedOut) return;
+
+        if (done) {
+          flushBufferedLines(buffer, controller, encoder);
+          controller.close();
+          return;
+        }
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? "";
+        flushBufferedLines(lines.join("\n"), controller, encoder);
+      } catch (error) {
+        clearTimeout(timeoutId);
+        if (!timedOut) {
+          controller.error(error);
+        }
+      }
     },
     cancel() {
       return reader.cancel();

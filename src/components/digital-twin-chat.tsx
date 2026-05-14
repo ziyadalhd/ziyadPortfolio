@@ -11,6 +11,7 @@ import {
 } from "react";
 
 import type { ChatMessage } from "@/types/chat";
+import { MAX_MESSAGE_CONTENT_LENGTH } from "@/lib/request-validation";
 
 import { MessageContent } from "./DigitalTwinChat/renderMessageContent";
 
@@ -30,8 +31,16 @@ const starterPrompts = [
 const STORAGE_KEY = "ziyad-digital-twin-chat:v1";
 const SEED_GREETING =
   "Hi, I am Ziyad's Digital Twin. Feel free to ask about my background, projects, skills, and career direction.";
-const canUseStreamingResponses =
-  typeof ReadableStream !== "undefined" && typeof TextDecoder !== "undefined";
+const MAX_STORED_MESSAGES = 50;
+
+// Evaluated at call-time inside sendMessage (browser-only) so it reflects
+// the actual runtime environment rather than the SSR pre-render context.
+function supportsStreaming() {
+  return (
+    typeof ReadableStream !== "undefined" &&
+    typeof TextDecoder !== "undefined"
+  );
+}
 
 function createMessage(message: ChatMessage, isSeed = false): UiMessage {
   return {
@@ -54,11 +63,7 @@ function createSeedMessages() {
 }
 
 function createId() {
-  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
-    return crypto.randomUUID();
-  }
-
-  return `message-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  return crypto.randomUUID();
 }
 
 function loadStoredMessages() {
@@ -72,9 +77,11 @@ function loadStoredMessages() {
     const validMessages = parsed.filter(
       (message) =>
         typeof message.id === "string" &&
+        message.id.length > 0 &&
         (message.role === "user" || message.role === "assistant") &&
         typeof message.content === "string" &&
-        message.content.trim().length > 0,
+        message.content.trim().length > 0 &&
+        message.content.length <= MAX_MESSAGE_CONTENT_LENGTH,
     );
 
     return validMessages.length > 0 ? validMessages : createSeedMessages();
@@ -132,7 +139,11 @@ export function DigitalTwinChat() {
     messagesRef.current = messages;
     if (!storageReadyRef.current) return;
 
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+    const toStore =
+      messages.length > MAX_STORED_MESSAGES
+        ? messages.slice(-MAX_STORED_MESSAGES)
+        : messages;
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(toStore));
   }, [messages]);
 
   useEffect(() => {
@@ -180,19 +191,20 @@ export function DigitalTwinChat() {
     setStatus("sending");
 
     try {
+      const streamingEnabled = supportsStreaming();
       const response = await fetch("/api/digital-twin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: history,
-          stream: canUseStreamingResponses,
+          stream: streamingEnabled,
         }),
         signal: abortController.signal,
       });
 
       const contentType = response.headers?.get("content-type") ?? "";
       if (
-        canUseStreamingResponses &&
+        streamingEnabled &&
         response.ok &&
         response.body &&
         contentType.includes("text/plain")

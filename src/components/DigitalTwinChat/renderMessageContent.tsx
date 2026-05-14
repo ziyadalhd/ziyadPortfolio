@@ -4,10 +4,14 @@ function RenderedMessageContent({ content }: { content: string }) {
   const blocks = useMemo(() => {
     const cleaned = content
       .replace(/\r\n/g, "\n")
-      .replace(/\u00a0/g, " ")
+      .replace(/ /g, " ")
+      .replace(/```[\s\S]*?```/g, "")
       .replace(/```/g, "")
+      .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
       .replace(/\*\*(.*?)\*\*/g, "$1")
       .replace(/__(.*?)__/g, "$1")
+      .replace(/\*(.*?)\*/g, "$1")
+      .replace(/_(.*?)_/g, "$1")
       .replace(/`([^`]+)`/g, "$1")
       .replace(/[ \t]+\n/g, "\n")
       .replace(/\n{3,}/g, "\n\n")
@@ -29,11 +33,9 @@ function RenderedMessageContent({ content }: { content: string }) {
 
         if (lines.length > 0 && lines.every((line) => /^[-*•]\s+/.test(line))) {
           return (
-            <ul key={`ul-${index}`}>
+            <ul key={index}>
               {lines.map((line, lineIndex) => (
-                <li key={`ul-line-${lineIndex}`}>
-                  {line.replace(/^[-*•]\s+/, "")}
-                </li>
+                <li key={lineIndex}>{line.replace(/^[-*•]\s+/, "")}</li>
               ))}
             </ul>
           );
@@ -44,17 +46,15 @@ function RenderedMessageContent({ content }: { content: string }) {
           lines.every((line) => /^\d+[.)]\s+/.test(line))
         ) {
           return (
-            <ol key={`ol-${index}`}>
+            <ol key={index}>
               {lines.map((line, lineIndex) => (
-                <li key={`ol-line-${lineIndex}`}>
-                  {line.replace(/^\d+[.)]\s+/, "")}
-                </li>
+                <li key={lineIndex}>{line.replace(/^\d+[.)]\s+/, "")}</li>
               ))}
             </ol>
           );
         }
 
-        return <p key={`p-${index}`}>{lines.join(" ")}</p>;
+        return <p key={index}>{lines.join(" ")}</p>;
       })}
     </div>
   );

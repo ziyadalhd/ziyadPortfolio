@@ -1,16 +1,17 @@
 import linkedInProfile from "@/data/linkedin.json";
+import { personalInfo } from "@/data/portfolio";
 
 export const CAREER_KNOWLEDGE = `
 Identity:
-- Name: Ziyad Jaber Alhdriti
-- Role: Software Engineering student, Mobile Application Engineer
-- Location: Makkah, Saudi Arabia
-- LinkedIn: www.linkedin.com/in/ziyad-alhdriti
-- GitHub: github.com/ziyadalhd
+- Name: ${personalInfo.name}
+- Role: ${personalInfo.role}
+- Location: ${personalInfo.location}
+- LinkedIn: ${personalInfo.linkedinDisplay}
+- GitHub: ${personalInfo.githubDisplay}
 
 Education:
-- Umm Al-Qura University, B.S. in Software Engineering (2023-2027 expected)
-- GPA: 3.73/4.00
+- Umm Al-Qura University, B.S. in Software Engineering (2023-${personalInfo.expectedGraduation} expected)
+- GPA: ${personalInfo.gpa}
 - Academic foundation: OOP, data structures, software requirements, UML, testing, databases, SDLC
 
 Projects:
@@ -25,7 +26,7 @@ Certifications:
 
 Volunteering:
 - Community Volunteer (2024-present)
-- 262+ verified volunteering hours via National Volunteering Platform in Saudi Arabia
+- ${personalInfo.volunteerHours} verified volunteering hours via National Volunteering Platform in Saudi Arabia
 
 Skills:
 - Languages: Java, Dart, Swift
@@ -54,12 +55,17 @@ Response rules:
 - Prefer warm and confident wording over robotic tone.
 `;
 
+let _cachedSystemPrompt: string | undefined;
+
 export function buildSystemPrompt() {
-  return [
-    SYSTEM_PROMPT,
-    "Career profile you must use as the source of truth:",
-    CAREER_KNOWLEDGE,
-    "Curated LinkedIn and resume context:",
-    linkedInProfile.summary,
-  ].join("\n\n");
+  if (!_cachedSystemPrompt) {
+    _cachedSystemPrompt = [
+      SYSTEM_PROMPT,
+      "Career profile you must use as the source of truth:",
+      CAREER_KNOWLEDGE,
+      "Curated LinkedIn and resume context:",
+      linkedInProfile.summary,
+    ].join("\n\n");
+  }
+  return _cachedSystemPrompt;
 }

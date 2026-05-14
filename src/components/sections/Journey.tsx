@@ -9,7 +9,7 @@ export function Journey() {
         eyebrow="Career Journey"
         title="Milestones that shaped my engineering approach"
       />
-      <div className="timeline mt-8 space-y-6">
+      <div className="timeline mt-8 space-y-6" aria-label="Career timeline">
         {journey.map((item) => (
           <article
             key={item.title}

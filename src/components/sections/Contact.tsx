@@ -1,3 +1,5 @@
+import { personalInfo } from "@/data/portfolio";
+
 import { SectionHeading } from "../ui/SectionHeading";
 
 export function Contact() {
@@ -8,11 +10,11 @@ export function Contact() {
         title="Let us build something meaningful"
       />
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        <a href="mailto:ziyadalhdriti@gmail.com" className="contact-tile">
-          ziyadalhdriti@gmail.com
+        <a href={`mailto:${personalInfo.email}`} className="contact-tile">
+          {personalInfo.email}
         </a>
-        <a href="tel:+966569264771" className="contact-tile">
-          +966 56 926 4771
+        <a href={`tel:${personalInfo.phoneHref}`} className="contact-tile">
+          {personalInfo.phone}
         </a>
       </div>
     </section>

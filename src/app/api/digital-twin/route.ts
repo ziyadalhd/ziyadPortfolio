@@ -11,6 +11,9 @@ import { validateRequestBodyText } from "@/lib/request-validation";
 
 export const runtime = "nodejs";
 
+// No CSRF token required: this is a public unauthenticated endpoint and
+// accepts no cookies. Any future authenticated or state-mutating endpoint
+// must add CSRF protection before shipping.
 export async function POST(req: Request) {
   const rateLimit = checkRateLimit(getClientIp(req));
   if (!rateLimit.allowed) {

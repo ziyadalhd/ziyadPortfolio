@@ -1,3 +1,20 @@
+export const personalInfo = {
+  name: "Ziyad Jaber Alhdriti",
+  role: "Software Engineering student, Mobile Application Engineer",
+  roleTagline: "Software Engineering | Mobile Application Engineer",
+  location: "Makkah, Saudi Arabia",
+  linkedin: "https://www.linkedin.com/in/ziyad-alhdriti",
+  linkedinDisplay: "www.linkedin.com/in/ziyad-alhdriti",
+  github: "https://github.com/ziyadalhd",
+  githubDisplay: "github.com/ziyadalhd",
+  email: "ziyadalhdriti@gmail.com",
+  phone: "+966 56 926 4771",
+  phoneHref: "+966569264771",
+  gpa: "3.73 / 4.00",
+  expectedGraduation: "2027",
+  volunteerHours: "262+",
+} as const;
+
 export const journey = [
   {
     period: "2023 - 2027",

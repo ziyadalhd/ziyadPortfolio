@@ -16,12 +16,21 @@ const requestSchema = z.object({
   stream: z.boolean().optional(),
 });
 
+// Best-effort pattern block — not a security guarantee. The system prompt
+// itself instructs the model to resist meta-instructions, which is the
+// primary defence. Extend this list as new bypass patterns are observed.
 const promptInjectionPatterns = [
   /ignore (all )?(previous|prior|above) (instructions|rules|prompts)/i,
   /reveal (the )?(system|developer) (prompt|message|instructions)/i,
   /show (the )?(system|developer) (prompt|message|instructions)/i,
   /you are now/i,
   /jailbreak/i,
+  /pretend (you are|to be)/i,
+  /roleplay as/i,
+  /forget (your|all|the) (instructions?|rules?|previous)/i,
+  /disregard (your|all) (instructions?|rules?)/i,
+  /new (instructions?|system prompt|rules)/i,
+  /override (your|the) (instructions?|system|rules)/i,
 ];
 
 export type ValidationResult =
@@ -58,6 +67,7 @@ export function validateRequestBodyText(bodyText: string): ValidationResult {
     };
   }
 
+  // Silently truncate to the tail so a large-history client can't inflate cost.
   const messages = result.data.messages.slice(-MAX_HISTORY_MESSAGES);
 
   if (!messages.some((message) => message.role === "user")) {
