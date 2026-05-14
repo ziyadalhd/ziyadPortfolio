@@ -120,19 +120,12 @@ export function SiteHeader() {
                 key={item.href}
                 href={item.href}
                 aria-current={isActive ? "page" : undefined}
-                className="relative flex items-center px-3.5 h-9 rounded-lg text-[0.8rem] font-semibold transition-colors duration-150"
+                data-active={isActive ? "" : undefined}
+                className="header-nav-link relative flex items-center px-3.5 h-9 rounded-lg text-[0.8rem] font-semibold"
                 style={{
                   fontFamily: "var(--font-syne)",
                   letterSpacing: "0.025em",
-                  color: isActive ? "var(--clr-amber)" : "var(--clr-subtle)",
-                  background: isActive ? "rgba(245,158,11,0.07)" : "transparent",
                   textDecoration: "none",
-                }}
-                onMouseEnter={(e) => {
-                  if (!isActive) (e.currentTarget as HTMLAnchorElement).style.color = "var(--clr-text)";
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive) (e.currentTarget as HTMLAnchorElement).style.color = "var(--clr-subtle)";
                 }}
               >
                 {item.label}
@@ -246,16 +239,14 @@ export function SiteHeader() {
                   ref={index === 0 ? firstNavLinkRef : undefined}
                   href={item.href}
                   aria-current={isActive ? "page" : undefined}
+                  data-active={isActive ? "" : undefined}
                   onClick={() => setMenuOpen(false)}
-                  className="flex items-center justify-between px-4 rounded-xl text-sm font-semibold"
+                  className="header-mobile-link flex items-center justify-between px-4 rounded-xl text-sm font-semibold"
                   style={{
                     fontFamily: "var(--font-syne)",
                     minHeight: "48px",
-                    color: isActive ? "var(--clr-amber)" : "var(--clr-muted)",
-                    background: isActive ? "rgba(245,158,11,0.07)" : "transparent",
                     textDecoration: "none",
                     letterSpacing: "0.02em",
-                    transition: "color 150ms ease, background 150ms ease",
                   }}
                 >
                   {item.label}

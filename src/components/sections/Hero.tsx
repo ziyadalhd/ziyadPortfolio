@@ -4,15 +4,15 @@ import { Metric } from "../ui/Metric";
 
 export function Hero() {
   return (
-    <section id="hero" className="grid gap-10 lg:grid-cols-[1fr_340px] lg:items-start">
+    <section id="hero" className="grid gap-8 lg:gap-10 lg:grid-cols-[1fr_320px] lg:items-start">
 
       {/* Left column */}
-      <div className="space-y-7">
+      <div className="space-y-5 sm:space-y-7">
 
-        {/* Eyebrow pill */}
-        <div className="flex items-center gap-3">
+        {/* Eyebrow pill — compact on mobile */}
+        <div>
           <span
-            className="inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-[0.28em]"
+            className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[0.6rem] font-bold uppercase tracking-[0.18em] sm:px-4 sm:text-xs sm:tracking-[0.26em]"
             style={{
               fontFamily: "var(--font-syne)",
               borderColor: "rgba(245,158,11,0.35)",
@@ -21,7 +21,7 @@ export function Hero() {
             }}
           >
             <span
-              className="h-1.5 w-1.5 rounded-full"
+              className="h-1.5 w-1.5 shrink-0 rounded-full"
               style={{ background: "var(--clr-amber)" }}
               aria-hidden="true"
             />
@@ -29,29 +29,26 @@ export function Hero() {
           </span>
         </div>
 
-        {/* Main headline */}
+        {/* Main headline — fluid type scale safe for iPhone SE */}
         <h1
-          className="text-[2.6rem] font-extrabold leading-[1.08] tracking-tight text-white sm:text-6xl lg:text-7xl"
-          style={{ fontFamily: "var(--font-syne)" }}
+          className="text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-7xl"
+          style={{ fontFamily: "var(--font-syne)", overflowWrap: "break-word" }}
         >
-          Building{" "}
-          <br className="hidden sm:block" />
-          resilient software{" "}
-          <br className="hidden lg:block" />
+          Building resilient software{" "}
           with{" "}
-          <span className="hero-gradient">startup&#8209;level speed</span>.
+          <span className="hero-gradient">startup-level&nbsp;speed</span>.
         </h1>
 
         {/* Value description */}
-        <p className="max-w-xl text-lg leading-relaxed text-slate-400">
+        <p className="max-w-xl text-base leading-relaxed text-slate-400 sm:text-lg">
           I design and build cross-platform mobile products with structured
           engineering discipline, clean architecture, and polished user
           experience — turning complex requirements into systems people trust
           and teams can scale.
         </p>
 
-        {/* Value pillars */}
-        <ul className="flex flex-wrap gap-2.5">
+        {/* Value pillars — stack vertically on mobile so long text never overflows */}
+        <ul className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
           {valuePillars.map((pillar) => (
             <li
               key={pillar}
@@ -69,7 +66,7 @@ export function Hero() {
         </ul>
 
         {/* CTAs */}
-        <div className="flex flex-wrap gap-4 pt-1">
+        <div className="flex flex-wrap gap-3 pt-1">
           <a
             href={personalInfo.linkedin}
             target="_blank"
@@ -109,9 +106,9 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Right column — Snapshot card */}
+      {/* Snapshot card — full width on mobile, fixed 320px sidebar on desktop */}
       <aside
-        className="rounded-2xl p-6 lg:mt-2"
+        className="rounded-2xl p-5 sm:p-6 lg:mt-2"
         style={{
           border: "1px solid rgba(255,255,255,0.08)",
           background:
@@ -119,14 +116,14 @@ export function Hero() {
         }}
       >
         <p className="eyebrow">Snapshot</p>
-        <div className="mt-5 space-y-3">
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-1 lg:grid-cols-1">
           <Metric label="Expected Graduation" value={personalInfo.expectedGraduation} />
           <Metric label="GPA" value={personalInfo.gpa} />
-          <Metric label="Verified Volunteer Hours" value={personalInfo.volunteerHours} />
+          <Metric label="Volunteer Hours" value={personalInfo.volunteerHours} />
           <Metric label="Location" value={personalInfo.location} />
         </div>
         <div
-          className="mt-5 rounded-xl px-4 py-3 text-sm leading-relaxed"
+          className="mt-4 rounded-xl px-4 py-3 text-sm leading-relaxed"
           style={{
             border: "1px solid rgba(52,211,153,0.2)",
             background: "rgba(52,211,153,0.06)",

@@ -286,6 +286,72 @@ a {
   color: var(--clr-amber);
 }
 
+/* ── Header nav link — CSS-driven hover/active/pressed ── */
+.header-nav-link {
+  color: var(--clr-subtle);
+  background-color: transparent;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color 130ms ease,
+    background-color 130ms ease;
+}
+
+.header-nav-link[data-active] {
+  color: var(--clr-amber);
+  background-color: rgba(245, 158, 11, 0.08);
+}
+
+@media (hover: hover) {
+  .header-nav-link:hover:not([data-active]) {
+    color: var(--clr-text);
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.header-nav-link:active:not([data-active]) {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--clr-text);
+}
+
+.header-nav-link:focus-visible {
+  outline: 2px solid var(--clr-amber);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* ── Mobile drawer link — CSS-driven ── */
+.header-mobile-link {
+  color: var(--clr-muted);
+  background-color: transparent;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color 130ms ease,
+    background-color 130ms ease,
+    transform 80ms ease;
+}
+
+.header-mobile-link[data-active] {
+  color: var(--clr-amber);
+  background-color: rgba(245, 158, 11, 0.07);
+}
+
+@media (hover: hover) {
+  .header-mobile-link:hover:not([data-active]) {
+    color: var(--clr-text);
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+}
+
+.header-mobile-link:active {
+  background-color: rgba(255, 255, 255, 0.07);
+  transform: scale(0.98);
+}
+
+.header-mobile-link:focus-visible {
+  outline: 2px solid var(--clr-amber);
+  outline-offset: 2px;
+}
+
 .nav-toggle {
   display: flex;
   align-items: center;
