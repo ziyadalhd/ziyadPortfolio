@@ -1,8 +1,23 @@
 import type { Metadata, Viewport } from "next";
+import { Plus_Jakarta_Sans, Syne } from "next/font/google";
 
 import { ScrollResetOnLoad } from "@/components/ScrollResetOnLoad";
 
 import "./globals.css";
+
+const syne = Syne({
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
+  variable: "--font-syne",
+  display: "swap",
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-jakarta",
+  display: "swap",
+});
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
@@ -34,7 +49,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#070b14",
+  themeColor: "#06080f",
   colorScheme: "dark",
 };
 
@@ -44,7 +59,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${syne.variable} ${jakarta.variable}`}>
       <body>
         <ScrollResetOnLoad />
         {children}

@@ -11,7 +11,9 @@
       "Bash(lsof -ti:3100)",
       "Bash(xargs kill -9)",
       "Bash(python3 -c \"print\\('a' * 4001\\)\")",
-      "Bash(python3 -c \"print\\('a' * 17000\\)\")"
+      "Bash(python3 -c \"print\\('a' * 17000\\)\")",
+      "Skill(frontend-design)",
+      "Bash(npx tsc *)"
     ]
   }
 }

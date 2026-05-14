@@ -6,11 +6,15 @@ export function SectionHeading({
   title: string;
 }) {
   return (
-    <div>
-      <p className="eyebrow text-cyan-300">{eyebrow}</p>
-      <h2 className="mt-3 text-3xl font-semibold text-white md:text-4xl">
+    <div className="space-y-3">
+      <p className="eyebrow">{eyebrow}</p>
+      <h2
+        className="text-3xl font-bold leading-tight text-white md:text-4xl"
+        style={{ fontFamily: "var(--font-syne)" }}
+      >
         {title}
       </h2>
+      <span className="amber-line" aria-hidden="true" />
     </div>
   );
 }

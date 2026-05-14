@@ -343,8 +343,29 @@ export function DigitalTwinChat() {
           <h3>Digital Twin Chat</h3>
           <p>Ask about projects, skills, education, and career journey.</p>
         </div>
-        <button type="button" className="twin-reset" onClick={resetChat}>
-          Reset chat
+        <button
+          type="button"
+          className="twin-reset"
+          onClick={resetChat}
+          aria-label="Reset chat"
+          title="Reset chat"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            />
+          </svg>
         </button>
       </div>
 
@@ -387,18 +408,60 @@ export function DigitalTwinChat() {
         <label htmlFor="digital-twin-input" className="sr-only">
           Ask about Ziyad&apos;s career
         </label>
-        <textarea
-          id="digital-twin-input"
-          value={input}
-          onChange={(event) => setInput(event.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Ask about experience, skills, projects, education, or goals..."
-          rows={3}
-          disabled={loading}
-        />
-        <button type="submit" disabled={!canSubmit}>
-          {loading ? "Sending..." : "Ask Digital Twin"}
-        </button>
+        <div className="twin-form-row">
+          <textarea
+            id="digital-twin-input"
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Ask about experience, skills, projects, education, or goals..."
+            rows={3}
+            disabled={loading}
+          />
+          <button
+            type="submit"
+            className="twin-send"
+            disabled={!canSubmit}
+            aria-label={loading ? "Sending…" : "Send message"}
+          >
+            {loading ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+                aria-hidden="true"
+                style={{ animation: "spin 1s linear infinite" }}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                />
+              </svg>
+            )}
+          </button>
+        </div>
       </form>
 
       {error ? (
