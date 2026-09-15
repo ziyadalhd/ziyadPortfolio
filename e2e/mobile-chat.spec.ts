@@ -22,7 +22,8 @@ test("loads styled and interactive on iPhone Safari/WebKit", async ({
   );
   page.on("pageerror", (err) => console.error("[PAGE ERROR]", err.message));
 
-  await page.goto("/");
+  // "/" redirects by Accept-Language; go straight to the English locale.
+  await page.goto("/en");
 
   await expect(
     page.getByRole("heading", {

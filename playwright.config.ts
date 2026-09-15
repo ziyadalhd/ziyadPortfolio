@@ -10,6 +10,11 @@ export default defineConfig({
   use: {
     baseURL: "http://127.0.0.1:3100",
     trace: "retain-on-failure",
+    // The site negotiates locale from Accept-Language; pin it so tests
+    // don't depend on the browser default.
+    extraHTTPHeaders: {
+      "Accept-Language": "en-US,en;q=0.9",
+    },
   },
   webServer: {
     command: "npm run start -- --hostname 127.0.0.1 --port 3100",

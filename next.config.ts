@@ -24,6 +24,12 @@ const cspDirectives = [
 const csp = cspDirectives.join("; ");
 
 const nextConfig: NextConfig = {
+  // The root layout lives in app/[locale], so unmatched routes have no
+  // layout to render into; global-not-found.tsx supplies the document.
+  experimental: {
+    globalNotFound: true,
+  },
+
   async headers() {
     return [
       {
