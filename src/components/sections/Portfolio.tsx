@@ -1,4 +1,5 @@
 import { portfolioRoadmap } from "@/data/portfolio";
+import type { Dictionary } from "@/i18n/types";
 
 import { SectionHeading } from "../ui/SectionHeading";
 
@@ -17,12 +18,12 @@ const cardIcons = [
   </svg>,
 ];
 
-export function Portfolio() {
+export function Portfolio({ content }: { content: Dictionary["portfolio"] }) {
   return (
     <section id="portfolio" className="section-card scroll-mt-6">
       <SectionHeading
-        eyebrow="Portfolio"
-        title="Selected work and case studies"
+        eyebrow={content.eyebrow}
+        title={content.title}
       />
 
       <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

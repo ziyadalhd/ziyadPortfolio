@@ -1,19 +1,27 @@
 import { journey } from "@/data/portfolio";
+import type { Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/types";
 
 import { SectionHeading } from "../ui/SectionHeading";
 
-export function Journey() {
+export function Journey({
+  content,
+  locale,
+}: {
+  content: Dictionary["journey"];
+  locale: Locale;
+}) {
   return (
     <section id="journey" className="section-card scroll-mt-6">
       <SectionHeading
-        eyebrow="Career Journey"
-        title="Milestones that shaped my engineering approach"
+        eyebrow={content.eyebrow}
+        title={content.title}
       />
 
-      <div className="mt-10 space-y-0" aria-label="Career timeline">
+      <div className="mt-10 space-y-0" aria-label={content.timelineLabel}>
         {journey.map((item, index) => (
           <article
-            key={item.title}
+            key={item.title.en}
             className="group relative flex gap-6 pb-8 last:pb-0"
           >
             {/* Vertical timeline track */}
@@ -62,16 +70,16 @@ export function Journey() {
                   color: "rgba(245,158,11,0.75)",
                 }}
               >
-                {item.period}
+                {item.period[locale]}
               </p>
               <h3
                 className="mt-2 text-lg font-bold leading-snug text-white"
                 style={{ fontFamily: "var(--font-syne)" }}
               >
-                {item.title}
+                {item.title[locale]}
               </h3>
               <p className="mt-2 leading-relaxed text-slate-400">
-                {item.detail}
+                {item.detail[locale]}
               </p>
             </div>
           </article>

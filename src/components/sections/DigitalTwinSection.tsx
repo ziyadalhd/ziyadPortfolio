@@ -1,12 +1,20 @@
 import { DigitalTwinChat } from "@/components/digital-twin-chat";
+import type { Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/types";
 
 import { SectionHeading } from "../ui/SectionHeading";
 
-export function DigitalTwinSection() {
+export function DigitalTwinSection({
+  content,
+  locale,
+}: {
+  content: Dictionary["twin"];
+  locale: Locale;
+}) {
   return (
     <section id="digital-twin" className="section-card scroll-mt-6">
       <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-start">
-        <SectionHeading eyebrow="AI Experience" title="Ask my Digital Twin" />
+        <SectionHeading eyebrow={content.eyebrow} title={content.title} />
 
         {/* Live badge */}
         <div
@@ -22,17 +30,16 @@ export function DigitalTwinSection() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
           </span>
-          Live
+          {content.liveBadge}
         </div>
       </div>
 
       <p className="mt-4 max-w-2xl leading-relaxed text-slate-400">
-        This assistant is trained on my career background and project history.
-        Ask about my skills, journey, and professional direction in real time.
+        {content.intro}
       </p>
 
       <div className="mt-8">
-        <DigitalTwinChat />
+        <DigitalTwinChat content={content} locale={locale} />
       </div>
     </section>
   );

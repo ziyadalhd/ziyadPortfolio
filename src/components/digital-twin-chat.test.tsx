@@ -2,7 +2,14 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import { en } from "@/i18n/en";
+
 import { DigitalTwinChat } from "./digital-twin-chat";
+
+// Render with the real dictionary, so these tests also assert that en.twin
+// supplies every key the component reads.
+const twin = en.twin;
+const renderChat = () => render(<DigitalTwinChat content={twin} locale="en" />);
 
 // In happy-dom, ReadableStream and TextDecoder are available, so supportsStreaming()
 // returns true and the component sends stream: true. JSON-content-type responses fall
@@ -40,7 +47,7 @@ describe("DigitalTwinChat", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     const user = userEvent.setup();
-    render(<DigitalTwinChat />);
+    renderChat();
 
     const textarea = screen.getByLabelText(/ask about ziyad/i);
     await user.type(textarea, "What does Ziyad build?{Enter}");
@@ -63,18 +70,18 @@ describe("DigitalTwinChat", () => {
     ).toBeInTheDocument();
     // Starter prompts should be gone once the user has sent a message
     expect(
-      screen.queryByText("What are Ziyad's strongest technical skills?"),
+      screen.queryByText(twin.starterPrompts[0]),
     ).not.toBeInTheDocument();
   });
 
   it("resets the chat to the seeded greeting", async () => {
     const user = userEvent.setup();
-    render(<DigitalTwinChat />);
+    renderChat();
 
     await user.click(screen.getByRole("button", { name: /reset chat/i }));
 
     expect(
-      screen.getByText(/Hi, I am Ziyad's Digital Twin/i),
+      screen.getByText(twin.seedGreeting),
     ).toBeInTheDocument();
   });
 
@@ -83,7 +90,7 @@ describe("DigitalTwinChat", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     const user = userEvent.setup();
-    render(<DigitalTwinChat />);
+    renderChat();
 
     await user.type(
       screen.getByLabelText(/ask about ziyad/i),
@@ -96,7 +103,7 @@ describe("DigitalTwinChat", () => {
 
     // The empty streaming bubble must have been removed; only the seed greeting
     // has a "Digital Twin" label — there should be exactly one.
-    expect(screen.getAllByText("Digital Twin")).toHaveLength(1);
+    expect(screen.getAllByText(twin.roles.assistant)).toHaveLength(1);
   });
 
   it("retry after streaming failure does not include empty messages in history", async () => {
@@ -104,7 +111,7 @@ describe("DigitalTwinChat", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     const user = userEvent.setup();
-    render(<DigitalTwinChat />);
+    renderChat();
 
     await user.type(
       screen.getByLabelText(/ask about ziyad/i),
@@ -135,11 +142,11 @@ describe("DigitalTwinChat", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     const user = userEvent.setup();
-    render(<DigitalTwinChat />);
+    renderChat();
 
     await user.click(
       screen.getByRole("button", {
-        name: "What are Ziyad's strongest technical skills?",
+        name: twin.starterPrompts[0],
       }),
     );
 
@@ -152,7 +159,7 @@ describe("DigitalTwinChat", () => {
     expect(body.messages).toEqual([
       {
         role: "user",
-        content: "What are Ziyad's strongest technical skills?",
+        content: twin.starterPrompts[0],
       },
     ]);
   });

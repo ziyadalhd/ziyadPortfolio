@@ -10,6 +10,7 @@ import {
   isLocale,
   type Locale,
 } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
 import { SITE_URL } from "@/lib/site";
 
 import "../globals.css";
@@ -36,11 +37,7 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
 
-  const title = "Ziyad Alhdriti | Software Engineer";
-  const description =
-    "Professional portfolio website for Ziyad Alhdriti, Software Engineering student and mobile application engineer.";
-  const ogDescription =
-    "Mobile-focused software engineering portfolio with a digital twin chat experience.";
+  const { title, description, ogDescription } = getDictionary(locale).meta;
 
   return {
     metadataBase: new URL(SITE_URL),

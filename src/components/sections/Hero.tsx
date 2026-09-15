@@ -1,8 +1,16 @@
 import { personalInfo, valuePillars } from "@/data/portfolio";
+import type { Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/types";
 
 import { Metric } from "../ui/Metric";
 
-export function Hero() {
+export function Hero({
+  content,
+  locale,
+}: {
+  content: Dictionary["hero"];
+  locale: Locale;
+}) {
   return (
     <section id="hero" className="grid gap-8 lg:gap-10 lg:grid-cols-[1fr_320px] lg:items-start">
 
@@ -25,7 +33,7 @@ export function Hero() {
               style={{ background: "var(--clr-amber)" }}
               aria-hidden="true"
             />
-            Enterprise meets edgy
+            {content.eyebrow}
           </span>
         </div>
 
@@ -34,24 +42,21 @@ export function Hero() {
           className="text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-7xl"
           style={{ fontFamily: "var(--font-syne)", overflowWrap: "break-word" }}
         >
-          Building resilient software{" "}
-          with{" "}
-          <span className="hero-gradient">startup-level&nbsp;speed</span>.
+          {content.titleLead}{" "}
+          <span className="hero-gradient">{content.titleAccent}</span>
+          {content.titleTail}
         </h1>
 
         {/* Value description */}
         <p className="max-w-xl text-base leading-relaxed text-slate-400 sm:text-lg">
-          I design and build cross-platform mobile products with structured
-          engineering discipline, clean architecture, and polished user
-          experience — turning complex requirements into systems people trust
-          and teams can scale.
+          {content.lede}
         </p>
 
         {/* Value pillars — stack vertically on mobile so long text never overflows */}
         <ul className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
           {valuePillars.map((pillar) => (
             <li
-              key={pillar}
+              key={pillar.en}
               className="rounded-full border px-4 py-1.5 text-sm text-slate-300"
               style={{
                 borderColor: "rgba(255,255,255,0.1)",
@@ -60,7 +65,7 @@ export function Hero() {
                 fontWeight: 500,
               }}
             >
-              {pillar}
+              {pillar[locale]}
             </li>
           ))}
         </ul>
@@ -115,12 +120,21 @@ export function Hero() {
             "linear-gradient(160deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)",
         }}
       >
-        <p className="eyebrow">Snapshot</p>
+        <p className="eyebrow">{content.snapshot}</p>
         <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-1 lg:grid-cols-1">
-          <Metric label="Expected Graduation" value={personalInfo.expectedGraduation} />
-          <Metric label="GPA" value={personalInfo.gpa} />
-          <Metric label="Volunteer Hours" value={personalInfo.volunteerHours} />
-          <Metric label="Location" value={personalInfo.location} />
+          <Metric
+            label={content.metrics.graduation}
+            value={personalInfo.expectedGraduation}
+          />
+          <Metric label={content.metrics.gpa} value={personalInfo.gpa} />
+          <Metric
+            label={content.metrics.volunteer}
+            value={personalInfo.volunteerHours}
+          />
+          <Metric
+            label={content.metrics.location}
+            value={personalInfo.location[locale]}
+          />
         </div>
         <div
           className="mt-4 rounded-xl px-4 py-3 text-sm leading-relaxed"
@@ -132,7 +146,7 @@ export function Hero() {
             fontWeight: 500,
           }}
         >
-          Open to mobile engineering opportunities and high-growth teams.
+          {content.availability}
         </div>
       </aside>
     </section>

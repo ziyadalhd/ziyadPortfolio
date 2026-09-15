@@ -6,15 +6,27 @@ import { Hero } from "@/components/sections/Hero";
 import { Journey } from "@/components/sections/Journey";
 import { Portfolio } from "@/components/sections/Portfolio";
 import { TechnicalFocus } from "@/components/sections/TechnicalFocus";
+import { isLocale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
+import { notFound } from "next/navigation";
 
-export default function Home() {
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+
+  const dict = getDictionary(locale);
+
   return (
     <main
       id="main-content"
       className="relative min-h-screen overflow-hidden bg-base text-slate-100"
     >
       <a href="#hero" className="skip-link">
-        Skip to content
+        {dict.skipToContent}
       </a>
 
       {/* Ambient background layers */}
@@ -27,40 +39,40 @@ export default function Home() {
 
       <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-12 px-5 pb-20 pt-8 md:gap-16 md:px-10 lg:gap-20 lg:pt-12">
         <div className="animate-slide-up delay-0">
-          <SiteHeader />
+          <SiteHeader content={dict.nav} locale={locale} />
         </div>
 
         <div className="animate-slide-up delay-100">
-          <Hero />
+          <Hero content={dict.hero} locale={locale} />
         </div>
 
         <div className="animate-slide-up delay-200">
-          <About />
+          <About content={dict.about} />
         </div>
 
         <div className="animate-slide-up delay-300">
-          <Journey />
+          <Journey content={dict.journey} locale={locale} />
         </div>
 
         <div className="animate-slide-up delay-400">
-          <TechnicalFocus />
+          <TechnicalFocus content={dict.focus} />
         </div>
 
         <div className="animate-slide-up delay-500">
-          <Portfolio />
+          <Portfolio content={dict.portfolio} />
         </div>
 
         <div className="animate-slide-up delay-600">
-          <DigitalTwinSection />
+          <DigitalTwinSection content={dict.twin} locale={locale} />
         </div>
 
         <div className="animate-slide-up delay-700">
-          <Contact />
+          <Contact content={dict.contact} />
         </div>
 
         <footer className="pb-2 text-center">
           <span className="eyebrow text-[0.62rem] text-slate-600">
-            Ziyad Alhdriti &mdash; Engineered with precision
+            {dict.footer.tagline}
           </span>
         </footer>
       </div>

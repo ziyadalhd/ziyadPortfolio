@@ -2,16 +2,30 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const navItems = [
-  { href: "#about", label: "About", id: "about" },
-  { href: "#journey", label: "Journey", id: "journey" },
-  { href: "#portfolio", label: "Portfolio", id: "portfolio" },
-  { href: "#digital-twin", label: "Twin", id: "digital-twin" },
-  { href: "#contact", label: "Contact", id: "contact" },
+import { LOCALES, type Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/types";
+
+type NavId = "about" | "journey" | "portfolio" | "digital-twin" | "contact";
+
+// href/id stay here on purpose: the ids feed document.getElementById in the
+// scroll-spy observer. Only the label is translated.
+const navItems: { href: string; id: NavId }[] = [
+  { href: "#about", id: "about" },
+  { href: "#journey", id: "journey" },
+  { href: "#portfolio", id: "portfolio" },
+  { href: "#digital-twin", id: "digital-twin" },
+  { href: "#contact", id: "contact" },
 ];
 
-export function SiteHeader() {
-  const [activeSection, setActiveSection] = useState(navItems[0].id);
+export function SiteHeader({
+  content,
+  locale,
+}: {
+  content: Dictionary["nav"];
+  locale: Locale;
+}) {
+  const otherLocale = LOCALES.find((l) => l !== locale) ?? locale;
+  const [activeSection, setActiveSection] = useState<string>(navItems[0].id);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -88,7 +102,7 @@ export function SiteHeader() {
         {/* Name — left anchor */}
         <a
           href="#hero"
-          aria-label="Back to top"
+          aria-label={content.backToTop}
           className="shrink-0 select-none"
           style={{ textDecoration: "none" }}
         >
@@ -128,7 +142,7 @@ export function SiteHeader() {
                   textDecoration: "none",
                 }}
               >
-                {item.label}
+                {content[item.id]}
                 {isActive && (
                   <span
                     aria-hidden="true"
@@ -158,8 +172,29 @@ export function SiteHeader() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
             </span>
-            Available
+            {content.available}
           </div>
+
+          {/* Locale switcher — plain <a>, not <Link>: a full load swaps
+              <html lang>/dir, the font variables and the chat storage key. */}
+          <a
+            href={`/${otherLocale}`}
+            hrefLang={otherLocale}
+            aria-label={content.switchAria}
+            className="shrink-0 rounded-lg px-2.5 py-1.5 text-xs font-semibold"
+            style={{
+              fontFamily: "var(--font-syne)",
+              border: "1px solid rgba(255,255,255,0.12)",
+              background: "rgba(255,255,255,0.04)",
+              color: "var(--clr-muted)",
+              textDecoration: "none",
+              minHeight: "36px",
+              display: "inline-flex",
+              alignItems: "center",
+            }}
+          >
+            {content.switchLabel}
+          </a>
 
           {/* Mobile hamburger */}
           <button
@@ -167,7 +202,7 @@ export function SiteHeader() {
             type="button"
             aria-expanded={menuOpen}
             aria-controls="mobile-nav"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-label={menuOpen ? content.closeMenu : content.openMenu}
             onClick={() => setMenuOpen((v) => !v)}
             className="md:hidden flex items-center justify-center"
             style={{
@@ -249,7 +284,7 @@ export function SiteHeader() {
                     letterSpacing: "0.02em",
                   }}
                 >
-                  {item.label}
+                  {content[item.id]}
                   {isActive && (
                     <span
                       aria-hidden="true"
@@ -286,7 +321,7 @@ export function SiteHeader() {
                   letterSpacing: "0.05em",
                 }}
               >
-                Open to opportunities
+                {content.available}
               </span>
             </div>
           </div>

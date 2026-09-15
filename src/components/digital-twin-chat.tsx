@@ -11,6 +11,8 @@ import {
 } from "react";
 
 import type { ChatMessage } from "@/types/chat";
+import type { Locale } from "@/i18n/config";
+import type { Dictionary } from "@/i18n/types";
 import {
   MAX_HISTORY_MESSAGES,
   MAX_MESSAGE_CONTENT_LENGTH,
@@ -25,15 +27,11 @@ type UiMessage = ChatMessage & {
   isSeed?: boolean;
 };
 
-const starterPrompts = [
-  "What are Ziyad's strongest technical skills?",
-  "Tell me about the WASL project impact.",
-  "What type of opportunities is he looking for?",
-];
-
-const STORAGE_KEY = "ziyad-digital-twin-chat:v1";
-const SEED_GREETING =
-  "Hi, I am Ziyad's Digital Twin. Feel free to ask about my background, projects, skills, and career direction.";
+// v2 + locale: seed messages are persisted, so a shared key would restore an
+// English greeting and English history on the Arabic page.
+function storageKey(locale: Locale) {
+  return `ziyad-digital-twin-chat:v2:${locale}`;
+}
 const MAX_STORED_MESSAGES = 50;
 
 // Evaluated at call-time inside sendMessage (browser-only) so it reflects
@@ -53,28 +51,20 @@ function createMessage(message: ChatMessage, isSeed = false): UiMessage {
   };
 }
 
-function createSeedMessages() {
-  return [
-    createMessage(
-      {
-        role: "assistant",
-        content: SEED_GREETING,
-      },
-      true,
-    ),
-  ];
+function createSeedMessages(greeting: string) {
+  return [createMessage({ role: "assistant", content: greeting }, true)];
 }
 
 function createId() {
   return crypto.randomUUID();
 }
 
-function loadStoredMessages() {
-  if (typeof window === "undefined") return createSeedMessages();
+function loadStoredMessages(locale: Locale, greeting: string) {
+  if (typeof window === "undefined") return createSeedMessages(greeting);
 
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return createSeedMessages();
+    const raw = window.localStorage.getItem(storageKey(locale));
+    if (!raw) return createSeedMessages(greeting);
 
     const parsed = JSON.parse(raw) as UiMessage[];
     const validMessages = parsed.filter(
@@ -87,16 +77,18 @@ function loadStoredMessages() {
         message.content.length <= MAX_MESSAGE_CONTENT_LENGTH,
     );
 
-    return validMessages.length > 0 ? validMessages : createSeedMessages();
+    return validMessages.length > 0 ? validMessages : createSeedMessages(greeting);
   } catch {
-    return createSeedMessages();
+    return createSeedMessages(greeting);
   }
 }
 
 const MessageBubble = memo(function MessageBubble({
   message,
+  roles,
 }: {
   message: UiMessage;
+  roles: Dictionary["twin"]["roles"];
 }) {
   return (
     <div
@@ -105,15 +97,23 @@ const MessageBubble = memo(function MessageBubble({
       }`}
     >
       <span className="twin-role">
-        {message.role === "user" ? "You" : "Digital Twin"}
+        {message.role === "user" ? roles.user : roles.assistant}
       </span>
       <MessageContent content={message.content} />
     </div>
   );
 });
 
-export function DigitalTwinChat() {
-  const [messages, setMessages] = useState<UiMessage[]>(createSeedMessages);
+export function DigitalTwinChat({
+  content,
+  locale,
+}: {
+  content: Dictionary["twin"];
+  locale: Locale;
+}) {
+  const [messages, setMessages] = useState<UiMessage[]>(() =>
+    createSeedMessages(content.seedGreeting),
+  );
   const [input, setInput] = useState("");
   const [status, setStatus] = useState<ChatStatus>("idle");
   const [error, setError] = useState<string | null>(null);
@@ -147,17 +147,19 @@ export function DigitalTwinChat() {
       messages.length > MAX_STORED_MESSAGES
         ? messages.slice(-MAX_STORED_MESSAGES)
         : messages;
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(toStore));
-  }, [messages]);
+    window.localStorage.setItem(storageKey(locale), JSON.stringify(toStore));
+  }, [messages, locale]);
 
+  // Hydrate once per locale. The switcher does a full document load, so
+  // locale is stable for the lifetime of this component.
   useEffect(() => {
-    const storedMessages = loadStoredMessages();
+    const storedMessages = loadStoredMessages(locale, content.seedGreeting);
     storageReadyRef.current = true;
     queueMicrotask(() => {
       messagesRef.current = storedMessages;
       setMessages(storedMessages);
     });
-  }, []);
+  }, [locale, content.seedGreeting]);
 
   useEffect(() => {
     const container = messagesContainerRef.current;
@@ -322,7 +324,7 @@ export function DigitalTwinChat() {
 
   function resetChat() {
     abortControllerRef.current?.abort();
-    const seedMessages = createSeedMessages();
+    const seedMessages = createSeedMessages(content.seedGreeting);
     setMessages(seedMessages);
     messagesRef.current = seedMessages;
     setInput("");
@@ -340,15 +342,15 @@ export function DigitalTwinChat() {
     <div className="twin-shell">
       <div className="twin-header">
         <div>
-          <h3>Digital Twin Chat</h3>
-          <p>Ask about projects, skills, education, and career journey.</p>
+          <h3>{content.panelTitle}</h3>
+          <p>{content.panelSubtitle}</p>
         </div>
         <button
           type="button"
           className="twin-reset"
           onClick={resetChat}
-          aria-label="Reset chat"
-          title="Reset chat"
+          aria-label={content.reset}
+          title={content.reset}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -371,7 +373,7 @@ export function DigitalTwinChat() {
 
       {!hasUserMessage ? (
         <div className="twin-prompts">
-          {starterPrompts.map((prompt) => (
+          {content.starterPrompts.map((prompt: string) => (
             <button
               key={prompt}
               type="button"
@@ -392,21 +394,25 @@ export function DigitalTwinChat() {
         ref={messagesContainerRef}
       >
         {messages.map((message) => (
-          <MessageBubble key={message.id} message={message} />
+          <MessageBubble
+            key={message.id}
+            message={message}
+            roles={content.roles}
+          />
         ))}
       </div>
 
       {loading ? (
         <p className="twin-status" role="status">
           {showDelayMessage
-            ? "Still working — the AI service may be experiencing delays."
-            : "Digital Twin is thinking..."}
+            ? content.stillWorking
+            : content.thinking}
         </p>
       ) : null}
 
       <form className="twin-form" onSubmit={handleSubmit}>
         <label htmlFor="digital-twin-input" className="sr-only">
-          Ask about Ziyad&apos;s career
+          {content.inputLabel}
         </label>
         <div className="twin-form-row">
           <textarea
@@ -414,7 +420,7 @@ export function DigitalTwinChat() {
             value={input}
             onChange={(event) => setInput(event.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask about experience, skills, projects, education, or goals..."
+            placeholder={content.placeholder}
             rows={3}
             disabled={loading}
           />
@@ -422,7 +428,7 @@ export function DigitalTwinChat() {
             type="submit"
             className="twin-send"
             disabled={!canSubmit}
-            aria-label={loading ? "Sending…" : "Send message"}
+            aria-label={loading ? content.sending : content.send}
           >
             {loading ? (
               <svg
@@ -469,7 +475,7 @@ export function DigitalTwinChat() {
           <p>{error}</p>
           {lastUserPrompt ? (
             <button type="button" onClick={retryLastMessage} disabled={loading}>
-              Retry
+              {content.retry}
             </button>
           ) : null}
         </div>

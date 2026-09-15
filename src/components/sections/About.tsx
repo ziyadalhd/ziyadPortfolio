@@ -1,20 +1,18 @@
+import type { Dictionary } from "@/i18n/types";
+
 import { SectionHeading } from "../ui/SectionHeading";
 
-export function About() {
+export function About({ content }: { content: Dictionary["about"] }) {
   return (
     <section id="about" className="section-card scroll-mt-6">
       <SectionHeading
-        eyebrow="About Me"
-        title="Structured engineer. Product mindset. Execution-focused."
+        eyebrow={content.eyebrow}
+        title={content.title}
       />
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_auto]">
         <p className="max-w-3xl text-lg leading-relaxed text-slate-400">
-          I am a Software Engineering student with strong interest in mobile
-          development and full-stack systems. I enjoy operating at the
-          intersection of architecture and user impact — defining requirements,
-          shaping system design, implementing production-ready features, and
-          validating quality with a disciplined workflow.
+          {content.body}
         </p>
 
         {/* Pull stat */}
@@ -38,7 +36,7 @@ export function About() {
             className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500"
             style={{ fontFamily: "var(--font-syne)" }}
           >
-            GPA
+            {content.gpaLabel}
           </span>
         </div>
       </div>

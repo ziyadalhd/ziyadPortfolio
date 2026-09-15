@@ -1,8 +1,9 @@
 import { personalInfo } from "@/data/portfolio";
+import type { Dictionary } from "@/i18n/types";
 
 import { SectionHeading } from "../ui/SectionHeading";
 
-export function Contact() {
+export function Contact({ content }: { content: Dictionary["contact"] }) {
   return (
     <section id="contact" className="section-card scroll-mt-6">
       <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-start">
@@ -10,8 +11,8 @@ export function Contact() {
         {/* Left: heading + tiles */}
         <div>
           <SectionHeading
-            eyebrow="Contact"
-            title="Let&rsquo;s build something meaningful"
+            eyebrow={content.eyebrow}
+            title={content.title}
           />
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
@@ -49,7 +50,7 @@ export function Contact() {
                   className="text-[0.6rem] uppercase tracking-[0.2em] text-slate-600"
                   style={{ fontFamily: "var(--font-syne)" }}
                 >
-                  Email
+                  {content.emailLabel}
                 </p>
                 <p className="truncate text-sm text-slate-300">
                   {personalInfo.email}
@@ -91,7 +92,7 @@ export function Contact() {
                   className="text-[0.6rem] uppercase tracking-[0.2em] text-slate-600"
                   style={{ fontFamily: "var(--font-syne)" }}
                 >
-                  Phone
+                  {content.phoneLabel}
                 </p>
                 <p className="text-sm text-slate-300">{personalInfo.phone}</p>
               </div>
@@ -105,7 +106,7 @@ export function Contact() {
             className="text-[0.6rem] uppercase tracking-[0.24em] text-slate-600 lg:text-right"
             style={{ fontFamily: "var(--font-syne)" }}
           >
-            Find me online
+            {content.findMeOnline}
           </p>
           <a
             href={personalInfo.linkedin}

@@ -1,36 +1,28 @@
+import type { Dictionary } from "@/i18n/types";
+
 import { SectionHeading } from "../ui/SectionHeading";
 
-const skillDetails: { category: string; techs: string[] }[] = [
-  {
-    category: "Mobile",
-    techs: ["Flutter", "Dart", "Swift", "Java"],
-  },
-  {
-    category: "Backend",
-    techs: ["Spring Boot", "REST APIs", "Firebase"],
-  },
-  {
-    category: "Data",
-    techs: ["PostgreSQL", "SQL", "Git", "GitHub"],
-  },
-  {
-    category: "Process",
-    techs: ["OOP", "SDLC", "Agile (Scrum)", "System Design"],
-  },
+type CategoryKey = keyof Dictionary["focus"]["categories"];
+
+const skillDetails: { key: CategoryKey; techs: string[] }[] = [
+  { key: "mobile", techs: ["Flutter", "Dart", "Swift", "Java"] },
+  { key: "backend", techs: ["Spring Boot", "REST APIs", "Firebase"] },
+  { key: "data", techs: ["PostgreSQL", "SQL", "Git", "GitHub"] },
+  { key: "process", techs: ["OOP", "SDLC", "Agile (Scrum)", "System Design"] },
 ];
 
-export function TechnicalFocus() {
+export function TechnicalFocus({ content }: { content: Dictionary["focus"] }) {
   return (
-    <section className="grid gap-6 lg:grid-cols-2" aria-label="Technical focus">
+    <section className="grid gap-6 lg:grid-cols-2" aria-label={content.sectionLabel}>
       {/* Skills card */}
       <div className="section-card">
         <SectionHeading
-          eyebrow="Technical Focus"
-          title="Core engineering stack"
+          eyebrow={content.eyebrow}
+          title={content.title}
         />
         <div className="mt-8 space-y-5">
           {skillDetails.map((group) => (
-            <div key={group.category}>
+            <div key={group.key}>
               <p
                 className="mb-2.5 text-[0.65rem] uppercase tracking-[0.24em]"
                 style={{
@@ -38,7 +30,7 @@ export function TechnicalFocus() {
                   color: "rgba(245,158,11,0.7)",
                 }}
               >
-                {group.category}
+                {content.categories[group.key]}
               </p>
               <div className="flex flex-wrap gap-2">
                 {group.techs.map((tech) => (
@@ -65,15 +57,11 @@ export function TechnicalFocus() {
       {/* Objective card */}
       <div className="section-card flex flex-col">
         <SectionHeading
-          eyebrow="Current Objective"
-          title="Building high-value mobile products"
+          eyebrow={content.objectiveEyebrow}
+          title={content.objectiveTitle}
         />
         <p className="mt-8 leading-relaxed text-slate-400">
-          I am open to roles where I can contribute to mobile product
-          engineering, collaborate across backend and design, and continue
-          delivering scalable features with speed and quality. I am particularly
-          interested in teams that value ownership, mentorship, and measurable
-          product outcomes.
+          {content.objectiveBody}
         </p>
 
         {/* Decorative stat row */}
