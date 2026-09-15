@@ -32,7 +32,7 @@ test("loads styled and interactive on iPhone Safari/WebKit", async ({
 
   await expect(page.locator("main")).toHaveCSS(
     "background-color",
-    "rgb(7, 11, 20)",
+    "rgb(6, 8, 15)",
   );
 
   const prompt = page.getByRole("button", {
@@ -55,7 +55,7 @@ test("loads styled and interactive on iPhone Safari/WebKit", async ({
     .getByLabel(/Ask about Ziyad's career/i)
     .fill("What kind of roles is Ziyad looking for?");
   await Promise.all([
-    page.getByRole("button", { name: /Ask Digital Twin/i }).click(),
+    page.getByRole("button", { name: /Send message/i }).click(),
     page.waitForResponse(/\/api\/digital-twin/),
   ]);
   await expect(

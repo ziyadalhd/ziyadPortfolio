@@ -173,12 +173,12 @@ export function DigitalTwinChat() {
   }, []);
 
   useEffect(() => {
-    if (!loading) {
-      setShowDelayMessage(false);
-      return;
-    }
+    if (!loading) return;
     const timer = setTimeout(() => setShowDelayMessage(true), 8_000);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      setShowDelayMessage(false);
+    };
   }, [loading]);
 
   async function sendMessage(content: string, appendUserMessage = true) {
