@@ -57,7 +57,7 @@ export async function POST(req: Request) {
         apiKey,
         model,
         siteUrl,
-        systemPrompt: buildSystemPrompt(),
+        systemPrompt: buildSystemPrompt(validation.locale),
         messages: validation.messages,
       });
 
@@ -73,7 +73,7 @@ export async function POST(req: Request) {
       apiKey,
       model,
       siteUrl,
-      systemPrompt: buildSystemPrompt(),
+      systemPrompt: buildSystemPrompt(validation.locale),
       messages: validation.messages,
     });
 

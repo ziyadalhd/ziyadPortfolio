@@ -1,11 +1,12 @@
 import linkedInProfile from "@/data/linkedin.json";
 import { personalInfo } from "@/data/portfolio";
+import type { Locale } from "@/i18n/config";
 
 export const CAREER_KNOWLEDGE = `
 Identity:
 - Name: ${personalInfo.name}
-- Role: ${personalInfo.role}
-- Location: ${personalInfo.location}
+- Role: ${personalInfo.role.en}
+- Location: ${personalInfo.location.en}
 - LinkedIn: ${personalInfo.linkedinDisplay}
 - GitHub: ${personalInfo.githubDisplay}
 
@@ -55,17 +56,35 @@ Response rules:
 - Prefer warm and confident wording over robotic tone.
 `;
 
-let _cachedSystemPrompt: string | undefined;
+const LOCALE_RULES: Record<Locale, string> = {
+  en: `Language:
+- Reply in English.`,
+  // "Regardless of the language of the question" matters: without it an
+  // English question on /ar gets an English answer and the page looks broken.
+  ar: `Language:
+- Reply in Modern Standard Arabic, regardless of the language of the question.
+- Keep technology, product and company names in Latin script: Flutter, Dart, Swift, Spring Boot, Java, PostgreSQL, SQL, REST API, Git, GitHub, Firebase, Agile, Scrum, WASL, iOS, Xcode.
+- Use these renderings: جامعة أم القرى (Umm Al-Qura University), هندسة البرمجيات (Software Engineering), مشروع التخرج (graduation project), تطوير تطبيقات الجوال (mobile app development), المعدل التراكمي (GPA), ساعات تطوعية (volunteering hours).`,
+};
 
-export function buildSystemPrompt() {
-  if (!_cachedSystemPrompt) {
-    _cachedSystemPrompt = [
-      SYSTEM_PROMPT,
-      "Career profile you must use as the source of truth:",
-      CAREER_KNOWLEDGE,
-      "Curated LinkedIn and resume context:",
-      linkedInProfile.summary,
-    ].join("\n\n");
-  }
-  return _cachedSystemPrompt;
+// Keyed by locale: a single cached string would pin a warm serverless instance
+// to whichever locale reached it first, so an Arabic visitor would silently
+// get English answers.
+const cache = new Map<Locale, string>();
+
+export function buildSystemPrompt(locale: Locale) {
+  const cached = cache.get(locale);
+  if (cached) return cached;
+
+  const prompt = [
+    SYSTEM_PROMPT,
+    LOCALE_RULES[locale],
+    "Career profile you must use as the source of truth:",
+    CAREER_KNOWLEDGE,
+    "Curated LinkedIn and resume context:",
+    linkedInProfile.summary,
+  ].join("\n\n");
+
+  cache.set(locale, prompt);
+  return prompt;
 }

@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import type { ChatMessage } from "@/types/chat";
+import { DEFAULT_LOCALE, LOCALES, type Locale } from "@/i18n/config";
 
 export const MAX_HISTORY_MESSAGES = 12;
 export const MAX_MESSAGE_CONTENT_LENGTH = 4_000;
@@ -14,6 +15,7 @@ const chatMessageSchema = z.object({
 const requestSchema = z.object({
   messages: z.array(chatMessageSchema).min(1),
   stream: z.boolean().optional(),
+  locale: z.enum(LOCALES).default(DEFAULT_LOCALE),
 });
 
 // Best-effort pattern block — not a security guarantee. The system prompt
@@ -36,7 +38,7 @@ const promptInjectionPatterns = [
 ];
 
 export type ValidationResult =
-  | { ok: true; messages: ChatMessage[]; stream: boolean }
+  | { ok: true; messages: ChatMessage[]; stream: boolean; locale: Locale }
   | { ok: false; status: number; error: string; fields?: unknown };
 
 export function validateRequestBodyText(bodyText: string): ValidationResult {
@@ -99,5 +101,10 @@ export function validateRequestBodyText(bodyText: string): ValidationResult {
     };
   }
 
-  return { ok: true, messages, stream: result.data.stream ?? false };
+  return {
+    ok: true,
+    messages,
+    stream: result.data.stream ?? false,
+    locale: result.data.locale,
+  };
 }

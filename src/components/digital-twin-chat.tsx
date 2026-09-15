@@ -216,6 +216,7 @@ export function DigitalTwinChat({
         body: JSON.stringify({
           messages: history,
           stream: streamingEnabled,
+          locale,
         }),
         signal: abortController.signal,
       });

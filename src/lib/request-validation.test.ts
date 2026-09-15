@@ -123,3 +123,34 @@ describe("validateRequestBodyText", () => {
     }
   });
 });
+
+describe("locale", () => {
+  it("defaults to Arabic when absent", () => {
+    const result = validateRequestBodyText(
+      JSON.stringify({ messages: [{ role: "user", content: "hi" }] }),
+    );
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.locale).toBe("ar");
+  });
+
+  it("accepts an explicit locale", () => {
+    const result = validateRequestBodyText(
+      JSON.stringify({
+        messages: [{ role: "user", content: "hi" }],
+        locale: "en",
+      }),
+    );
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.locale).toBe("en");
+  });
+
+  it("rejects an unsupported locale", () => {
+    const result = validateRequestBodyText(
+      JSON.stringify({
+        messages: [{ role: "user", content: "hi" }],
+        locale: "fr",
+      }),
+    );
+    expect(result.ok).toBe(false);
+  });
+});
