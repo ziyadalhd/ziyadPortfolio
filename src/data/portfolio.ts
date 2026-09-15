@@ -77,30 +77,107 @@ export const journey: {
   },
 ];
 
-export const portfolioRoadmap = [
+export type ProjectLink = {
+  kind: "repo" | "demo" | "caseStudy" | "store";
+  href: string;
+};
+
+export type Project = {
+  /** Stable React key and analytics id; never translated. */
+  slug: string;
+  title: Localized;
+  kind: Localized;
+  /** Locale-neutral, ASCII digits. */
+  period: Localized;
+  status: "shipped" | "inProgress" | "personal";
+  summary: Localized;
+  highlights: Localized<string[]>;
+  /** Brand names — never translated. */
+  stack: string[];
+  icon?: "mobile" | "architecture" | "code";
+  links?: ProjectLink[];
+  image?: { src: string; width: number; height: number; alt: Localized };
+};
+
+export const projects: Project[] = [
   {
-    title: "Case Study: WASL Platform",
-    description:
-      "Full architecture walkthrough, product decisions, UI system, and engineering tradeoffs.",
+    slug: "wasl",
+    title: {
+      en: "Wasl — Student Transportation & Accommodation Platform",
+      ar: "وصل — منصة النقل والسكن الطلابي",
+    },
+    kind: { en: "Graduation Project", ar: "مشروع التخرج" },
+    period: { en: "2025 – 2026", ar: "2025 – 2026" },
+    status: "inProgress",
+    icon: "mobile",
+    summary: {
+      en: "An integrated platform connecting students with transportation and accommodation providers, built with a Flutter front-end over Spring Boot REST APIs and PostgreSQL.",
+      ar: "منصة متكاملة تربط الطلاب بمزوّدي خدمات النقل والسكن، مبنية بواجهة Flutter فوق واجهات برمجية على Spring Boot وقاعدة بيانات PostgreSQL.",
+    },
+    highlights: {
+      en: [
+        "Built cross-platform mobile screens from system design and SRS documentation, supporting three user roles: Student, Provider and Admin.",
+        "Integrated the Flutter front-end with Spring Boot REST APIs for data exchange, user flows and service operations.",
+        "Implemented booking and service-request workflows connecting students with providers.",
+      ],
+      ar: [
+        "طوّرت واجهات جوال متعددة المنصات انطلاقاً من تصميم النظام ووثيقة المتطلبات، بدعم ثلاثة أدوار: الطالب والمزوّد والمشرف.",
+        "ربطت واجهة Flutter بواجهات Spring Boot البرمجية لتبادل البيانات وإدارة مسارات المستخدم والخدمات.",
+        "بنيت مسارات الحجز وطلبات الخدمة التي تربط الطلاب بالمزوّدين.",
+      ],
+    },
+    stack: [
+      "Flutter",
+      "Dart",
+      "Spring Boot",
+      "Java",
+      "REST APIs",
+      "PostgreSQL",
+      "Git",
+      "Agile/Scrum",
+    ],
   },
   {
-    title: "Case Study: Swift iOS Project",
-    description:
-      "How I learned Swift quickly and turned requirements into a working application.",
-  },
-  {
-    title: "Mobile Engineering Playbook",
-    description:
-      "My reusable development standards for clean architecture, API integration, and testing.",
+    slug: "water-tracker",
+    title: {
+      en: "Daily Water Intake Tracker — iOS App",
+      ar: "متتبّع شرب الماء اليومي — تطبيق iOS",
+    },
+    kind: { en: "Personal Learning Project", ar: "مشروع تعلّم شخصي" },
+    period: { en: "2026", ar: "2026" },
+    status: "personal",
+    icon: "code",
+    summary: {
+      en: "A native iOS app that calculates and tracks daily water-intake goals, built while teaching myself Swift from scratch.",
+      ar: "تطبيق iOS أصلي يحسب أهداف شرب الماء اليومية ويتتبّعها، طوّرته أثناء تعلّمي لغة Swift من الصفر.",
+    },
+    highlights: {
+      en: [
+        "Self-taught Swift from scratch to ship a working iOS prototype.",
+        "Implemented core application logic and interface components using native iOS patterns.",
+        "Added local persistence so entries survive across sessions.",
+      ],
+      ar: [
+        "تعلّمت Swift ذاتياً من الصفر حتى إنجاز نموذج عملي يعمل على iOS.",
+        "نفّذت منطق التطبيق الأساسي ومكوّنات الواجهة وفق أنماط iOS الأصلية.",
+        "أضفت تخزيناً محلياً يحفظ إدخالات المستخدم بين الجلسات.",
+      ],
+    },
+    stack: ["Swift", "Xcode", "Local Persistence"],
   },
 ];
 
-export const skillGroups = [
-  "Flutter, Dart, Swift, Java",
-  "Spring Boot, REST APIs, Firebase",
-  "PostgreSQL, SQL, Git, GitHub",
-  "OOP, SDLC, Agile (Scrum), System Design",
+
+export const skillCategories: {
+  key: "mobile" | "backend" | "data" | "process";
+  techs: string[];
+}[] = [
+  { key: "mobile", techs: ["Flutter", "Dart", "Swift", "native iOS"] },
+  { key: "backend", techs: ["Spring Boot", "Java", "REST APIs", "Firebase"] },
+  { key: "data", techs: ["PostgreSQL", "SQL", "Git", "GitHub"] },
+  { key: "process", techs: ["OOP", "SDLC", "Agile (Scrum)", "System Design"] },
 ];
+
 
 export const valuePillars: Localized[] = [
   {

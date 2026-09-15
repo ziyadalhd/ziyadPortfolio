@@ -1,15 +1,8 @@
+import { skillCategories } from "@/data/portfolio";
 import type { Dictionary } from "@/i18n/types";
 
 import { SectionHeading } from "../ui/SectionHeading";
 
-type CategoryKey = keyof Dictionary["focus"]["categories"];
-
-const skillDetails: { key: CategoryKey; techs: string[] }[] = [
-  { key: "mobile", techs: ["Flutter", "Dart", "Swift", "Java"] },
-  { key: "backend", techs: ["Spring Boot", "REST APIs", "Firebase"] },
-  { key: "data", techs: ["PostgreSQL", "SQL", "Git", "GitHub"] },
-  { key: "process", techs: ["OOP", "SDLC", "Agile (Scrum)", "System Design"] },
-];
 
 export function TechnicalFocus({ content }: { content: Dictionary["focus"] }) {
   return (
@@ -21,7 +14,7 @@ export function TechnicalFocus({ content }: { content: Dictionary["focus"] }) {
           title={content.title}
         />
         <div className="mt-8 space-y-5">
-          {skillDetails.map((group) => (
+          {skillCategories.map((group) => (
             <div key={group.key}>
               <p
                 className="mb-2.5 text-[0.65rem] uppercase tracking-[0.24em]"

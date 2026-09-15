@@ -59,7 +59,7 @@ export default async function Home({
         </div>
 
         <div className="animate-slide-up delay-500">
-          <Portfolio content={dict.portfolio} />
+          <Portfolio content={dict.portfolio} locale={locale} />
         </div>
 
         <div className="animate-slide-up delay-600">
