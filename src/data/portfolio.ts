@@ -19,8 +19,8 @@ export const personalInfo = {
   github: "https://github.com/ziyadalhd",
   githubDisplay: "github.com/ziyadalhd",
   email: "ziyadalhdriti@gmail.com",
-  phone: "+966 56 926 4771",
-  phoneHref: "+966569264771",
+  /** Served from /public; see README. Deliberately has no phone number. */
+  resume: "/ziyad-alhdriti-resume.pdf",
   gpa: "3.73 / 4.00",
   expectedGraduation: "2027",
   volunteerHours: "262+",

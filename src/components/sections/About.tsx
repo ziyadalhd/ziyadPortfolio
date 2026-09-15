@@ -1,3 +1,4 @@
+import { personalInfo } from "@/data/portfolio";
 import type { Dictionary } from "@/i18n/types";
 
 import { SectionHeading } from "../ui/SectionHeading";
@@ -15,30 +16,37 @@ export function About({ content }: { content: Dictionary["about"] }) {
           {content.body}
         </p>
 
-        {/* Pull stat */}
-        <div
-          className="flex flex-col items-center justify-center rounded-2xl px-8 py-5 text-center lg:min-w-[140px]"
+        {/* GPA lives once, in the Hero snapshot card. */}
+        <a
+          href={personalInfo.resume}
+          target="_blank"
+          rel="noreferrer"
+          className="flex flex-col justify-center rounded-2xl px-8 py-5 lg:min-w-[200px]"
           style={{
             border: "1px solid rgba(245,158,11,0.2)",
             background: "rgba(245,158,11,0.05)",
+            textDecoration: "none",
           }}
         >
           <span
-            className="text-4xl font-extrabold"
+            className="text-lg font-extrabold text-white"
+            style={{ fontFamily: "var(--font-heading)" }}
+          >
+            {content.resumeTitle}
+          </span>
+          <span className="mt-1 text-sm text-slate-400">
+            {content.resumeNote}
+          </span>
+          <span
+            className="mt-3 text-sm font-semibold"
             style={{
               fontFamily: "var(--font-heading)",
               color: "var(--clr-amber)",
             }}
           >
-            3.73
+            {content.resumeCta}
           </span>
-          <span
-            className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500"
-            style={{ fontFamily: "var(--font-heading)" }}
-          >
-            {content.gpaLabel}
-          </span>
-        </div>
+        </a>
       </div>
     </section>
   );

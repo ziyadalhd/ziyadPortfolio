@@ -825,3 +825,28 @@ html[lang="ar"] [class*="tracking-"] {
 [dir="rtl"] .amber-line {
   background: linear-gradient(270deg, var(--clr-amber), transparent);
 }
+
+
+/* ── Scroll-triggered reveal ──────────────────────────────────────────────
+   The entrance animations used to run on mount, so sections below the fold
+   had finished animating before you scrolled to them.
+
+   The @supports guard is load-bearing: Firefox has no animation-timeline, and
+   without it the opacity:0 start state would leave the whole page invisible
+   there. Unsupported browsers simply show content immediately.             */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: slide-up 0.6s both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 30%;
+  }
+}
+
+/* The global reduced-motion block only zeroes animation-duration, which has
+   no effect on a scroll-driven timeline. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    animation: none;
+    animation-timeline: none;
+  }
+}

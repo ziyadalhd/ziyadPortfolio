@@ -48,35 +48,35 @@ export default async function Home({
       </div>
 
       <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-12 px-5 pb-20 pt-8 md:gap-16 md:px-10 lg:gap-20 lg:pt-12">
-        <div className="animate-slide-up delay-0">
+        <div className="reveal">
           <SiteHeader content={dict.nav} locale={locale} />
         </div>
 
-        <div className="animate-slide-up delay-100">
+        <div className="reveal">
           <Hero content={dict.hero} locale={locale} />
         </div>
 
-        <div className="animate-slide-up delay-200">
+        <div className="reveal">
           <About content={dict.about} />
         </div>
 
-        <div className="animate-slide-up delay-300">
+        <div className="reveal">
           <Journey content={dict.journey} locale={locale} />
         </div>
 
-        <div className="animate-slide-up delay-400">
+        <div className="reveal">
           <TechnicalFocus content={dict.focus} />
         </div>
 
-        <div className="animate-slide-up delay-500">
+        <div className="reveal">
           <Portfolio content={dict.portfolio} locale={locale} />
         </div>
 
-        <div className="animate-slide-up delay-600">
+        <div className="reveal">
           <DigitalTwinSection content={dict.twin} locale={locale} />
         </div>
 
-        <div className="animate-slide-up delay-700">
+        <div className="reveal">
           <Contact content={dict.contact} />
         </div>
 

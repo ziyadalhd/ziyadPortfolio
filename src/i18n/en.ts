@@ -34,6 +34,8 @@ export const en = {
       volunteer: "Volunteer Hours",
       location: "Location",
     },
+    ctaContact: "Get in touch",
+    ctaResume: "Download résumé",
     availability:
       "Open to mobile engineering opportunities and high-growth teams.",
   },
@@ -43,6 +45,9 @@ export const en = {
     title: "Structured engineer. Product mindset. Execution-focused.",
     body: "I am a Software Engineering student with strong interest in mobile development and full-stack systems. I enjoy operating at the intersection of architecture and user impact — defining requirements, shaping system design, implementing production-ready features, and validating quality with a disciplined workflow.",
     gpaLabel: "GPA",
+    resumeTitle: "Résumé",
+    resumeNote: "One page. PDF.",
+    resumeCta: "Download PDF \u2192",
   },
 
   journey: {
@@ -121,7 +126,6 @@ export const en = {
     eyebrow: "Contact",
     title: "Let's build something meaningful",
     emailLabel: "Email",
-    phoneLabel: "Phone",
     findMeOnline: "Find me online",
   },
 
