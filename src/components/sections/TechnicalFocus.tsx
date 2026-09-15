@@ -57,31 +57,11 @@ export function TechnicalFocus({ content }: { content: Dictionary["focus"] }) {
           {content.objectiveBody}
         </p>
 
-        {/* Decorative stat row */}
-        <div className="mt-auto pt-8 grid grid-cols-3 gap-4 border-t border-white/[0.06]">
-          {[
-            { value: "262+", label: "Volunteer hrs" },
-            { value: "3.73", label: "GPA" },
-            { value: "2027", label: "Graduation" },
-          ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <p
-                className="text-2xl font-extrabold"
-                style={{
-                  fontFamily: "var(--font-heading)",
-                  color: "var(--clr-amber)",
-                }}
-              >
-                {stat.value}
-              </p>
-              <p
-                className="mt-0.5 text-[0.62rem] uppercase tracking-[0.18em] text-slate-600"
-                style={{ fontFamily: "var(--font-heading)" }}
-              >
-                {stat.label}
-              </p>
-            </div>
-          ))}
+        {/* The Hero snapshot card is the single home for these numbers. */}
+        <div className="mt-auto pt-8 border-t border-white/[0.06]">
+          <a href="#contact" className="button-primary">
+            {content.ctaTalk}
+          </a>
         </div>
       </div>
     </section>

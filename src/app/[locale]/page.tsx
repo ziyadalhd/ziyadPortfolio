@@ -8,6 +8,7 @@ import { Portfolio } from "@/components/sections/Portfolio";
 import { TechnicalFocus } from "@/components/sections/TechnicalFocus";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
+import { personSchema } from "@/lib/person-schema";
 import { notFound } from "next/navigation";
 
 export default async function Home({
@@ -25,6 +26,15 @@ export default async function Home({
       id="main-content"
       className="relative min-h-screen overflow-hidden bg-base text-slate-100"
     >
+      {/* script-src already allows inline, and CSP does not apply to
+          non-executable ld+json. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(personSchema(locale, dict.meta.description)),
+        }}
+      />
+
       <a href="#hero" className="skip-link">
         {dict.skipToContent}
       </a>

@@ -59,6 +59,7 @@ export const en = {
     objectiveTitle: "Building high-value mobile products",
     objectiveBody:
       "I am open to roles where I can contribute to mobile product engineering, collaborate across backend and design, and continue delivering scalable features with speed and quality. I am particularly interested in teams that value ownership, mentorship, and measurable product outcomes.",
+    ctaTalk: "Let's talk",
     categories: {
       mobile: "Mobile",
       backend: "Backend",
