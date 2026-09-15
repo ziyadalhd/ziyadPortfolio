@@ -12,11 +12,12 @@ export function Hero({
   locale: Locale;
 }) {
   return (
-    <section id="hero" className="grid gap-8 lg:gap-10 lg:grid-cols-[1fr_320px] lg:items-start">
-
+    <section
+      id="hero"
+      className="grid gap-8 lg:gap-10 lg:grid-cols-[1fr_320px] lg:items-start"
+    >
       {/* Left column */}
       <div className="space-y-5 sm:space-y-7">
-
         {/* Eyebrow pill — compact on mobile */}
         <div>
           <span
@@ -40,7 +41,10 @@ export function Hero({
         {/* Main headline — fluid type scale safe for iPhone SE */}
         <h1
           className="text-3xl font-extrabold leading-[1.1] tracking-tight rtl:tracking-normal text-white sm:text-5xl lg:text-7xl"
-          style={{ fontFamily: "var(--font-heading)", overflowWrap: "break-word" }}
+          style={{
+            fontFamily: "var(--font-heading)",
+            overflowWrap: "break-word",
+          }}
         >
           {content.titleLead}{" "}
           <span className="hero-gradient">{content.titleAccent}</span>
@@ -81,14 +85,26 @@ export function Hero({
             rel="noreferrer"
             className="button-secondary gap-2.5"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75} aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.75}
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16"
+              />
             </svg>
             {content.ctaResume}
           </a>
         </div>
       </div>
-
 
       {/* Snapshot card — full width on mobile, fixed 320px sidebar on desktop */}
       <aside

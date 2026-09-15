@@ -1,5 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Sans_Arabic, Plus_Jakarta_Sans, Syne } from "next/font/google";
+import {
+  IBM_Plex_Sans_Arabic,
+  Plus_Jakarta_Sans,
+  Syne,
+} from "next/font/google";
 import { notFound } from "next/navigation";
 
 import { ScrollResetOnLoad } from "@/components/ScrollResetOnLoad";

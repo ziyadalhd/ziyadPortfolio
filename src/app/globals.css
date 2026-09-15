@@ -658,16 +658,36 @@ a {
   animation: fade-in 0.5s ease both;
 }
 
-.delay-0 { animation-delay: 0ms; }
-.delay-100 { animation-delay: 100ms; }
-.delay-150 { animation-delay: 150ms; }
-.delay-200 { animation-delay: 200ms; }
-.delay-300 { animation-delay: 300ms; }
-.delay-400 { animation-delay: 400ms; }
-.delay-500 { animation-delay: 500ms; }
-.delay-600 { animation-delay: 600ms; }
-.delay-700 { animation-delay: 700ms; }
-.delay-800 { animation-delay: 800ms; }
+.delay-0 {
+  animation-delay: 0ms;
+}
+.delay-100 {
+  animation-delay: 100ms;
+}
+.delay-150 {
+  animation-delay: 150ms;
+}
+.delay-200 {
+  animation-delay: 200ms;
+}
+.delay-300 {
+  animation-delay: 300ms;
+}
+.delay-400 {
+  animation-delay: 400ms;
+}
+.delay-500 {
+  animation-delay: 500ms;
+}
+.delay-600 {
+  animation-delay: 600ms;
+}
+.delay-700 {
+  animation-delay: 700ms;
+}
+.delay-800 {
+  animation-delay: 800ms;
+}
 
 /* ── Focus rings ── */
 .button-primary:focus-visible,
@@ -784,7 +804,6 @@ a {
   }
 }
 
-
 /* ── Arabic ───────────────────────────────────────────────────────────────
    Syne and Plus Jakarta carry no Arabic glyphs, so the Arabic page swaps to
    IBM Plex Sans Arabic for both roles. One family at two weights reads better
@@ -825,7 +844,6 @@ html[lang="ar"] [class*="tracking-"] {
 [dir="rtl"] .amber-line {
   background: linear-gradient(270deg, var(--clr-amber), transparent);
 }
-
 
 /* ── Scroll-triggered reveal ──────────────────────────────────────────────
    The entrance animations used to run on mount, so sections below the fold

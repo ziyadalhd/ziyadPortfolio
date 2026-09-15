@@ -13,7 +13,10 @@ export const personalInfo = {
     en: "Software Engineering | Mobile Application Engineer",
     ar: "هندسة برمجيات | مهندس تطبيقات جوال",
   } as Localized,
-  location: { en: "Makkah, Saudi Arabia", ar: "مكة المكرمة، السعودية" } as Localized,
+  location: {
+    en: "Makkah, Saudi Arabia",
+    ar: "مكة المكرمة، السعودية",
+  } as Localized,
   linkedin: "https://www.linkedin.com/in/ziyad-alhdriti",
   linkedinDisplay: "www.linkedin.com/in/ziyad-alhdriti",
   github: "https://github.com/ziyadalhd",
@@ -167,7 +170,6 @@ export const projects: Project[] = [
   },
 ];
 
-
 export const skillCategories: {
   key: "mobile" | "backend" | "data" | "process";
   techs: string[];
@@ -177,7 +179,6 @@ export const skillCategories: {
   { key: "data", techs: ["PostgreSQL", "SQL", "Git", "GitHub"] },
   { key: "process", techs: ["OOP", "SDLC", "Agile (Scrum)", "System Design"] },
 ];
-
 
 export const valuePillars: Localized[] = [
   {

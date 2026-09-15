@@ -6,10 +6,7 @@ import { SectionHeading } from "../ui/SectionHeading";
 export function About({ content }: { content: Dictionary["about"] }) {
   return (
     <section id="about" className="section-card scroll-mt-6">
-      <SectionHeading
-        eyebrow={content.eyebrow}
-        title={content.title}
-      />
+      <SectionHeading eyebrow={content.eyebrow} title={content.title} />
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_auto]">
         <p className="max-w-3xl text-lg leading-relaxed text-slate-400">

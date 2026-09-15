@@ -98,8 +98,7 @@ export const en = {
     intro:
       "This assistant is trained on my career background and project history. Ask about my skills, journey, and professional direction in real time.",
     panelTitle: "Digital Twin Chat",
-    panelSubtitle:
-      "Ask about projects, skills, education, and career journey.",
+    panelSubtitle: "Ask about projects, skills, education, and career journey.",
     seedGreeting:
       "Hi, I am Ziyad's Digital Twin. Feel free to ask about my background, projects, skills, and career direction.",
     starterPrompts: [

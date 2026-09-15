@@ -7,13 +7,9 @@ export function Contact({ content }: { content: Dictionary["contact"] }) {
   return (
     <section id="contact" className="section-card scroll-mt-6">
       <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-start">
-
         {/* Left: heading + tiles */}
         <div>
-          <SectionHeading
-            eyebrow={content.eyebrow}
-            title={content.title}
-          />
+          <SectionHeading eyebrow={content.eyebrow} title={content.title} />
 
           <div className="mt-8 grid gap-3">
             <a
@@ -57,7 +53,6 @@ export function Contact({ content }: { content: Dictionary["contact"] }) {
                 </p>
               </div>
             </a>
-
           </div>
         </div>
 

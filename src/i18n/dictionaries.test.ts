@@ -56,7 +56,6 @@ describe("dictionaries", () => {
 function isLatinByDesign(path: string) {
   // Array entries carry an index segment; match on the parent path too.
   return (
-    LATIN_BY_DESIGN.has(path) ||
-    LATIN_BY_DESIGN.has(path.replace(/\.\d+$/, ""))
+    LATIN_BY_DESIGN.has(path) || LATIN_BY_DESIGN.has(path.replace(/\.\d+$/, ""))
   );
 }

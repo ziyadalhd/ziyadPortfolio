@@ -8,7 +8,8 @@ test.beforeEach(async ({ page }) => {
       status: 200,
       contentType: "application/json",
       body: JSON.stringify({
-        reply: "Ziyad focuses on mobile engineering, API integration, and clean architecture.",
+        reply:
+          "Ziyad focuses on mobile engineering, API integration, and clean architecture.",
       }),
     });
   });

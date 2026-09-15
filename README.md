@@ -4,8 +4,8 @@ Professional portfolio website for Ziyad Jaber Alhdriti, built with Next.js, Rea
 
 ## Features
 
-- Responsive portfolio homepage with section navigation.
-- Digital Twin chat backed by OpenRouter.
+- Bilingual Arabic/English portfolio at `/ar` and `/en`, Arabic by default.
+- Digital Twin chat backed by OpenRouter, answering in the page's language.
 - API validation, request size limits, timeout/retry handling, and basic IP rate limiting.
 - Curated LinkedIn/resume context stored as source data under `src/data`.
 
@@ -35,7 +35,26 @@ Use Node.js `^20.19.0`, `^22.13.0`, or `>=24.0.0`.
 - `npm run format`: Format files with Prettier.
 - `npm run format:check`: Check formatting.
 
+## Resume
+
+The download button points at `public/ziyad-alhdriti-resume.pdf`, which is
+**not committed**. Add it before deploying, and remove the phone number from it
+first: the file is served at a crawlable URL and is indexed by search engines.
+The site itself intentionally publishes email, LinkedIn and GitHub only.
+
+## Deploying
+
+1. Import the repo on Vercel.
+2. Set `OPENROUTER_API_KEY`, `OPENROUTER_MODEL` and `NEXT_PUBLIC_SITE_URL`
+   (the real origin) for Production. Without `NEXT_PUBLIC_SITE_URL`, metadata,
+   sitemap and JSON-LD emit `localhost` URLs.
+3. Deploy, then confirm `/robots.txt` and `/sitemap.xml` return 200 — that
+   proves the locale proxy's matcher is not swallowing them.
+4. Submit the sitemap in Google Search Console.
+
 ## Notes
 
 - If an OpenRouter key has ever been shared in chat or logs, rotate it before deploying.
+- Requires a native arm64 Node on Apple Silicon; an x86_64 build fails with
+  `bad CPU type in executable`.
 - `tutorial.md` contains the original project walkthrough.

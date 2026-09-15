@@ -35,11 +35,16 @@ export function SiteHeader({
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((e) => ratioMapRef.current.set(e.target.id, e.intersectionRatio));
+        entries.forEach((e) =>
+          ratioMapRef.current.set(e.target.id, e.intersectionRatio),
+        );
         let bestId = "";
         let bestRatio = 0;
         ratioMapRef.current.forEach((ratio, id) => {
-          if (ratio > bestRatio) { bestRatio = ratio; bestId = id; }
+          if (ratio > bestRatio) {
+            bestRatio = ratio;
+            bestId = id;
+          }
         });
         if (bestRatio > 0 && bestId) setActiveSection(bestId);
       },
@@ -64,7 +69,10 @@ export function SiteHeader({
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && menuOpen) { setMenuOpen(false); menuButtonRef.current?.focus(); }
+      if (e.key === "Escape" && menuOpen) {
+        setMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
@@ -77,10 +85,9 @@ export function SiteHeader({
         borderRadius: "18px",
         border: "1px solid rgba(255,255,255,0.08)",
         overflow: "hidden",
-        transition: "background 300ms ease, box-shadow 300ms ease, backdrop-filter 300ms ease",
-        background: scrolled
-          ? "rgba(6,8,15,0.88)"
-          : "rgba(255,255,255,0.025)",
+        transition:
+          "background 300ms ease, box-shadow 300ms ease, backdrop-filter 300ms ease",
+        background: scrolled ? "rgba(6,8,15,0.88)" : "rgba(255,255,255,0.025)",
         backdropFilter: scrolled ? "blur(20px) saturate(1.5)" : "blur(8px)",
         boxShadow: scrolled
           ? "0 8px 40px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.05) inset"
@@ -92,13 +99,13 @@ export function SiteHeader({
         aria-hidden="true"
         style={{
           height: "1px",
-          background: "linear-gradient(90deg, transparent 0%, rgba(245,158,11,0.55) 35%, rgba(251,146,60,0.45) 65%, transparent 100%)",
+          background:
+            "linear-gradient(90deg, transparent 0%, rgba(245,158,11,0.55) 35%, rgba(251,146,60,0.45) 65%, transparent 100%)",
         }}
       />
 
       {/* ── Single unified row ── */}
       <div className="flex items-center gap-4 px-5 py-3.5 md:px-6 md:py-0 md:h-[58px]">
-
         {/* Name — left anchor */}
         <a
           href="#hero"
@@ -227,7 +234,9 @@ export function SiteHeader({
                   height: "1.5px",
                   background: "currentColor",
                   transformOrigin: "center",
-                  transform: menuOpen ? "translateY(6.5px) rotate(45deg)" : "none",
+                  transform: menuOpen
+                    ? "translateY(6.5px) rotate(45deg)"
+                    : "none",
                 }}
               />
               <span
@@ -244,7 +253,9 @@ export function SiteHeader({
                   height: "1.5px",
                   background: "currentColor",
                   transformOrigin: "center",
-                  transform: menuOpen ? "translateY(-6.5px) rotate(-45deg)" : "none",
+                  transform: menuOpen
+                    ? "translateY(-6.5px) rotate(-45deg)"
+                    : "none",
                 }}
               />
             </span>
@@ -261,7 +272,9 @@ export function SiteHeader({
           display: "grid",
           gridTemplateRows: menuOpen ? "1fr" : "0fr",
           transition: "grid-template-rows 260ms cubic-bezier(0.23, 1, 0.32, 1)",
-          borderTop: menuOpen ? "1px solid rgba(255,255,255,0.06)" : "1px solid transparent",
+          borderTop: menuOpen
+            ? "1px solid rgba(255,255,255,0.06)"
+            : "1px solid transparent",
         }}
       >
         <div style={{ overflow: "hidden" }}>

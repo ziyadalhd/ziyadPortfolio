@@ -3,16 +3,15 @@ import type { Dictionary } from "@/i18n/types";
 
 import { SectionHeading } from "../ui/SectionHeading";
 
-
 export function TechnicalFocus({ content }: { content: Dictionary["focus"] }) {
   return (
-    <section className="grid gap-6 lg:grid-cols-2" aria-label={content.sectionLabel}>
+    <section
+      className="grid gap-6 lg:grid-cols-2"
+      aria-label={content.sectionLabel}
+    >
       {/* Skills card */}
       <div className="section-card">
-        <SectionHeading
-          eyebrow={content.eyebrow}
-          title={content.title}
-        />
+        <SectionHeading eyebrow={content.eyebrow} title={content.title} />
         <div className="mt-8 space-y-5">
           {skillCategories.map((group) => (
             <div key={group.key}>

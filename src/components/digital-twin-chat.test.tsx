@@ -69,9 +69,7 @@ describe("DigitalTwinChat", () => {
       await screen.findByText("Ziyad is focused on mobile engineering."),
     ).toBeInTheDocument();
     // Starter prompts should be gone once the user has sent a message
-    expect(
-      screen.queryByText(twin.starterPrompts[0]),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText(twin.starterPrompts[0])).not.toBeInTheDocument();
   });
 
   it("resets the chat to the seeded greeting", async () => {
@@ -80,9 +78,7 @@ describe("DigitalTwinChat", () => {
 
     await user.click(screen.getByRole("button", { name: /reset chat/i }));
 
-    expect(
-      screen.getByText(twin.seedGreeting),
-    ).toBeInTheDocument();
+    expect(screen.getByText(twin.seedGreeting)).toBeInTheDocument();
   });
 
   it("removes empty streaming bubble when the stream returns no content", async () => {
@@ -97,9 +93,7 @@ describe("DigitalTwinChat", () => {
       "test question{Enter}",
     );
 
-    await waitFor(() =>
-      expect(screen.getByRole("alert")).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
 
     // The empty streaming bubble must have been removed; only the seed greeting
     // has a "Digital Twin" label — there should be exactly one.
@@ -118,9 +112,7 @@ describe("DigitalTwinChat", () => {
       "What skills?{Enter}",
     );
 
-    await waitFor(() =>
-      expect(screen.getByRole("alert")).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.getByRole("alert")).toBeInTheDocument());
 
     await user.click(screen.getByRole("button", { name: /retry/i }));
 
@@ -130,15 +122,13 @@ describe("DigitalTwinChat", () => {
     const retryBody = JSON.parse(retryInit.body as string) as {
       messages: { role: string; content: string }[];
     };
-    expect(
-      retryBody.messages.every((m) => m.content.trim().length > 0),
-    ).toBe(true);
+    expect(retryBody.messages.every((m) => m.content.trim().length > 0)).toBe(
+      true,
+    );
   });
 
   it("submits a suggested question when tapped", async () => {
-    const fetchMock = makeJsonFetch(
-      "Flutter, Swift, and API integration.",
-    );
+    const fetchMock = makeJsonFetch("Flutter, Swift, and API integration.");
     vi.stubGlobal("fetch", fetchMock);
 
     const user = userEvent.setup();

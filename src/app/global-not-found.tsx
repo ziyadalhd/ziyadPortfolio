@@ -1,4 +1,8 @@
-import { IBM_Plex_Sans_Arabic, Plus_Jakarta_Sans, Syne } from "next/font/google";
+import {
+  IBM_Plex_Sans_Arabic,
+  Plus_Jakarta_Sans,
+  Syne,
+} from "next/font/google";
 
 import { DEFAULT_LOCALE, LOCALE_DIR } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -47,7 +51,10 @@ export default function GlobalNotFound() {
               {content.title}
             </h1>
             <p className="mt-4 text-slate-300">{content.body}</p>
-            <a href={`/${DEFAULT_LOCALE}`} className="button-primary mt-6 inline-flex">
+            <a
+              href={`/${DEFAULT_LOCALE}`}
+              className="button-primary mt-6 inline-flex"
+            >
               {content.cta}
             </a>
           </div>

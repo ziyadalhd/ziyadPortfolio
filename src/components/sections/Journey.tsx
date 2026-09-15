@@ -13,10 +13,7 @@ export function Journey({
 }) {
   return (
     <section id="journey" className="section-card scroll-mt-6">
-      <SectionHeading
-        eyebrow={content.eyebrow}
-        title={content.title}
-      />
+      <SectionHeading eyebrow={content.eyebrow} title={content.title} />
 
       <div className="mt-10 space-y-0" aria-label={content.timelineLabel}>
         {journey.map((item, index) => (

@@ -38,8 +38,7 @@ const MAX_STORED_MESSAGES = 50;
 // the actual runtime environment rather than the SSR pre-render context.
 function supportsStreaming() {
   return (
-    typeof ReadableStream !== "undefined" &&
-    typeof TextDecoder !== "undefined"
+    typeof ReadableStream !== "undefined" && typeof TextDecoder !== "undefined"
   );
 }
 
@@ -77,7 +76,9 @@ function loadStoredMessages(locale: Locale, greeting: string) {
         message.content.length <= MAX_MESSAGE_CONTENT_LENGTH,
     );
 
-    return validMessages.length > 0 ? validMessages : createSeedMessages(greeting);
+    return validMessages.length > 0
+      ? validMessages
+      : createSeedMessages(greeting);
   } catch {
     return createSeedMessages(greeting);
   }
@@ -405,9 +406,7 @@ export function DigitalTwinChat({
 
       {loading ? (
         <p className="twin-status" role="status">
-          {showDelayMessage
-            ? content.stillWorking
-            : content.thinking}
+          {showDelayMessage ? content.stillWorking : content.thinking}
         </p>
       ) : null}
 

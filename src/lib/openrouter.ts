@@ -308,4 +308,3 @@ async function flushBufferedLinesToWriter(
     }
   }
 }
-
