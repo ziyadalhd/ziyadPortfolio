@@ -30,7 +30,7 @@ export function Journey({
               <div
                 className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold"
                 style={{
-                  fontFamily: "var(--font-syne)",
+                  fontFamily: "var(--font-heading)",
                   border: "1px solid rgba(245,158,11,0.4)",
                   background:
                     "linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.05))",
@@ -66,7 +66,7 @@ export function Journey({
               <p
                 className="text-xs font-bold uppercase tracking-[0.22em]"
                 style={{
-                  fontFamily: "var(--font-syne)",
+                  fontFamily: "var(--font-heading)",
                   color: "rgba(245,158,11,0.75)",
                 }}
               >
@@ -74,7 +74,7 @@ export function Journey({
               </p>
               <h3
                 className="mt-2 text-lg font-bold leading-snug text-white"
-                style={{ fontFamily: "var(--font-syne)" }}
+                style={{ fontFamily: "var(--font-heading)" }}
               >
                 {item.title[locale]}
               </h3>

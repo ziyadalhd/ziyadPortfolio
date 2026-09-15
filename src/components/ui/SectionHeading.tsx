@@ -10,7 +10,7 @@ export function SectionHeading({
       <p className="eyebrow">{eyebrow}</p>
       <h2
         className="text-3xl font-bold leading-tight text-white md:text-4xl"
-        style={{ fontFamily: "var(--font-syne)" }}
+        style={{ fontFamily: "var(--font-heading)" }}
       >
         {title}
       </h2>

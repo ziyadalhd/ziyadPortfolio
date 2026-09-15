@@ -1,4 +1,4 @@
-import { Plus_Jakarta_Sans, Syne } from "next/font/google";
+import { IBM_Plex_Sans_Arabic, Plus_Jakarta_Sans, Syne } from "next/font/google";
 
 import { DEFAULT_LOCALE, LOCALE_DIR } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -19,6 +19,13 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
+const plexArabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic", "latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-plex-ar",
+  display: "swap",
+});
+
 /**
  * Rendered for any unmatched route. The app has no root layout (it lives in
  * [locale]), so this must emit the whole document itself.
@@ -30,7 +37,7 @@ export default function GlobalNotFound() {
     <html
       lang={DEFAULT_LOCALE}
       dir={LOCALE_DIR[DEFAULT_LOCALE]}
-      className={`${syne.variable} ${jakarta.variable}`}
+      className={`${syne.variable} ${jakarta.variable} ${plexArabic.variable}`}
     >
       <body>
         <main className="flex min-h-screen items-center justify-center bg-base px-6 text-slate-100">

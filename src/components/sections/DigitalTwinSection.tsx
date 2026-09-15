@@ -20,7 +20,7 @@ export function DigitalTwinSection({
         <div
           className="flex items-center gap-2 rounded-full px-4 py-2 text-xs font-bold uppercase tracking-[0.18em]"
           style={{
-            fontFamily: "var(--font-syne)",
+            fontFamily: "var(--font-heading)",
             border: "1px solid rgba(52,211,153,0.25)",
             background: "rgba(52,211,153,0.07)",
             color: "rgba(110,231,183,0.9)",

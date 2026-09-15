@@ -26,7 +26,7 @@ export function About({ content }: { content: Dictionary["about"] }) {
           <span
             className="text-4xl font-extrabold"
             style={{
-              fontFamily: "var(--font-syne)",
+              fontFamily: "var(--font-heading)",
               color: "var(--clr-amber)",
             }}
           >
@@ -34,7 +34,7 @@ export function About({ content }: { content: Dictionary["about"] }) {
           </span>
           <span
             className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500"
-            style={{ fontFamily: "var(--font-syne)" }}
+            style={{ fontFamily: "var(--font-heading)" }}
           >
             {content.gpaLabel}
           </span>

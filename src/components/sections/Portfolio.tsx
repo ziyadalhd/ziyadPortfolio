@@ -69,7 +69,7 @@ export function Portfolio({
                   <span
                     className="text-[0.62rem] font-bold uppercase tracking-[0.18em]"
                     style={{
-                      fontFamily: "var(--font-syne)",
+                      fontFamily: "var(--font-heading)",
                       color: "rgba(245,158,11,0.75)",
                     }}
                   >
@@ -83,7 +83,7 @@ export function Portfolio({
 
                 <h3
                   className="mt-2 text-base font-bold leading-snug text-white"
-                  style={{ fontFamily: "var(--font-syne)" }}
+                  style={{ fontFamily: "var(--font-heading)" }}
                 >
                   {project.title[locale]}
                 </h3>
@@ -128,7 +128,7 @@ export function Portfolio({
                 <span
                   className="inline-flex w-fit items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.18em]"
                   style={{
-                    fontFamily: "var(--font-syne)",
+                    fontFamily: "var(--font-heading)",
                     border: "1px solid rgba(245,158,11,0.3)",
                     background: "rgba(245,158,11,0.08)",
                     color: "rgba(245,158,11,0.85)",
@@ -151,7 +151,7 @@ export function Portfolio({
                     rel="noreferrer"
                     className="rounded-full px-3 py-1 text-xs font-semibold text-slate-300"
                     style={{
-                      fontFamily: "var(--font-syne)",
+                      fontFamily: "var(--font-heading)",
                       border: "1px solid rgba(255,255,255,0.12)",
                       background: "rgba(255,255,255,0.04)",
                       textDecoration: "none",

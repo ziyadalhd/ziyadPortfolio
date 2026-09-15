@@ -22,7 +22,7 @@ export function Hero({
           <span
             className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[0.6rem] font-bold uppercase tracking-[0.18em] sm:px-4 sm:text-xs sm:tracking-[0.26em]"
             style={{
-              fontFamily: "var(--font-syne)",
+              fontFamily: "var(--font-heading)",
               borderColor: "rgba(245,158,11,0.35)",
               background: "rgba(245,158,11,0.07)",
               color: "rgba(245,158,11,0.9)",
@@ -39,8 +39,8 @@ export function Hero({
 
         {/* Main headline — fluid type scale safe for iPhone SE */}
         <h1
-          className="text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-7xl"
-          style={{ fontFamily: "var(--font-syne)", overflowWrap: "break-word" }}
+          className="text-3xl font-extrabold leading-[1.1] tracking-tight rtl:tracking-normal text-white sm:text-5xl lg:text-7xl"
+          style={{ fontFamily: "var(--font-heading)", overflowWrap: "break-word" }}
         >
           {content.titleLead}{" "}
           <span className="hero-gradient">{content.titleAccent}</span>
@@ -61,7 +61,7 @@ export function Hero({
               style={{
                 borderColor: "rgba(255,255,255,0.1)",
                 background: "rgba(255,255,255,0.04)",
-                fontFamily: "var(--font-syne)",
+                fontFamily: "var(--font-heading)",
                 fontWeight: 500,
               }}
             >
@@ -142,7 +142,7 @@ export function Hero({
             border: "1px solid rgba(52,211,153,0.2)",
             background: "rgba(52,211,153,0.06)",
             color: "rgba(110,231,183,0.9)",
-            fontFamily: "var(--font-syne)",
+            fontFamily: "var(--font-heading)",
             fontWeight: 500,
           }}
         >

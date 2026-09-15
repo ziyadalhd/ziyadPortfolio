@@ -115,7 +115,7 @@ a {
 /* ── Skip link ── */
 .skip-link {
   position: absolute;
-  left: 1rem;
+  inset-inline-start: 1rem;
   top: 1rem;
   z-index: 50;
   transform: translateY(-150%);
@@ -475,7 +475,7 @@ a {
   color: rgba(245, 158, 11, 0.85);
   font-size: 0.78rem;
   cursor: pointer;
-  text-align: left;
+  text-align: start;
   transition:
     border-color 140ms ease,
     background 140ms ease;
@@ -490,7 +490,7 @@ a {
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
-  padding-right: 0.2rem;
+  padding-inline-end: 0.2rem;
 }
 
 .twin-message {
@@ -514,7 +514,7 @@ a {
 .twin-content ul,
 .twin-content ol {
   margin: 0;
-  padding-left: 1.1rem;
+  padding-inline-start: 1.1rem;
   display: grid;
   gap: 0.3rem;
   color: var(--clr-text);
@@ -782,4 +782,46 @@ a {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+
+/* ── Arabic ───────────────────────────────────────────────────────────────
+   Syne and Plus Jakarta carry no Arabic glyphs, so the Arabic page swaps to
+   IBM Plex Sans Arabic for both roles. One family at two weights reads better
+   than forcing a two-family Arabic pairing.                                */
+html[lang="ar"] {
+  --font-heading: var(--font-plex-ar), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-plex-ar), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Arabic needs more vertical room than Latin at the same nominal size. */
+html[lang="ar"] body {
+  line-height: 1.85;
+}
+
+html[lang="ar"] h1,
+html[lang="ar"] h2,
+html[lang="ar"] h3 {
+  line-height: 1.4;
+  letter-spacing: normal;
+}
+
+/* IBM Plex Sans Arabic stops at 700; Arabic at 700 already reads heavier
+   than Latin at 800. */
+html[lang="ar"] h1 {
+  font-weight: 700;
+}
+
+/* Letter-spacing breaks Arabic cursive joining: the glyphs stop connecting
+   and the word looks misspelt rather than spaced. */
+html[lang="ar"] .eyebrow,
+html[lang="ar"] .twin-role,
+html[lang="ar"] [class*="tracking-"] {
+  letter-spacing: normal;
+}
+
+/* Gradients have no logical direction keyword, so the underline needs an
+   explicit mirror. */
+[dir="rtl"] .amber-line {
+  background: linear-gradient(270deg, var(--clr-amber), transparent);
 }

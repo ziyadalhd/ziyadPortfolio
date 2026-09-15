@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Syne } from "next/font/google";
+import { IBM_Plex_Sans_Arabic, Plus_Jakarta_Sans, Syne } from "next/font/google";
 import { notFound } from "next/navigation";
 
 import { ScrollResetOnLoad } from "@/components/ScrollResetOnLoad";
@@ -26,6 +26,16 @@ const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   variable: "--font-jakarta",
+  display: "swap",
+});
+
+// Arabic companion. Syne and Plus Jakarta have no Arabic glyphs, so without
+// this the Arabic page falls back to a system font. The "latin" subset matters
+// because Arabic copy still renders Flutter, Spring Boot and similar inline.
+const plexArabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic", "latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-plex-ar",
   display: "swap",
 });
 
@@ -97,7 +107,7 @@ export default async function LocaleLayout({
     <html
       lang={typed}
       dir={LOCALE_DIR[typed]}
-      className={`${syne.variable} ${jakarta.variable}`}
+      className={`${syne.variable} ${jakarta.variable} ${plexArabic.variable}`}
     >
       <body>
         <ScrollResetOnLoad />

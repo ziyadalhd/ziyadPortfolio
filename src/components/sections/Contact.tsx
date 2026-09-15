@@ -48,7 +48,7 @@ export function Contact({ content }: { content: Dictionary["contact"] }) {
               <div className="min-w-0">
                 <p
                   className="text-[0.6rem] uppercase tracking-[0.2em] text-slate-600"
-                  style={{ fontFamily: "var(--font-syne)" }}
+                  style={{ fontFamily: "var(--font-heading)" }}
                 >
                   {content.emailLabel}
                 </p>
@@ -90,7 +90,7 @@ export function Contact({ content }: { content: Dictionary["contact"] }) {
               <div>
                 <p
                   className="text-[0.6rem] uppercase tracking-[0.2em] text-slate-600"
-                  style={{ fontFamily: "var(--font-syne)" }}
+                  style={{ fontFamily: "var(--font-heading)" }}
                 >
                   {content.phoneLabel}
                 </p>
@@ -103,8 +103,8 @@ export function Contact({ content }: { content: Dictionary["contact"] }) {
         {/* Right: social links */}
         <div className="flex flex-col gap-3 lg:pt-1">
           <p
-            className="text-[0.6rem] uppercase tracking-[0.24em] text-slate-600 lg:text-right"
-            style={{ fontFamily: "var(--font-syne)" }}
+            className="text-[0.6rem] uppercase tracking-[0.24em] text-slate-600 lg:text-end"
+            style={{ fontFamily: "var(--font-heading)" }}
           >
             {content.findMeOnline}
           </p>

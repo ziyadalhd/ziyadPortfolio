@@ -108,7 +108,7 @@ export function SiteHeader({
         >
           <span
             className="text-base font-extrabold tracking-tight text-white md:text-[1.05rem]"
-            style={{ fontFamily: "var(--font-syne)", lineHeight: 1 }}
+            style={{ fontFamily: "var(--font-heading)", lineHeight: 1 }}
           >
             Ziyad
             <span style={{ color: "var(--clr-amber)" }}>.</span>
@@ -137,7 +137,7 @@ export function SiteHeader({
                 data-active={isActive ? "" : undefined}
                 className="header-nav-link relative flex items-center px-3.5 h-9 rounded-lg text-[0.8rem] font-semibold"
                 style={{
-                  fontFamily: "var(--font-syne)",
+                  fontFamily: "var(--font-heading)",
                   letterSpacing: "0.025em",
                   textDecoration: "none",
                 }}
@@ -156,12 +156,12 @@ export function SiteHeader({
         </nav>
 
         {/* Right cluster */}
-        <div className="ml-auto flex items-center gap-3">
+        <div className="ms-auto flex items-center gap-3">
           {/* Status badge — desktop */}
           <div
             className="hidden md:inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[0.72rem] font-semibold"
             style={{
-              fontFamily: "var(--font-syne)",
+              fontFamily: "var(--font-heading)",
               letterSpacing: "0.04em",
               border: "1px solid rgba(52,211,153,0.22)",
               background: "rgba(52,211,153,0.06)",
@@ -183,7 +183,7 @@ export function SiteHeader({
             aria-label={content.switchAria}
             className="shrink-0 rounded-lg px-2.5 py-1.5 text-xs font-semibold"
             style={{
-              fontFamily: "var(--font-syne)",
+              fontFamily: "var(--font-heading)",
               border: "1px solid rgba(255,255,255,0.12)",
               background: "rgba(255,255,255,0.04)",
               color: "var(--clr-muted)",
@@ -278,7 +278,7 @@ export function SiteHeader({
                   onClick={() => setMenuOpen(false)}
                   className="header-mobile-link flex items-center justify-between px-4 rounded-xl text-sm font-semibold"
                   style={{
-                    fontFamily: "var(--font-syne)",
+                    fontFamily: "var(--font-heading)",
                     minHeight: "48px",
                     textDecoration: "none",
                     letterSpacing: "0.02em",
@@ -316,7 +316,7 @@ export function SiteHeader({
               <span
                 className="text-xs font-semibold"
                 style={{
-                  fontFamily: "var(--font-syne)",
+                  fontFamily: "var(--font-heading)",
                   color: "rgba(110,231,183,0.8)",
                   letterSpacing: "0.05em",
                 }}

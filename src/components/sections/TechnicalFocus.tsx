@@ -19,7 +19,7 @@ export function TechnicalFocus({ content }: { content: Dictionary["focus"] }) {
               <p
                 className="mb-2.5 text-[0.65rem] uppercase tracking-[0.24em]"
                 style={{
-                  fontFamily: "var(--font-syne)",
+                  fontFamily: "var(--font-heading)",
                   color: "rgba(245,158,11,0.7)",
                 }}
               >
@@ -31,7 +31,7 @@ export function TechnicalFocus({ content }: { content: Dictionary["focus"] }) {
                     key={tech}
                     className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-300"
                     style={{
-                      fontFamily: "var(--font-syne)",
+                      fontFamily: "var(--font-heading)",
                       fontWeight: 600,
                       border: "1px solid rgba(255,255,255,0.1)",
                       background: "rgba(255,255,255,0.04)",
@@ -68,7 +68,7 @@ export function TechnicalFocus({ content }: { content: Dictionary["focus"] }) {
               <p
                 className="text-2xl font-extrabold"
                 style={{
-                  fontFamily: "var(--font-syne)",
+                  fontFamily: "var(--font-heading)",
                   color: "var(--clr-amber)",
                 }}
               >
@@ -76,7 +76,7 @@ export function TechnicalFocus({ content }: { content: Dictionary["focus"] }) {
               </p>
               <p
                 className="mt-0.5 text-[0.62rem] uppercase tracking-[0.18em] text-slate-600"
-                style={{ fontFamily: "var(--font-syne)" }}
+                style={{ fontFamily: "var(--font-heading)" }}
               >
                 {stat.label}
               </p>
