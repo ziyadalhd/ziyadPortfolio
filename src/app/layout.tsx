@@ -43,9 +43,6 @@ export const metadata: Metadata = {
     description:
       "Mobile-focused software engineering portfolio with a digital twin chat experience.",
   },
-  icons: {
-    icon: "/favicon.ico",
-  },
 };
 
 export const viewport: Viewport = {
