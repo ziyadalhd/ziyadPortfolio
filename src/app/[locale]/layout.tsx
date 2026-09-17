@@ -1,10 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import {
+  Archivo,
+  EB_Garamond,
+  IBM_Plex_Mono,
   IBM_Plex_Sans_Arabic,
-  Plus_Jakarta_Sans,
-  Syne,
+  Noto_Naskh_Arabic,
+  Source_Serif_4,
 } from "next/font/google";
 import { notFound } from "next/navigation";
+import Script from "next/script";
 
 import { ScrollResetOnLoad } from "@/components/ScrollResetOnLoad";
 import {
@@ -19,29 +23,53 @@ import { SITE_URL } from "@/lib/site";
 
 import "../globals.css";
 
-const syne = Syne({
+const archivo = Archivo({
   subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
-  variable: "--font-syne",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-archivo",
   display: "swap",
 });
 
-const jakarta = Plus_Jakarta_Sans({
+const sourceSerif = Source_Serif_4({
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  variable: "--font-source-serif",
+  display: "swap",
+});
+
+const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
-  variable: "--font-jakarta",
+  variable: "--font-plex-mono",
   display: "swap",
 });
 
-// Arabic companion. Syne and Plus Jakarta have no Arabic glyphs, so without
-// this the Arabic page falls back to a system font. The "latin" subset matters
-// because Arabic copy still renders Flutter, Spring Boot and similar inline.
+// Fallback in the --latex chain, used only on the cover sheet's LaTeX-report
+// pastiche; Source Serif 4 already covers everything else in that stack.
+const garamond = EB_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-garamond",
+  display: "swap",
+});
+
+// Arabic companions. The "latin" subset matters because Arabic copy still
+// renders Flutter, Spring Boot and similar inline.
 const plexArabic = IBM_Plex_Sans_Arabic({
   subsets: ["arabic", "latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-plex-ar",
   display: "swap",
 });
+
+const notoNaskh = Noto_Naskh_Arabic({
+  subsets: ["arabic", "latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-naskh",
+  display: "swap",
+});
+
+const THEME_INIT_SCRIPT = `(function(){try{var t=localStorage.getItem("ziyad-spec-theme");if(t!=="light"&&t!=="dark"){t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}document.documentElement.setAttribute("data-theme",t);}catch(e){}})();`;
 
 export async function generateMetadata({
   params,
@@ -85,8 +113,11 @@ export async function generateMetadata({
 }
 
 export const viewport: Viewport = {
-  themeColor: "#06080f",
-  colorScheme: "dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f3f2f2" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e0e0d" },
+  ],
+  colorScheme: "light dark",
 };
 
 export function generateStaticParams() {
@@ -111,9 +142,15 @@ export default async function LocaleLayout({
     <html
       lang={typed}
       dir={LOCALE_DIR[typed]}
-      className={`${syne.variable} ${jakarta.variable} ${plexArabic.variable}`}
+      // data-theme is set by the beforeInteractive script below, before
+      // React hydrates, so the server markup never has it — expected.
+      suppressHydrationWarning
+      className={`${archivo.variable} ${sourceSerif.variable} ${plexMono.variable} ${garamond.variable} ${plexArabic.variable} ${notoNaskh.variable}`}
     >
       <body>
+        <Script id="theme-init" strategy="beforeInteractive">
+          {THEME_INIT_SCRIPT}
+        </Script>
         <ScrollResetOnLoad />
         {children}
       </body>

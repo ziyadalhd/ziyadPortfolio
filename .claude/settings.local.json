@@ -13,7 +13,10 @@
       "Bash(python3 -c \"print\\('a' * 4001\\)\")",
       "Bash(python3 -c \"print\\('a' * 17000\\)\")",
       "Skill(frontend-design)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(uv pip *)",
+      "Bash(pip3 install *)",
+      "Bash(python3 *)"
     ]
   }
 }

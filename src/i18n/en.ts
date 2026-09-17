@@ -148,4 +148,135 @@ export const en = {
   },
 
   skipToContent: "Skip to content",
+
+  spec: {
+    eyebrowSpec: "Personal specification",
+    eyebrowControlled: "Controlled copy",
+    theme: { switchToDark: "DARK", switchToLight: "LIGHT" },
+    railHeading: "Clause index",
+    rail: {
+      s0: { label: "Preface", sub: "(Introduction)" },
+      s1: { label: "Scope", sub: "(Overview & Status)" },
+      s2: { label: "Context", sub: "(My Journey & Experience)" },
+      s3: { label: "Interfaces", sub: "(Skills & Tech Stack)" },
+      s4: { label: "Requirements", sub: "(Projects)" },
+      s5: { label: "Verification", sub: "(GPA & Graduation)" },
+      s6: { label: "Conformance demo", sub: "(Live Demo)" },
+      s7: { label: "Change requests", sub: "(Contact & Socials)" },
+    },
+    hero: {
+      name: "Ziyad Jaber Alhdriti",
+      subtitle:
+        "Software Engineering student, Mobile Application Engineer. Makkah, Saudi Arabia.",
+      mast: {
+        statusLabel: "Status",
+        statusValue: "Open to work",
+        gpaLabel: "GPA",
+        graduationLabel: "Graduation",
+        volunteerLabel: "Volunteer hours",
+        effectiveLabel: "Effective",
+        effectiveValue: "Sept 2026",
+      },
+      intro1:
+        "My name is Ziyad. I study software engineering in Makkah, and most of my day goes into turning vague requirements into things that actually run. So instead of another page telling you I am passionate about technology, I wrote myself the way I write a system: numbered clauses, a stated scope, and acceptance criteria you can check.",
+      intro2Pre:
+        "Every part of this document has a clause number. Hover any reference like ",
+      intro2Post:
+        " and it opens right where you are, so you never lose your place.",
+    },
+    s1: {
+      heading: "Scope",
+      purposeTitle: "Purpose",
+      outOfScopeTitle: "Out of scope",
+      outOfScopeIntro:
+        "Things I have not done yet, stated here so you do not have to ask in an interview.",
+      outOfScopeItems: [
+        "I have not published an app to the App Store yet.",
+        "The largest team I have worked in so far is my graduation project team.",
+        "I have never been on call for a production system.",
+        "These are clauses for the next revision, not this one.",
+      ],
+      definitionsTitle: "Definitions",
+      definitions: [
+        {
+          term: "Shipped",
+          def: "It runs, and somebody other than me has used it.",
+        },
+        {
+          term: "In progress",
+          def: "It partly runs, and I am working on it this week.",
+        },
+        {
+          term: "Learned",
+          def: "I wrote it myself and then fixed it when it broke.",
+        },
+      ],
+    },
+    s2: {
+      heading: "Context",
+      seeFullPre: "Specified in full at ",
+    },
+    s3: {
+      heading: "Interfaces",
+      introPre:
+        "Listed by what I have actually built with, not what I have read about. Most of these came out of ",
+    },
+    s4: {
+      heading: "Requirements",
+      acceptanceCriteria: "Acceptance criteria",
+      dependencies: "Dependencies",
+    },
+    s5: {
+      heading: "Verification",
+      evidenceTitle: "Evidence record",
+      evidenceIntro:
+        "Every number in this document can be traced to a source. This is the source.",
+      tableItem: "Item",
+      tableValue: "Value",
+      tableMethod: "Method",
+      rowGpaMethod: "Umm Al-Qura transcript",
+      rowGraduationLabel: "Expected graduation",
+      rowGraduationMethod: "Registered study plan",
+      rowVolunteerMethod: "National Volunteering Platform log",
+      rowLocationLabel: "Location",
+      rowLocationMethod: "On site, or remote on Riyadh time",
+      annexTitle: "Annex A — Résumé",
+      annexBody:
+        "One page, PDF. The same facts as this document, in the format an applicant tracking system expects.",
+      annexCta: "Download Annex A",
+    },
+    s6: {
+      heading: "Conformance demo",
+      title: "Digital Twin — live",
+      intro:
+        "I built an assistant that answers questions about my background and projects in the language of the page. It runs on a live model, so replies vary each time you ask — try it below.",
+    },
+    s7: {
+      heading: "Change requests",
+      headline:
+        "The fastest path to a new revision of this document is a message from you.",
+      subtext:
+        "I read every message, and I reply in Arabic or English, whichever you write in.",
+    },
+    footer: {
+      end: "End of document — SPEC-2026 / Rev 4.0",
+      prepared: "Prepared in Makkah",
+      backTo0: "Back to §0",
+    },
+    cover: {
+      kicker: "Software Requirements Specification",
+      title: "Ziyad’s Personal Specification",
+      subtitle: "SRS Report",
+      dept: "Department of Software Engineering",
+      location: "Makkah, Saudi Arabia",
+      month: "September 2026",
+      blurb:
+        "A software engineering portfolio structured as an official specification document: every section a clause, every project a requirement with acceptance criteria.",
+      colId: "Document ID",
+      colDate: "Date",
+      colVersion: "Version",
+      colStatus: "Status",
+      statusValue: "Released",
+    },
+  },
 } as const;

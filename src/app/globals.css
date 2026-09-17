@@ -1,35 +1,69 @@
 @import "tailwindcss";
 
+/* Only --color-base is actually consumed (via bg-base, by the three
+   documents outside [locale]: global-not-found, loading, error). Those
+   never run the theme script, so they stay fixed on the dark ink rather
+   than reacting to data-theme. */
 @theme {
-  --color-base: #06080f;
-  --color-surface: #0b0f1c;
-  --color-card: #0e1322;
-  --color-amber: #f59e0b;
-  --color-amber-light: #fbbf24;
+  --color-base: #0e0e0d;
 }
 
+/* ── Design tokens — "personal specification" system ──────────────────────
+   Light is the default; :root[data-theme="dark"] overrides it. The toggle
+   (ThemeToggle) sets data-theme on <html> and persists it to localStorage;
+   an inline head script applies it before paint to avoid a flash.        */
 :root {
-  color-scheme: dark;
+  --bg: #f3f2f2;
+  --ink: #201e1d;
+  --accent: #ec3013;
+  --muted: #605d5d;
+  --rule: rgba(32, 30, 29, 0.62);
+  --hair: rgba(32, 30, 29, 0.22);
+  --surface: #eae9e9;
+  --display: var(--font-archivo), system-ui, sans-serif;
+  --serif: var(--font-source-serif), Georgia, "Times New Roman", serif;
+  --mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --latex:
+    var(--font-garamond), Garamond, var(--font-source-serif), Georgia, serif;
+  --desk: #dedcda;
+  --paper: #fbfaf9;
+  --paperink: #141312;
+  --paperrule: rgba(20, 19, 18, 0.85);
+  --papermute: #5f5c59;
+  --pad: 28px;
+}
 
-  --font-heading: var(--font-syne), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+:root[data-theme="dark"] {
+  --bg: #0e0e0d;
+  --ink: #f7f6f4;
+  --accent: #ff5f45;
+  --muted: #bcb9b5;
+  --rule: rgba(247, 246, 244, 0.66);
+  --hair: rgba(247, 246, 244, 0.24);
+  --surface: #191817;
+  --desk: #070706;
+  --paper: #171614;
+  --paperink: #f4f2ef;
+  --paperrule: rgba(244, 242, 239, 0.8);
+  --papermute: #a9a5a0;
+}
 
-  --clr-bg: #06080f;
-  --clr-surface: #0b0f1c;
-  --clr-card: #0e1322;
-  --clr-border: rgba(255, 255, 255, 0.07);
-  --clr-border-strong: rgba(255, 255, 255, 0.12);
-  --clr-amber: #f59e0b;
-  --clr-amber-dim: rgba(245, 158, 11, 0.1);
-  --clr-amber-glow: rgba(245, 158, 11, 0.18);
-  --clr-blue: #60a5fa;
-  --clr-text: #f1f5f9;
-  --clr-muted: #94a3b8;
-  --clr-subtle: #64748b;
+/* Arabic swaps every role to Noto Naskh Arabic / IBM Plex Sans Arabic.
+   IBM Plex Sans Arabic carries the mono role too: there is no Arabic
+   monospace face in this stack, and the uppercase-mono labels read fine
+   in a plain sans at the same size. */
+html[lang="ar"] {
+  --serif: var(--font-naskh), var(--font-source-serif), serif;
+  --display: var(--font-plex-ar), var(--font-archivo), sans-serif;
+  --mono: var(--font-plex-ar), var(--font-plex-mono), monospace;
 }
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 html,
@@ -37,11 +71,19 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100%;
-  overflow-x: hidden;
+  /* No overflow-x here on purpose: setting it (even just -x) turns html/body
+     into the sticky positioning's containing block in some engines, which
+     breaks [data-rail]'s position:sticky — it computes as "sticky" but
+     never actually pins. Nothing in this layout overflows horizontally. */
   -webkit-text-size-adjust: 100%;
-  font-family: var(--font-body);
-  background: var(--clr-bg);
-  color: var(--clr-text);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "tnum" 1;
+  transition:
+    background 0.45s ease,
+    color 0.45s ease;
 }
 
 h1,
@@ -50,7 +92,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-heading);
+  font-family: var(--display);
 }
 
 button,
@@ -62,66 +104,167 @@ textarea {
 button,
 a,
 textarea {
-  -webkit-tap-highlight-color: rgba(245, 158, 11, 0.2);
+  -webkit-tap-highlight-color: rgba(236, 48, 19, 0.2);
 }
 
 button,
 a {
   touch-action: manipulation;
+  color: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent);
 }
 
 button {
   min-height: 44px;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+::selection {
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
 }
 
-/* ── Dot grid background ── */
-.dot-grid {
-  background-image: radial-gradient(
-    circle,
-    rgba(148, 163, 184, 0.12) 1px,
-    transparent 1px
-  );
-  background-size: 28px 28px;
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
-/* ── Hero gradient — amber → orange → rose ── */
-.hero-gradient {
-  color: var(--clr-amber);
-}
-
-@supports ((-webkit-background-clip: text) or (background-clip: text)) {
-  .hero-gradient {
-    background: linear-gradient(110deg, #f59e0b 0%, #fb923c 55%, #f43f5e 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+@keyframes caret {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
   }
 }
 
-/* ── Amber accent line used in various decorative elements ── */
-.amber-line {
-  display: block;
-  width: 2.5rem;
-  height: 2px;
-  background: linear-gradient(90deg, var(--clr-amber), transparent);
-  border-radius: 999px;
+@keyframes coverin {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-/* ── Skip link ── */
+/* Letter-spacing breaks Arabic cursive joining, so RTL always resets it. */
+html[dir="rtl"] * {
+  letter-spacing: normal !important;
+}
+
+html[lang="ar"] body {
+  line-height: 1.85;
+}
+
+html[lang="ar"] h1,
+html[lang="ar"] h2,
+html[lang="ar"] h3 {
+  line-height: 1.4;
+}
+
+/* ── Responsive shell — mirrors the design's own breakpoints ────────────── */
+@media (max-width: 1300px) {
+  [data-mast] {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+  [data-mast] > div:nth-child(3n + 1) {
+    border-inline-start: 0 !important;
+    padding-inline-start: 0 !important;
+  }
+  [data-contact] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  [data-contact] > a {
+    border-inline-start: 0 !important;
+    padding-inline-start: 0 !important;
+  }
+}
+
+@media (max-width: 900px) {
+  [data-shell] {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 0 !important;
+  }
+  /* A sticky, translucent top bar (iOS-style material) rather than the
+     desktop's fixed side rail: it stays reachable while scrolling without
+     spending vertical space on a full-height column. */
+  [data-rail] {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 70 !important;
+    height: auto !important;
+    padding: 12px 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 16px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    background: color-mix(in srgb, var(--bg) 72%, transparent) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(1.8);
+    backdrop-filter: blur(20px) saturate(1.8);
+    border-bottom: 1px solid var(--hair) !important;
+    border-inline-end: 0 !important;
+    white-space: nowrap;
+  }
+  [data-rail-head] {
+    display: none !important;
+  }
+  /* The 22px/1fr grid these links use for the desktop column has no
+     definite width to resolve 1fr against once the rail is a
+     content-sized flex row, so it collapses to ~22px and the label spills
+     into the next item. Flex sizes by content instead, no 1fr involved. */
+  [data-rail] a[data-rail-link] {
+    display: flex !important;
+    align-items: baseline !important;
+    gap: 6px !important;
+  }
+  [data-clauserow] {
+    grid-template-columns: 44px minmax(0, 1fr) !important;
+    gap: 14px !important;
+  }
+  [data-mast] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  [data-cover-meta] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  [data-cover-meta] > div:nth-child(odd) {
+    border-inline-start: 0 !important;
+  }
+  [data-mast] > div:nth-child(odd) {
+    border-inline-start: 0 !important;
+    padding-inline-start: 0 !important;
+  }
+}
+
+/* Theme toggle shows both labels; the attribute the button itself flips
+   decides which one is visible — no React state, no hydration mismatch. */
+:root:not([data-theme="dark"]) .theme-label-dark {
+  display: none;
+}
+:root[data-theme="dark"] .theme-label-light {
+  display: none;
+}
+
+/* ── Skip link (kept for the fallback documents too) ─────────────────────── */
 .skip-link {
   position: absolute;
   inset-inline-start: 1rem;
   top: 1rem;
-  z-index: 50;
+  z-index: 90;
   transform: translateY(-150%);
-  border-radius: 999px;
-  background: var(--clr-amber);
-  color: #06080f;
+  background: var(--accent);
+  color: var(--bg);
   font-weight: 700;
   padding: 0.6rem 1rem;
   transition: transform 150ms ease;
@@ -131,293 +274,44 @@ a {
   transform: translateY(0);
 }
 
-/* ── Eyebrow label ── */
+/* ── Eyebrow label (used on global-not-found / error) ─────────────────────── */
 .eyebrow {
-  font-family: var(--font-heading);
+  font-family: var(--mono);
   font-size: 0.7rem;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--clr-amber);
+  color: var(--accent);
 }
 
-/* ── Card surfaces ── */
-.card-surface {
-  border: 1px solid var(--clr-border-strong);
-  background: var(--clr-card);
-  color: var(--clr-text);
-}
-
-.section-card {
-  border: 1px solid var(--clr-border);
-  background: linear-gradient(
-    160deg,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.02) 100%
-  );
-  border-radius: 24px;
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  backdrop-filter: blur(10px);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Subtle top-edge amber shimmer on section cards */
-.section-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 10%;
-  right: 10%;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(245, 158, 11, 0.35),
-    transparent
-  );
-  pointer-events: none;
-}
-
-/* ── Gradient-border card (portfolio) ── */
-.gradient-border-card {
-  position: relative;
-  background: var(--clr-card);
-  border-radius: 20px;
-  padding: 1px;
-}
-
-.gradient-border-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  padding: 1px;
-  background: linear-gradient(
-    135deg,
-    rgba(245, 158, 11, 0.3),
-    rgba(96, 165, 250, 0.15),
-    rgba(255, 255, 255, 0.05)
-  );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  transition: opacity 200ms ease;
-}
-
-.gradient-border-card:hover::before {
-  background: linear-gradient(
-    135deg,
-    rgba(245, 158, 11, 0.6),
-    rgba(96, 165, 250, 0.3),
-    rgba(255, 255, 255, 0.08)
-  );
-}
-
-.gradient-border-inner {
-  background: var(--clr-card);
-  border-radius: 19px;
-  padding: 1.4rem;
-  height: 100%;
-}
-
-/* ── Buttons ── */
+/* ── Primary button (global-not-found / error retry) ──────────────────────── */
 .button-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 9999px;
-  border: 1px solid rgba(245, 158, 11, 0.5);
-  background: linear-gradient(120deg, #d97706, #f59e0b 50%, #fb923c);
-  color: #06080f;
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 0.875rem;
-  letter-spacing: 0.02em;
-  padding: 0.75rem 1.5rem;
-  transition:
-    transform 150ms ease,
-    box-shadow 150ms ease;
-}
-
-.button-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 9999px;
-  border: 1px solid var(--clr-border-strong);
-  padding: 0.75rem 1.5rem;
-  font-family: var(--font-heading);
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+  font-family: var(--mono);
   font-weight: 600;
-  font-size: 0.875rem;
-  letter-spacing: 0.02em;
-  color: var(--clr-muted);
-  background: rgba(15, 23, 42, 0.6);
-  transition:
-    border-color 150ms ease,
-    color 150ms ease;
-}
-
-/* ── Nav ── */
-.nav-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  border-radius: 999px;
-  padding: 0.3rem 0.875rem;
-  font-family: var(--font-heading);
   font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--clr-subtle);
-  transition: color 150ms ease;
-}
-
-.nav-link:hover {
-  color: var(--clr-text);
-}
-
-.nav-link[aria-current="true"] {
-  color: var(--clr-amber);
-}
-
-/* ── Header nav link — CSS-driven hover/active/pressed ── */
-.header-nav-link {
-  color: var(--clr-subtle);
-  background-color: transparent;
-  -webkit-tap-highlight-color: transparent;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.5rem;
   transition:
-    color 130ms ease,
-    background-color 130ms ease;
-}
-
-.header-nav-link[data-active] {
-  color: var(--clr-amber);
-  background-color: rgba(245, 158, 11, 0.08);
-}
-
-@media (hover: hover) {
-  .header-nav-link:hover:not([data-active]) {
-    color: var(--clr-text);
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-}
-
-.header-nav-link:active:not([data-active]) {
-  background-color: rgba(255, 255, 255, 0.08);
-  color: var(--clr-text);
-}
-
-.header-nav-link:focus-visible {
-  outline: 2px solid var(--clr-amber);
-  outline-offset: 2px;
-  border-radius: 8px;
-}
-
-/* ── Mobile drawer link — CSS-driven ── */
-.header-mobile-link {
-  color: var(--clr-muted);
-  background-color: transparent;
-  -webkit-tap-highlight-color: transparent;
-  transition:
-    color 130ms ease,
-    background-color 130ms ease,
-    transform 80ms ease;
-}
-
-.header-mobile-link[data-active] {
-  color: var(--clr-amber);
-  background-color: rgba(245, 158, 11, 0.07);
-}
-
-@media (hover: hover) {
-  .header-mobile-link:hover:not([data-active]) {
-    color: var(--clr-text);
-    background-color: rgba(255, 255, 255, 0.04);
-  }
-}
-
-.header-mobile-link:active {
-  background-color: rgba(255, 255, 255, 0.07);
-  transform: scale(0.98);
-}
-
-.header-mobile-link:focus-visible {
-  outline: 2px solid var(--clr-amber);
-  outline-offset: 2px;
-}
-
-.nav-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  width: 44px;
-  border-radius: 10px;
-  border: 1px solid var(--clr-border-strong);
-  background: rgba(15, 23, 42, 0.6);
-  color: var(--clr-muted);
-  cursor: pointer;
-  transition:
-    border-color 150ms ease,
-    color 150ms ease;
-}
-
-/* ── Contact tiles ── */
-.contact-tile {
-  display: flex;
-  align-items: center;
-  min-height: 64px;
-  border: 1px solid var(--clr-border-strong);
-  border-radius: 16px;
-  padding: 1.25rem 1.5rem;
-  background: var(--clr-card);
-  color: var(--clr-text);
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition:
-    border-color 200ms ease,
-    background 200ms ease,
+    background 150ms ease,
     transform 150ms ease;
 }
 
-/* ── Timeline ── */
-.timeline {
-  position: relative;
+@media (hover: hover) {
+  .button-primary:hover {
+    background: var(--ink);
+    transform: translateY(-2px);
+  }
 }
 
-.timeline::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 1.5rem;
-  bottom: 1.5rem;
-  width: 1px;
-  background: linear-gradient(
-    180deg,
-    var(--clr-amber),
-    rgba(245, 158, 11, 0.2)
-  );
-}
-
-/* ── Digital twin shell ── */
+/* ── Digital Twin chat shell — restyled to the spec system ───────────────── */
 .twin-shell {
-  position: relative;
-  z-index: 1;
-  border: 1px solid var(--clr-border-strong);
-  border-radius: 20px;
-  background: linear-gradient(
-    180deg,
-    rgba(14, 19, 34, 0.96),
-    rgba(11, 15, 28, 0.9)
-  );
-  padding: 1.25rem;
+  border: 1px solid var(--rule);
 }
 
 .twin-header {
@@ -425,29 +319,32 @@ a {
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--hair);
 }
 
 .twin-header h3 {
   margin: 0;
-  font-family: var(--font-heading);
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--clr-text);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--muted);
 }
 
 .twin-header p {
   margin: 0.3rem 0 0;
   font-size: 0.82rem;
-  color: var(--clr-muted);
+  color: var(--muted);
 }
 
 .twin-reset {
-  min-height: 44px;
-  width: 44px;
-  border: 1px solid var(--clr-border-strong);
-  border-radius: 10px;
-  background: rgba(15, 23, 42, 0.8);
-  color: var(--clr-muted);
+  min-height: 36px;
+  width: 36px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink);
   cursor: pointer;
   flex: none;
   display: flex;
@@ -455,53 +352,46 @@ a {
   justify-content: center;
   padding: 0;
   transition:
-    color 150ms ease,
-    border-color 150ms ease;
+    background 150ms ease,
+    color 150ms ease;
 }
 
 .twin-prompts {
   display: flex;
   flex-wrap: wrap;
   gap: 0.55rem;
-  margin-top: 0.85rem;
+  margin: 0.85rem 16px 0;
 }
 
 .twin-prompt {
   min-height: 44px;
-  border: 1px solid var(--clr-border-strong);
-  border-radius: 999px;
+  border: 1px solid var(--rule);
   padding: 0.4rem 0.85rem;
-  background: rgba(15, 23, 42, 0.8);
-  color: rgba(245, 158, 11, 0.85);
+  background: transparent;
+  color: var(--accent);
   font-size: 0.78rem;
+  font-family: var(--mono);
   cursor: pointer;
   text-align: start;
-  transition:
-    border-color 140ms ease,
-    background 140ms ease;
+  transition: background 140ms ease;
 }
 
 .twin-messages {
   margin-top: 1rem;
+  padding: 0 16px;
   max-height: min(60vh, 520px);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
-  padding-inline-end: 0.2rem;
-}
-
-.twin-message {
-  border-radius: 14px;
-  padding: 0.75rem 0.9rem;
+  gap: 0.9rem;
 }
 
 .twin-message p {
   margin: 0;
   line-height: 1.6;
-  color: var(--clr-text);
+  color: var(--ink);
   white-space: normal;
 }
 
@@ -517,28 +407,29 @@ a {
   padding-inline-start: 1.1rem;
   display: grid;
   gap: 0.3rem;
-  color: var(--clr-text);
+  color: var(--ink);
 }
 
 .twin-role {
-  font-family: var(--font-heading);
-  font-size: 0.68rem;
+  font-family: var(--mono);
+  font-size: 10.5px;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--clr-amber);
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 4px;
 }
 
-.twin-user {
-  background: rgba(245, 158, 11, 0.08);
-  border: 1px solid rgba(245, 158, 11, 0.2);
+.twin-user .twin-role {
+  color: var(--muted);
 }
 
-.twin-assistant {
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid var(--clr-border);
+.twin-assistant .twin-role {
+  color: var(--accent);
 }
 
 .twin-form {
+  padding: 0 16px 16px;
   margin-top: 0.9rem;
 }
 
@@ -551,30 +442,28 @@ a {
 .twin-form textarea {
   flex: 1;
   min-height: 6rem;
-  border-radius: 12px;
-  border: 1px solid var(--clr-border-strong);
-  background: rgba(15, 23, 42, 0.85);
-  color: var(--clr-text);
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink);
   padding: 0.75rem;
   resize: vertical;
   font-size: 16px;
   line-height: 1.5;
-  font-family: var(--font-body);
+  font-family: var(--serif);
 }
 
 .twin-form textarea:focus {
-  outline: 2px solid rgba(245, 158, 11, 0.4);
-  border-color: rgba(245, 158, 11, 0.55);
+  outline: none;
+  border-color: var(--accent);
 }
 
 .twin-send {
   flex: none;
   width: 48px;
   min-height: 48px;
-  border-radius: 12px;
-  border: 1px solid rgba(245, 158, 11, 0.5);
-  background: linear-gradient(120deg, #d97706, #f59e0b);
-  color: #06080f;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--bg);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -593,9 +482,9 @@ a {
   align-items: center;
   flex-wrap: wrap;
   gap: 0.7rem;
-  margin: 0.75rem 0 0;
+  margin: 0 16px 16px;
   font-size: 0.85rem;
-  color: #fda4af;
+  color: var(--accent);
 }
 
 .twin-error p {
@@ -603,162 +492,33 @@ a {
 }
 
 .twin-error button {
-  min-height: 44px;
-  border: 1px solid rgba(253, 164, 175, 0.45);
-  border-radius: 999px;
-  background: rgba(127, 29, 29, 0.3);
-  color: #ffe4e6;
+  min-height: 40px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
   cursor: pointer;
   font: inherit;
   padding: 0.35rem 0.7rem;
 }
 
 .twin-status {
-  margin: 0.7rem 0 0;
-  color: var(--clr-muted);
+  margin: 0.7rem 16px 0;
+  color: var(--muted);
   font-size: 0.85rem;
 }
 
-/* ── Entrance animations ── */
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(28px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes amber-pulse {
-  0%,
-  100% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-.animate-slide-up {
-  animation: slide-up 0.65s cubic-bezier(0.23, 1, 0.32, 1) both;
-}
-
-.animate-fade-in {
-  animation: fade-in 0.5s ease both;
-}
-
-.delay-0 {
-  animation-delay: 0ms;
-}
-.delay-100 {
-  animation-delay: 100ms;
-}
-.delay-150 {
-  animation-delay: 150ms;
-}
-.delay-200 {
-  animation-delay: 200ms;
-}
-.delay-300 {
-  animation-delay: 300ms;
-}
-.delay-400 {
-  animation-delay: 400ms;
-}
-.delay-500 {
-  animation-delay: 500ms;
-}
-.delay-600 {
-  animation-delay: 600ms;
-}
-.delay-700 {
-  animation-delay: 700ms;
-}
-.delay-800 {
-  animation-delay: 800ms;
-}
-
-/* ── Focus rings ── */
-.button-primary:focus-visible,
-.button-secondary:focus-visible,
-.contact-tile:focus-visible,
-.nav-link:focus-visible,
-.nav-toggle:focus-visible,
-.skip-link:focus-visible,
-.twin-prompt:focus-visible,
-.twin-reset:focus-visible,
-.twin-send:focus-visible,
-.twin-error button:focus-visible {
-  outline: 2px solid var(--clr-amber);
-  outline-offset: 2px;
-}
-
-/* ── Hover states ── */
 @media (hover: hover) {
-  .button-primary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25);
-  }
-
-  .button-secondary:hover {
-    border-color: rgba(245, 158, 11, 0.4);
-    color: var(--clr-text);
-  }
-
-  .contact-tile:hover {
-    border-color: rgba(245, 158, 11, 0.5);
-    background: rgba(245, 158, 11, 0.05);
-    transform: translateY(-2px);
-  }
-
   .twin-prompt:hover,
   .twin-reset:hover {
-    border-color: rgba(245, 158, 11, 0.5);
-    color: var(--clr-text);
-    background: rgba(245, 158, 11, 0.07);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
   }
 
   .twin-send:hover:not(:disabled) {
     opacity: 0.88;
   }
-
-  .nav-toggle:hover {
-    border-color: rgba(245, 158, 11, 0.4);
-    color: var(--clr-text);
-  }
-
-  .portfolio-card:hover {
-    transform: translateY(-3px);
-  }
 }
 
-/* ── Mobile adjustments ── */
 @media (max-width: 640px) {
-  .eyebrow {
-    letter-spacing: 0.2em;
-  }
-
-  .section-card {
-    border-radius: 20px;
-    padding: 1.25rem;
-  }
-
-  .button-primary,
-  .button-secondary {
-    width: 100%;
-  }
-
   .twin-prompts {
     display: grid;
     grid-template-columns: 1fr;
@@ -767,29 +527,28 @@ a {
   .twin-prompt {
     width: 100%;
     justify-content: flex-start;
-    padding: 0.7rem 0.9rem;
   }
 
   .twin-messages {
     max-height: min(52vh, 440px);
-    padding-right: 0;
-  }
-
-  .timeline::before {
-    left: 0;
   }
 }
 
-/* ── Animations ── */
-@keyframes spin {
+/* ── Entrance animation, reused by the clause rows via .reveal ───────────── */
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
 @supports (-webkit-touch-callout: none) {
-  .section-card {
-    -webkit-backdrop-filter: blur(10px);
+  .twin-shell {
+    -webkit-backdrop-filter: none;
   }
 }
 
@@ -804,54 +563,10 @@ a {
   }
 }
 
-/* ── Arabic ───────────────────────────────────────────────────────────────
-   Syne and Plus Jakarta carry no Arabic glyphs, so the Arabic page swaps to
-   IBM Plex Sans Arabic for both roles. One family at two weights reads better
-   than forcing a two-family Arabic pairing.                                */
-html[lang="ar"] {
-  --font-heading: var(--font-plex-ar), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-plex-ar), ui-sans-serif, system-ui, sans-serif;
-}
-
-/* Arabic needs more vertical room than Latin at the same nominal size. */
-html[lang="ar"] body {
-  line-height: 1.85;
-}
-
-html[lang="ar"] h1,
-html[lang="ar"] h2,
-html[lang="ar"] h3 {
-  line-height: 1.4;
-  letter-spacing: normal;
-}
-
-/* IBM Plex Sans Arabic stops at 700; Arabic at 700 already reads heavier
-   than Latin at 800. */
-html[lang="ar"] h1 {
-  font-weight: 700;
-}
-
-/* Letter-spacing breaks Arabic cursive joining: the glyphs stop connecting
-   and the word looks misspelt rather than spaced. */
-html[lang="ar"] .eyebrow,
-html[lang="ar"] .twin-role,
-html[lang="ar"] [class*="tracking-"] {
-  letter-spacing: normal;
-}
-
-/* Gradients have no logical direction keyword, so the underline needs an
-   explicit mirror. */
-[dir="rtl"] .amber-line {
-  background: linear-gradient(270deg, var(--clr-amber), transparent);
-}
-
-/* ── Scroll-triggered reveal ──────────────────────────────────────────────
-   The entrance animations used to run on mount, so sections below the fold
-   had finished animating before you scrolled to them.
-
-   The @supports guard is load-bearing: Firefox has no animation-timeline, and
-   without it the opacity:0 start state would leave the whole page invisible
-   there. Unsupported browsers simply show content immediately.             */
+/* ── Scroll-triggered reveal ───────────────────────────────────────────────
+   The @supports guard is load-bearing: Firefox has no animation-timeline,
+   and without it the opacity:0 start state would leave the whole page
+   invisible there. Unsupported browsers simply show content immediately. */
 @supports (animation-timeline: view()) {
   .reveal {
     animation: slide-up 0.6s both;
@@ -860,11 +575,13 @@ html[lang="ar"] [class*="tracking-"] {
   }
 }
 
-/* The global reduced-motion block only zeroes animation-duration, which has
-   no effect on a scroll-driven timeline. */
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     animation: none;
     animation-timeline: none;
+  }
+
+  [data-cover] {
+    display: none !important;
   }
 }

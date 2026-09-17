@@ -20,7 +20,7 @@ export default function Error({
   return (
     <main className="flex min-h-screen items-center justify-center bg-base px-6 text-slate-100">
       <div className="max-w-lg rounded-3xl border border-white/10 bg-white/5 p-8 text-center">
-        <p className="eyebrow text-cyan-300">{content.eyebrow}</p>
+        <p className="eyebrow">{content.eyebrow}</p>
         <h1 className="mt-3 text-3xl font-semibold text-white">
           {content.title}
         </h1>

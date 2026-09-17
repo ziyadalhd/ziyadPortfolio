@@ -1,31 +1,35 @@
-import {
-  IBM_Plex_Sans_Arabic,
-  Plus_Jakarta_Sans,
-  Syne,
-} from "next/font/google";
+import { Archivo, IBM_Plex_Mono, Source_Serif_4 } from "next/font/google";
+import { IBM_Plex_Sans_Arabic } from "next/font/google";
 
 import { DEFAULT_LOCALE, LOCALE_DIR } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 
 import "./globals.css";
 
-const syne = Syne({
+const archivo = Archivo({
   subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
-  variable: "--font-syne",
+  weight: ["400", "700", "800"],
+  variable: "--font-archivo",
   display: "swap",
 });
 
-const jakarta = Plus_Jakarta_Sans({
+const sourceSerif = Source_Serif_4({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-jakarta",
+  weight: ["400"],
+  variable: "--font-source-serif",
+  display: "swap",
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["500"],
+  variable: "--font-plex-mono",
   display: "swap",
 });
 
 const plexArabic = IBM_Plex_Sans_Arabic({
   subsets: ["arabic", "latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "700"],
   variable: "--font-plex-ar",
   display: "swap",
 });
@@ -41,12 +45,12 @@ export default function GlobalNotFound() {
     <html
       lang={DEFAULT_LOCALE}
       dir={LOCALE_DIR[DEFAULT_LOCALE]}
-      className={`${syne.variable} ${jakarta.variable} ${plexArabic.variable}`}
+      className={`${archivo.variable} ${sourceSerif.variable} ${plexMono.variable} ${plexArabic.variable}`}
     >
       <body>
         <main className="flex min-h-screen items-center justify-center bg-base px-6 text-slate-100">
           <div className="max-w-lg rounded-3xl border border-white/10 bg-white/5 p-8 text-center">
-            <p className="eyebrow text-amber-300">{content.eyebrow}</p>
+            <p className="eyebrow">{content.eyebrow}</p>
             <h1 className="mt-3 text-3xl font-semibold text-white">
               {content.title}
             </h1>
