@@ -3,7 +3,14 @@ import type { ChatMessage } from "@/types/chat";
 import { normalizeWhitespace } from "./text";
 
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
-const DEFAULT_MODEL = "openai/gpt-oss-120b:free";
+// openai/gpt-oss-120b:free was retired by OpenRouter (404: "unavailable for
+// free"). Verified directly against the API (Sept 2026): most other free
+// models either sit behind a shared-pool 429 right now or are
+// reasoning-heavy and burn the token budget on <think> chatter before
+// producing any content=null. This one answered cleanly in both Arabic and
+// English across repeated calls, honored the locale system-prompt rule, and
+// kept tech terms in Latin script.
+const DEFAULT_MODEL = "cohere/north-mini-code:free";
 const MODEL_TEMPERATURE = 0.5;
 const MAX_TOKENS = 450;
 const REQUEST_TIMEOUT_MS = 30_000;
@@ -229,6 +236,13 @@ async function fetchOpenRouter({
       ],
       temperature: MODEL_TEMPERATURE,
       max_tokens: MAX_TOKENS,
+      // Verified against the API: this model's hidden reasoning scales with
+      // the system prompt's length, not a token cap — reasoning.max_tokens
+      // is silently ignored and it still burns the whole MAX_TOKENS budget
+      // on <think> chatter once the real ~4.5K-char persona prompt is used,
+      // leaving content empty. Disabling reasoning outright is what
+      // actually works.
+      reasoning: { enabled: false },
       stream,
     }),
     cache: "no-store",
