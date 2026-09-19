@@ -14,6 +14,11 @@ export default defineConfig({
     extraHTTPHeaders: {
       "Accept-Language": "en-US,en;q=0.9",
     },
+    // Skips the SRS cover intro, which otherwise holds a full-screen overlay
+    // over the page for ~4s on every load and stalls every first action.
+    contextOptions: {
+      reducedMotion: "reduce",
+    },
   },
   webServer: {
     command: "npm run start -- --hostname 127.0.0.1 --port 3100",

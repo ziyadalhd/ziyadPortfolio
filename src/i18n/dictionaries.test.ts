@@ -9,13 +9,9 @@ const LATIN_LETTER = /[A-Za-z]/;
 
 /**
  * Keys that are legitimately Latin in the Arabic dictionary: the switcher
- * advertises the other language in that language, and "App Store" is a brand.
+ * advertises the other language in that language.
  */
-const LATIN_BY_DESIGN = new Set([
-  "nav.switchLabel",
-  "nav.switchAria",
-  "portfolio.linkLabels.store",
-]);
+const LATIN_BY_DESIGN = new Set(["localeSwitch.label", "localeSwitch.aria"]);
 
 function leaves(value: unknown, path: string[] = []): [string, string][] {
   if (typeof value === "string") return [[path.join("."), value]];

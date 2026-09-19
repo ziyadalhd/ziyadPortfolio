@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { LOCALES } from "@/i18n/config";
 
-import { journey, projects, valuePillars, type Localized } from "./portfolio";
+import { journey, projects, type Localized } from "./portfolio";
 
 function missingLocales(value: Localized<string | string[]>, path: string) {
   return LOCALES.filter((locale) => {
@@ -32,15 +32,23 @@ describe("portfolio data", () => {
     expect(projects.filter((p) => p.stack.length === 0)).toEqual([]);
   });
 
-  it("translates journey entries and value pillars", () => {
-    const gaps = [
-      ...journey.flatMap((item, i) => [
-        ...missingLocales(item.period, `journey[${i}].period`),
-        ...missingLocales(item.title, `journey[${i}].title`),
-        ...missingLocales(item.detail, `journey[${i}].detail`),
-      ]),
-      ...valuePillars.flatMap((p, i) => missingLocales(p, `pillar[${i}]`)),
-    ];
+  it("translates every journey entry", () => {
+    const gaps = journey.flatMap((item, i) => [
+      ...missingLocales(item.period, `journey[${i}].period`),
+      ...missingLocales(item.title, `journey[${i}].title`),
+      ...missingLocales(item.detail, `journey[${i}].detail`),
+      ...(item.tag ? missingLocales(item.tag, `journey[${i}].tag`) : []),
+    ]);
     expect(gaps).toEqual([]);
+  });
+
+  // The cross-reference is rendered as "§4.3"; a stale clause number would
+  // silently point the reader at the wrong project.
+  it("points every journey cross-reference at a real project clause", () => {
+    const clauses = projects.map((_, i) => `4.${i + 1}`);
+    const dangling = journey
+      .filter((item) => item.refClause && !clauses.includes(item.refClause))
+      .map((item) => item.refClause);
+    expect(dangling).toEqual([]);
   });
 });

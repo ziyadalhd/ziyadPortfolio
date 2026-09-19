@@ -31,6 +31,17 @@
   --paperrule: rgba(20, 19, 18, 0.85);
   --papermute: #5f5c59;
   --pad: 28px;
+  /* One source of truth for the page's side margin: the shell pads by it,
+     and the mobile rail cancels it so the glass reaches the screen edge
+     while its links stay aligned with the text. max() keeps content clear
+     of the rounded corners / camera cutout in landscape. */
+  --gutter: max(28px, env(safe-area-inset-left, 0px));
+}
+
+@media (max-width: 640px) {
+  :root {
+    --gutter: max(18px, env(safe-area-inset-left, 0px));
+  }
 }
 
 :root[data-theme="dark"] {
@@ -48,14 +59,16 @@
   --papermute: #a9a5a0;
 }
 
-/* Arabic swaps every role to Noto Naskh Arabic / IBM Plex Sans Arabic.
-   IBM Plex Sans Arabic carries the mono role too: there is no Arabic
-   monospace face in this stack, and the uppercase-mono labels read fine
-   in a plain sans at the same size. */
+/* Arabic swaps every role: Cairo for headings and for the uppercase-mono
+   labels (there is no Arabic monospace face here, and a geometric sans
+   reads better than a fallback at that size), Tajawal for running text.
+   --latex covers the cover sheet, which has no Latin-serif equivalent in
+   Arabic, so it borrows the body face rather than falling back silently. */
 html[lang="ar"] {
-  --serif: var(--font-naskh), var(--font-source-serif), serif;
-  --display: var(--font-plex-ar), var(--font-archivo), sans-serif;
-  --mono: var(--font-plex-ar), var(--font-plex-mono), monospace;
+  --serif: var(--font-tajawal), var(--font-source-serif), sans-serif;
+  --display: var(--font-cairo), var(--font-archivo), sans-serif;
+  --mono: var(--font-cairo), var(--font-plex-mono), monospace;
+  --latex: var(--font-tajawal), var(--font-source-serif), serif;
 }
 
 * {
@@ -165,6 +178,35 @@ html[lang="ar"] body {
   line-height: 1.85;
 }
 
+/* Cairo sits optically larger than Archivo at the same size, and Arabic
+   carries no uppercase, so the display sizes are pulled back slightly and
+   the tight Latin tracking is released. */
+html[lang="ar"] h1 {
+  font-size: clamp(38px, 6.8vw, 88px);
+  line-height: 1.18;
+  font-weight: 700;
+}
+
+html[lang="ar"] h2,
+html[lang="ar"] h3 {
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+/* Arabic has no case, so the Latin uppercase labels would render unchanged
+   but keep the cramped tracking meant for small caps. */
+html[lang="ar"] [style*="uppercase"] {
+  text-transform: none !important;
+}
+
+/* Digits and Latin tokens inside Arabic sentences keep their own direction
+   without the surrounding paragraph flipping around them. */
+html[dir="rtl"] [data-clauserow] p,
+html[dir="rtl"] [data-clauserow] li,
+html[dir="rtl"] [data-clauserow] dd {
+  text-align: start;
+}
+
 html[lang="ar"] h1,
 html[lang="ar"] h2,
 html[lang="ar"] h3 {
@@ -202,12 +244,17 @@ html[lang="ar"] h3 {
     top: 0 !important;
     z-index: 70 !important;
     height: auto !important;
-    padding: 12px 0 !important;
+    /* The top inset keeps the bar clear of the iPhone notch / status bar
+       once the page is added to the home screen or viewed in standalone. */
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 0 12px !important;
+    margin-inline: calc(-1 * var(--gutter)) !important;
+    padding-inline: var(--gutter) !important;
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
     gap: 16px !important;
     overflow-x: auto !important;
+    scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
     background: color-mix(in srgb, var(--bg) 72%, transparent) !important;
     -webkit-backdrop-filter: blur(20px) saturate(1.8);
@@ -215,6 +262,10 @@ html[lang="ar"] h3 {
     border-bottom: 1px solid var(--hair) !important;
     border-inline-end: 0 !important;
     white-space: nowrap;
+  }
+  /* The bar is its own scroller; its scrollbar would cut across the glass. */
+  [data-rail]::-webkit-scrollbar {
+    display: none;
   }
   [data-rail-head] {
     display: none !important;

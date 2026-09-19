@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import {
   Archivo,
+  Cairo,
   EB_Garamond,
   IBM_Plex_Mono,
-  IBM_Plex_Sans_Arabic,
-  Noto_Naskh_Arabic,
   Source_Serif_4,
+  Tajawal,
 } from "next/font/google";
 import { notFound } from "next/navigation";
 import Script from "next/script";
@@ -53,19 +53,21 @@ const garamond = EB_Garamond({
   display: "swap",
 });
 
-// Arabic companions. The "latin" subset matters because Arabic copy still
-// renders Flutter, Spring Boot and similar inline.
-const plexArabic = IBM_Plex_Sans_Arabic({
+// Arabic companions: Cairo carries the headings and the uppercase mono
+// labels (there is no Arabic monospace in this stack), Tajawal the body.
+// The "latin" subset matters because Arabic copy still renders Next.js,
+// Supabase and similar inline.
+const cairo = Cairo({
   subsets: ["arabic", "latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-plex-ar",
+  weight: ["500", "600", "700", "800"],
+  variable: "--font-cairo",
   display: "swap",
 });
 
-const notoNaskh = Noto_Naskh_Arabic({
+const tajawal = Tajawal({
   subsets: ["arabic", "latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-naskh",
+  weight: ["400", "500", "700"],
+  variable: "--font-tajawal",
   display: "swap",
 });
 
@@ -97,7 +99,7 @@ export async function generateMetadata({
       title,
       description: ogDescription,
       url: `/${locale}`,
-      siteName: "Ziyad Alhdriti Portfolio",
+      siteName: "Ziyad Jaber Alhdriti",
       type: "website",
       locale: LOCALE_OG[locale],
       alternateLocale: LOCALES.filter((l) => l !== locale).map(
@@ -145,7 +147,7 @@ export default async function LocaleLayout({
       // data-theme is set by the beforeInteractive script below, before
       // React hydrates, so the server markup never has it — expected.
       suppressHydrationWarning
-      className={`${archivo.variable} ${sourceSerif.variable} ${plexMono.variable} ${garamond.variable} ${plexArabic.variable} ${notoNaskh.variable}`}
+      className={`${archivo.variable} ${sourceSerif.variable} ${plexMono.variable} ${garamond.variable} ${cairo.variable} ${tajawal.variable}`}
     >
       <body>
         <Script id="theme-init" strategy="beforeInteractive">

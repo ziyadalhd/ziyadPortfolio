@@ -27,15 +27,13 @@ test("loads styled and interactive on iPhone Safari/WebKit", async ({
   await page.goto("/en");
 
   await expect(
-    page.getByRole("heading", {
-      name: /Building resilient software with startup-level speed/i,
-    }),
+    page.getByRole("heading", { level: 1, name: "Ziyad Jaber Alhdriti" }),
   ).toBeVisible();
 
-  await expect(page.locator("main")).toHaveCSS(
-    "background-color",
-    "rgb(6, 8, 15)",
-  );
+  // Proves the stylesheet and the locale layout both landed, without
+  // pinning a colour that now depends on the visitor's light/dark theme.
+  await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
+  await expect(page.locator("[data-rail] a[data-rail-link]")).toHaveCount(8);
 
   const prompt = page.getByRole("button", {
     name: "What are Ziyad's strongest technical skills?",

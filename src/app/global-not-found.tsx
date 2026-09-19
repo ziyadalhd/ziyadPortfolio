@@ -1,5 +1,10 @@
-import { Archivo, IBM_Plex_Mono, Source_Serif_4 } from "next/font/google";
-import { IBM_Plex_Sans_Arabic } from "next/font/google";
+import {
+  Archivo,
+  Cairo,
+  IBM_Plex_Mono,
+  Source_Serif_4,
+  Tajawal,
+} from "next/font/google";
 
 import { DEFAULT_LOCALE, LOCALE_DIR } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -27,10 +32,17 @@ const plexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
-const plexArabic = IBM_Plex_Sans_Arabic({
+const cairo = Cairo({
   subsets: ["arabic", "latin"],
-  weight: ["400", "700"],
-  variable: "--font-plex-ar",
+  weight: ["600", "800"],
+  variable: "--font-cairo",
+  display: "swap",
+});
+
+const tajawal = Tajawal({
+  subsets: ["arabic", "latin"],
+  weight: ["400"],
+  variable: "--font-tajawal",
   display: "swap",
 });
 
@@ -45,7 +57,7 @@ export default function GlobalNotFound() {
     <html
       lang={DEFAULT_LOCALE}
       dir={LOCALE_DIR[DEFAULT_LOCALE]}
-      className={`${archivo.variable} ${sourceSerif.variable} ${plexMono.variable} ${plexArabic.variable}`}
+      className={`${archivo.variable} ${sourceSerif.variable} ${plexMono.variable} ${cairo.variable} ${tajawal.variable}`}
     >
       <body>
         <main className="flex min-h-screen items-center justify-center bg-base px-6 text-slate-100">

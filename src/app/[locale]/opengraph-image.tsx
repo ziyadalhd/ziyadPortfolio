@@ -4,7 +4,7 @@ import { personalInfo } from "@/data/portfolio";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "Ziyad Alhdriti — Software Engineer";
+export const alt = "Ziyad Jaber Alhdriti — Software Engineer";
 
 /**
  * Latin-only for both locales on purpose: Satori does no system font
@@ -20,7 +20,7 @@ export default function OpenGraphImage() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        background: "#06080f",
+        background: "#0e0e0d",
         padding: 72,
       }}
     >
@@ -32,10 +32,10 @@ export default function OpenGraphImage() {
             justifyContent: "center",
             width: 56,
             height: 56,
-            borderRadius: 14,
-            background: "rgba(245,158,11,0.12)",
-            border: "1px solid rgba(245,158,11,0.35)",
-            color: "#f59e0b",
+            borderRadius: 0,
+            background: "rgba(255,95,69,0.14)",
+            border: "1px solid rgba(255,95,69,0.4)",
+            color: "#ff5f45",
             fontSize: 30,
             fontWeight: 700,
           }}
@@ -57,17 +57,17 @@ export default function OpenGraphImage() {
             lineHeight: 1.05,
           }}
         >
-          Ziyad Alhdriti
+          Ziyad Jaber Alhdriti
         </div>
         <div
           style={{
             display: "flex",
             marginTop: 20,
             fontSize: 36,
-            color: "#f59e0b",
+            color: "#ff5f45",
           }}
         >
-          Software Engineer · Mobile
+          Software Engineer · Full-Stack & Mobile
         </div>
         <div
           style={{
@@ -77,7 +77,7 @@ export default function OpenGraphImage() {
             color: "#94a3b8",
           }}
         >
-          Flutter · Swift · Spring Boot
+          Next.js · Supabase · Flutter · Swift
         </div>
       </div>
 
@@ -86,8 +86,8 @@ export default function OpenGraphImage() {
           display: "flex",
           height: 6,
           width: 220,
-          background: "#f59e0b",
-          borderRadius: 999,
+          background: "#ff5f45",
+          borderRadius: 0,
         }}
       />
     </div>,

@@ -15,6 +15,7 @@ import {
   personalInfo,
   projects,
   skillCategories,
+  type Project,
 } from "@/data/portfolio";
 import { LOCALES, type Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
@@ -59,15 +60,23 @@ function useActiveSection() {
     return () => observer.disconnect();
   }, []);
 
-  // On mobile the rail is a horizontally-scrolling strip, not a full-height
-  // column, so the highlighted link can end up off-screen to the right as
-  // "active" advances through later sections. block:"nearest" keeps this
-  // from also nudging the page's own vertical scroll on desktop, where the
-  // rail has no horizontal overflow and this is a no-op.
+  // On mobile the rail is a horizontally-scrolling strip, so the highlighted
+  // link drifts off-screen as "active" advances. Scroll the rail's own box
+  // rather than calling scrollIntoView: that walks every scrollable ancestor
+  // and *starts* a scroll even when the delta is zero, which cancels the
+  // in-flight smooth scroll from clicking a clause link on desktop and
+  // leaves the jump stranded halfway.
   useEffect(() => {
-    document
-      .querySelector(`[data-rail] a[href="#${active}"]`)
-      ?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    const rail = document.querySelector<HTMLElement>("[data-rail]");
+    const link = rail?.querySelector<HTMLElement>(`a[href="#${active}"]`);
+    if (!rail || !link) return;
+    if (rail.scrollWidth <= rail.clientWidth) return;
+
+    const railBox = rail.getBoundingClientRect();
+    const linkBox = link.getBoundingClientRect();
+    const delta =
+      linkBox.left + linkBox.width / 2 - (railBox.left + railBox.width / 2);
+    rail.scrollTo({ left: rail.scrollLeft + delta, behavior: "smooth" });
   }, [active]);
 
   return active;
@@ -251,22 +260,17 @@ function RailLink({
   );
 }
 
-const pillStyle = (
-  status: "shipped" | "inProgress" | "personal",
-): CSSProperties => {
-  if (status === "shipped")
+// Filled = it is out there being used; outlined = actively moving; plain
+// rule = personal scope. Reads as a status at a glance without a legend.
+const pillStyle = (status: Project["status"]): CSSProperties => {
+  const base: CSSProperties = { padding: "4px 9px", fontWeight: 600 };
+  if (status === "liveEvent")
+    return { ...base, background: "var(--accent)", color: "var(--bg)" };
+  if (status === "activeDevelopment" || status === "graduation")
     return {
-      padding: "4px 9px",
-      background: "var(--accent)",
-      color: "var(--bg)",
-      fontWeight: 600,
-    };
-  if (status === "inProgress")
-    return {
-      padding: "4px 9px",
+      ...base,
       border: "1px solid var(--accent)",
       color: "var(--accent)",
-      fontWeight: 600,
     };
   return { padding: "4px 9px", border: "1px solid var(--rule)" };
 };
@@ -345,7 +349,7 @@ export function SpecPage({
           gap: "48px",
           maxWidth: "1280px",
           margin: "0 auto",
-          padding: "0 28px",
+          padding: "0 var(--gutter)",
         }}
       >
         <nav
@@ -397,6 +401,7 @@ export function SpecPage({
             <a
               href={`/${otherLocale}`}
               hrefLang={otherLocale}
+              aria-label={dict.localeSwitch.aria}
               style={{
                 fontFamily: "var(--mono)",
                 fontSize: "12px",
@@ -407,7 +412,7 @@ export function SpecPage({
                 color: "var(--ink)",
               }}
             >
-              {dict.nav.switchLabel}
+              {dict.localeSwitch.label}
             </a>
             <button
               type="button"
@@ -431,7 +436,13 @@ export function SpecPage({
           </div>
         </nav>
 
-        <main id="main-content" style={{ paddingBottom: "120px", minWidth: 0 }}>
+        <main
+          id="main-content"
+          style={{
+            paddingBottom: "calc(120px + env(safe-area-inset-bottom, 0px))",
+            minWidth: 0,
+          }}
+        >
           <header id="s0" style={{ padding: "64px 0 0" }}>
             <div
               style={{
@@ -612,7 +623,7 @@ export function SpecPage({
                   maxWidth: "62ch",
                 }}
               >
-                {dict.about.body}
+                {s.s1.purposeBody}
               </p>
             </ClauseRow>
 
@@ -625,47 +636,81 @@ export function SpecPage({
                   margin: "0 0 10px",
                 }}
               >
-                {s.s1.outOfScopeTitle}
+                {s.s1.growthTitle}
               </h3>
               <p
                 style={{
                   fontSize: "17px",
                   lineHeight: 1.65,
-                  margin: "0 0 14px",
+                  margin: "0 0 20px",
                   maxWidth: "62ch",
                 }}
               >
-                {s.s1.outOfScopeIntro}
+                {s.s1.growthIntro}
               </p>
-              <ul
+              <ol
                 style={{
                   listStyle: "none",
                   margin: 0,
                   padding: 0,
                   display: "flex",
                   flexDirection: "column",
-                  gap: "10px",
-                  maxWidth: "62ch",
+                  maxWidth: "64ch",
                 }}
               >
-                {s.s1.outOfScopeItems.map((item) => (
+                {s.s1.growthItems.map((item, i) => (
                   <li
-                    key={item}
+                    key={item.title}
                     style={{
-                      display: "flex",
-                      gap: "12px",
-                      fontSize: "16px",
-                      lineHeight: 1.55,
-                      color: "var(--muted)",
+                      display: "grid",
+                      gridTemplateColumns: "34px minmax(0,1fr)",
+                      gap: "16px",
+                      padding: "16px 0",
+                      borderTop: "1px solid var(--hair)",
+                      borderBottom:
+                        i === s.s1.growthItems.length - 1
+                          ? "1px solid var(--hair)"
+                          : undefined,
                     }}
                   >
-                    <span style={{ color: "var(--accent)", flex: "none" }}>
-                      —
+                    <span
+                      style={{
+                        fontFamily: "var(--mono)",
+                        fontSize: "12px",
+                        fontWeight: 500,
+                        color: "var(--accent)",
+                        paddingTop: "4px",
+                      }}
+                    >
+                      0{i + 1}
                     </span>
-                    <span>{item}</span>
+                    <span>
+                      <span
+                        style={{
+                          display: "block",
+                          fontFamily: "var(--display)",
+                          fontSize: "16px",
+                          fontWeight: 800,
+                          letterSpacing: "-.01em",
+                          marginBottom: "6px",
+                        }}
+                      >
+                        {item.title}
+                      </span>
+                      <span
+                        style={{
+                          display: "block",
+                          fontSize: "16px",
+                          lineHeight: 1.6,
+                          color: "var(--muted)",
+                        }}
+                      >
+                        {item.body}
+                      </span>
+                    </span>
                   </li>
                 ))}
-              </ul>
+              </ol>
             </ClauseRow>
 
             <ClauseRow n="1.3">
@@ -719,56 +764,92 @@ export function SpecPage({
 
           <section id="s2" style={{ paddingTop: "104px" }}>
             <SectionHead n="§2" title={s.s2.heading} />
-            {journey.map((item, i) => (
-              <ClauseRow key={item.title[locale]} n={`2.${i + 1}`}>
-                <div
-                  dir={i === 0 ? "ltr" : undefined}
-                  style={{
-                    fontSize: "11.5px",
-                    letterSpacing: ".12em",
-                    textTransform: "uppercase",
-                    fontFamily: "var(--mono)",
-                    color: "var(--muted)",
-                    marginBottom: "8px",
-                  }}
-                >
-                  {item.period[locale]}
-                </div>
-                <h3
-                  style={{
-                    fontSize: "20px",
-                    fontWeight: 800,
-                    letterSpacing: "-.015em",
-                    margin: "0 0 10px",
-                  }}
-                >
-                  {item.title[locale]}
-                </h3>
-                <p
-                  style={{
-                    fontSize: "16.5px",
-                    lineHeight: 1.65,
-                    margin: 0,
-                    maxWidth: "62ch",
-                    color: "var(--muted)",
-                  }}
-                >
-                  {item.detail[locale]}
-                  {i === 2 && (
-                    <>
-                      {" "}
-                      {s.s2.seeFullPre}
-                      <RefTag
-                        id="4.1"
-                        title={projects[0].title[locale]}
-                        body={projects[0].summary[locale]}
-                      />
-                      .
-                    </>
-                  )}
-                </p>
-              </ClauseRow>
-            ))}
+            {journey.map((item, i) => {
+              const period = item.period[locale];
+              const referenced = item.refClause
+                ? projects.find(
+                    (p) => `4.${projects.indexOf(p) + 1}` === item.refClause,
+                  )
+                : undefined;
+
+              return (
+                <ClauseRow key={item.title[locale]} n={`2.${i + 1}`}>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      alignItems: "center",
+                      gap: "8px 14px",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    <span
+                      // A period that is pure ASCII ("2023 - 2027") has no
+                      // strong direction of its own, so RTL would flip it.
+                      dir={/^[\x20-\x7E]+$/.test(period) ? "ltr" : undefined}
+                      style={{
+                        fontSize: "11.5px",
+                        letterSpacing: ".12em",
+                        textTransform: "uppercase",
+                        fontFamily: "var(--mono)",
+                        color: "var(--muted)",
+                      }}
+                    >
+                      {period}
+                    </span>
+                    {item.tag && (
+                      <span
+                        style={{
+                          fontSize: "10.5px",
+                          letterSpacing: ".12em",
+                          textTransform: "uppercase",
+                          fontFamily: "var(--mono)",
+                          fontWeight: 600,
+                          padding: "3px 8px",
+                          border: "1px solid var(--accent)",
+                          color: "var(--accent)",
+                        }}
+                      >
+                        {item.tag[locale]}
+                      </span>
+                    )}
+                  </div>
+                  <h3
+                    style={{
+                      fontSize: "20px",
+                      fontWeight: 800,
+                      letterSpacing: "-.015em",
+                      margin: "0 0 10px",
+                    }}
+                  >
+                    {item.title[locale]}
+                  </h3>
+                  <p
+                    style={{
+                      fontSize: "16.5px",
+                      lineHeight: 1.65,
+                      margin: 0,
+                      maxWidth: "62ch",
+                      color: "var(--muted)",
+                    }}
+                  >
+                    {item.detail[locale]}
+                    {referenced && item.refClause && (
+                      <>
+                        {" "}
+                        {s.s2.seeFullPre}
+                        <RefTag
+                          id={item.refClause}
+                          title={referenced.title[locale]}
+                          body={referenced.summary[locale]}
+                        />
+                        .
+                      </>
+                    )}
+                  </p>
+                </ClauseRow>
+              );
+            })}
           </section>
 
           <section id="s3" style={{ paddingTop: "104px" }}>
@@ -813,7 +894,7 @@ export function SpecPage({
                   }}
                 >
                   <h3 style={{ fontSize: "17px", fontWeight: 800, margin: 0 }}>
-                    {dict.focus.categories[cat.key]}
+                    {s.s3.categories[cat.key]}
                   </h3>
                   <SlashList items={cat.techs} />
                 </div>
@@ -844,7 +925,7 @@ export function SpecPage({
                     {project.period[locale]}
                   </span>
                   <span style={pillStyle(project.status)}>
-                    {dict.portfolio.statusLabels[project.status]}
+                    {s.s4.statusLabels[project.status]}
                   </span>
                 </div>
                 <h3
@@ -1236,7 +1317,7 @@ export function SpecPage({
                       color: "var(--muted)",
                     }}
                   >
-                    {dict.contact.emailLabel}
+                    {s.s7.emailLabel}
                   </div>
                   <div
                     style={{

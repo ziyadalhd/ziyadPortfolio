@@ -20,7 +20,10 @@ npm run dev
 Required environment variables:
 
 - `OPENROUTER_API_KEY`: OpenRouter API key.
-- `OPENROUTER_MODEL`: Optional model override. Defaults to `openai/gpt-oss-120b:free`.
+- `OPENROUTER_MODEL`: Optional model override. Defaults to
+  `cohere/north-mini-code:free`. Free models get retired and rate-limited
+  without notice — see `src/lib/openrouter.ts` for why reasoning is disabled
+  on the request.
 - `NEXT_PUBLIC_SITE_URL`: Public site origin for metadata and OpenRouter attribution.
 
 Use Node.js `^20.19.0`, `^22.13.0`, or `>=24.0.0`.
@@ -37,10 +40,16 @@ Use Node.js `^20.19.0`, `^22.13.0`, or `>=24.0.0`.
 
 ## Resume
 
-The download button points at `public/ziyad-alhdriti-resume.pdf`, which is
-**not committed**. Add it before deploying, and remove the phone number from it
-first: the file is served at a crawlable URL and is indexed by search engines.
-The site itself intentionally publishes email, LinkedIn and GitHub only.
+The download button (clause 5.2) points at
+`public/ziyad-jaber-alhdriti-cv.pdf`, set once in `personalInfo.resume`. That
+file is **not committed**; add it before deploying.
+
+Remove the phone number from it first. The file is served at a crawlable URL
+and gets indexed, while the site itself deliberately publishes only email,
+LinkedIn and GitHub. `Ziyad_Alhdriti_Resume.pdf` in the repo root is the old
+June revision: it still carries the number, and predates the Holy Makkah
+Municipality internship and the Bayn / Wedding Greetings projects, so it is
+not the file to copy across.
 
 ## Deploying
 

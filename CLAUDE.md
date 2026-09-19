@@ -27,7 +27,10 @@ E2E tests require a production build; they target `http://127.0.0.1:3100` and ru
 Copy `.env.example` to `.env` before running locally.
 
 - `OPENROUTER_API_KEY` — required; the chat API will 500 without it.
-- `OPENROUTER_MODEL` — optional; defaults to `openai/gpt-oss-120b:free`.
+- `OPENROUTER_MODEL` — optional; defaults to `cohere/north-mini-code:free`.
+  The request sets `reasoning: { enabled: false }`: current free models
+  otherwise spend the whole `max_tokens` budget on hidden reasoning and
+  return empty content.
 - `NEXT_PUBLIC_SITE_URL` — optional; used as `HTTP-Referer` for OpenRouter attribution and in metadata.
 
 ## Architecture
@@ -44,20 +47,24 @@ Bilingual single-page portfolio on the Next.js App Router. The page lives at
   `/robots.txt`, `/sitemap.xml` and `/icon.svg` reachable.
 - `src/i18n/en.ts` is the shape source; `ar.ts` is declared `const ar:
 Dictionary`, so a missing or misspelt key is a **compile error**.
-- `page.tsx` resolves the dictionary once and passes a section slice to each
-  component. Client components (`SiteHeader`, `digital-twin-chat`) must
-  receive copy as props.
-- `SiteHeader` keeps nav `href`/`id` in the component: the ids feed
-  `getElementById` in the scroll-spy observer. Only labels are translated.
-- Content entities (projects, journey, pillars) carry their own `Localized`
+- The dictionary is keyed to the document's own structure (`spec.s1`…`spec.s7`,
+  `spec.cover`, `spec.rail`). Keep it that way: every key should be reachable
+  from a clause, so dead copy is visible instead of accumulating.
+- `page.tsx` resolves the dictionary once and hands the whole thing to
+  `SpecPage`, which is a client component (scroll-spy, theme, cover intro).
+- Content entities (projects, journey) carry their own `Localized`
   translations in `src/data/portfolio.ts`, so adding a project is one edit in
   one file. UI chrome lives in `src/i18n`.
+- Clause numbers are positional: project _n_ is clause `4.{n+1}`. A journey
+  entry links to one via `refClause`, and `portfolio.test.ts` fails if that
+  number points at nothing — do not hard-code the index in the component.
 - `src/app/global-not-found.tsx` handles unmatched routes. With the root layout
   inside `[locale]`, they have no document to render into, and a
   `[locale]/[...rest]` catch-all returned a soft 404 (HTTP 200).
-- Arabic uses IBM Plex Sans Arabic via an `html[lang="ar"]` override of
-  `--font-heading`/`--font-body`. Components must reference those variables,
-  never `--font-syne` directly, or the swap silently does nothing.
+- Arabic swaps Cairo (headings, mono labels) and Tajawal (body) in through an
+  `html[lang="ar"]` override of `--display`/`--serif`/`--mono`/`--latex`.
+  Components must reference those variables, never `--font-archivo` directly,
+  or the swap silently does nothing.
 
 ### Data flow for the Digital Twin chat
 
@@ -76,18 +83,19 @@ The client detects streaming support via `ReadableStream` / `TextDecoder` availa
 
 ### Key modules
 
-| Path                                   | Purpose                                                                                                                                                                                                                         |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/app/api/digital-twin/route.ts`    | API handler: rate limiting, validation, OpenRouter dispatch                                                                                                                                                                     |
-| `src/lib/openrouter.ts`                | OpenRouter fetch wrapper with retry/timeout/streaming                                                                                                                                                                           |
-| `src/lib/prompt.ts`                    | System prompt builder — edit `CAREER_KNOWLEDGE` here to update Ziyad's bio. Cache is keyed by locale; a single cached string would pin a warm instance to one language. `CAREER_KNOWLEDGE` stays English (grounding, not prose) |
-| `src/i18n/`                            | Dictionaries, locale config, `getDictionary`                                                                                                                                                                                    |
-| `src/proxy.ts`                         | Locale negotiation and redirect                                                                                                                                                                                                 |
-| `src/lib/request-validation.ts`        | Zod request schema + prompt-injection regex patterns                                                                                                                                                                            |
-| `src/lib/rate-limit.ts`                | In-memory IP bucket; `resetRateLimitForTests()` available for tests                                                                                                                                                             |
-| `src/data/linkedin.json`               | LinkedIn profile summary injected into the system prompt                                                                                                                                                                        |
-| `src/data/portfolio.ts`                | Typed portfolio project data rendered in the Portfolio section                                                                                                                                                                  |
-| `src/components/digital-twin-chat.tsx` | Client component: chat state, streaming reader, localStorage persistence                                                                                                                                                        |
+| Path                                   | Purpose                                                                                                                                                                                                                                                                                                                     |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/app/api/digital-twin/route.ts`    | API handler: rate limiting, validation, OpenRouter dispatch                                                                                                                                                                                                                                                                 |
+| `src/lib/openrouter.ts`                | OpenRouter fetch wrapper with retry/timeout/streaming                                                                                                                                                                                                                                                                       |
+| `src/lib/prompt.ts`                    | System prompt builder. The projects/journey/skills blocks are **derived from `portfolio.ts`**, so the twin cannot contradict the clause on screen — update the data, not the prompt. Cache is keyed by locale; a single cached string would pin a warm instance to one language. Grounding stays English (facts, not prose) |
+| `src/i18n/`                            | Dictionaries, locale config, `getDictionary`                                                                                                                                                                                                                                                                                |
+| `src/proxy.ts`                         | Locale negotiation and redirect                                                                                                                                                                                                                                                                                             |
+| `src/lib/request-validation.ts`        | Zod request schema + prompt-injection regex patterns                                                                                                                                                                                                                                                                        |
+| `src/lib/rate-limit.ts`                | In-memory IP bucket; `resetRateLimitForTests()` available for tests                                                                                                                                                                                                                                                         |
+| `src/data/linkedin.json`               | LinkedIn profile summary injected into the system prompt                                                                                                                                                                                                                                                                    |
+| `src/data/portfolio.ts`                | Projects, journey, skills and personal facts. Single source for §2, §3, §4, §5 and the twin's grounding                                                                                                                                                                                                                     |
+| `src/components/spec/SpecPage.tsx`     | The whole document: rail, clauses, cover intro, theme toggle                                                                                                                                                                                                                                                                |
+| `src/components/digital-twin-chat.tsx` | Client component: chat state, streaming reader, localStorage persistence                                                                                                                                                                                                                                                    |
 
 ### Content Security Policy
 
