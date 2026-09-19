@@ -18,6 +18,8 @@ export const personalInfo = {
   github: "https://github.com/ziyadalhd",
   githubDisplay: "github.com/ziyadalhd",
   email: "ziyadalhdriti@gmail.com",
+  phone: "+966 56 926 4771",
+  phoneHref: "tel:+966569264771",
   /** Served from /public; see README. Must be the phone-free revision. */
   resume: "/ziyad-jaber-alhdriti-cv.pdf",
   gpa: "3.73 / 4.00",

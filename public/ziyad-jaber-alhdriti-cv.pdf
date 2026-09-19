@@ -1,524 +1,80 @@
-%PDF-1.3
-%âãÏÓ
+%PDF-1.4
+%“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
 <<
-/PageMode /UseNone
-/Pages 2 0 R
-/Type /Catalog
+/F1 2 0 R /F2 3 0 R /F3 4 0 R
 >>
 endobj
 2 0 obj
 <<
-/Count 1
-/Kids [ 3 0 R ]
-/Type /Pages
+/BaseFont /Helvetica /Encoding /WinAnsiEncoding /Name /F1 /Subtype /Type1 /Type /Font
 >>
 endobj
 3 0 obj
 <<
-/Contents 4 0 R
-/MediaBox [ 0 0 612 792 ]
-/Parent 2 0 R
-/Resources <<
-/Font 5 0 R
-/ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->>
-/Rotate 0
-/Trans <<
->>
-/Type /Page
+/BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding /Name /F2 /Subtype /Type1 /Type /Font
 >>
 endobj
 4 0 obj
 <<
-/Length 7986
+/BaseFont /Helvetica-Oblique /Encoding /WinAnsiEncoding /Name /F3 /Subtype /Type1 /Type /Font
 >>
-stream
-1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
-q
-1 0 0 1 49.2 724 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 4 Tm /F2 22 Tf 26 TL (ZIYAD JABER ALHDRITI) Tj T* ET
-Q
-Q
-q
-1 0 0 1 49.2 711 cm
-q
-.333333 .333333 .333333 rg
-BT 1 0 0 1 0 3 Tm /F1 8 Tf 11 TL (Makkah, Saudi Arabia | ziyadalhdriti@gmail.com | linkedin.com/in/ziyad-alhdriti | github.com/ziyadalhd) Tj T* ET
-Q
-Q
-q
-1 0 0 1 49.2 704 cm
-q
-1 w
-1 J
-0 0 0 RG
-n 0 0 m 513.6 0 l S
-Q
-Q
-q
-1 0 0 1 49.2 683 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2.5 Tm /F2 8.5 Tf 11 TL (SUMMARY) Tj T* ET
-Q
-Q
-q
-1 0 0 1 49.2 680.5 cm
-q
-.5 w
-1 J
-0 0 0 RG
-n 0 0 m 513.6 0 l S
-Q
-Q
-q
-1 0 0 1 49.2 626.5 cm
-q
-.133333 .133333 .133333 rg
-BT 1 0 0 1 0 41.5 Tm /F1 8.5 Tf 12.5 TL .509167 Tw (Software Engineering student at Umm Al-Qura University \(GPA 3.73/4.00, expected 2027\) with hands-on experience building full-stack) Tj T* 0 Tw 1.480344 Tw (mobile applications using Flutter, Dart, and Spring Boot. Comfortable integrating RESTful APIs, modeling data in PostgreSQL, and) Tj T* 0 Tw 1.023368 Tw (collaborating in Agile/Scrum teams. A self-directed learner who independently picked up Swift to build an iOS prototype, with a solid) Tj T* 0 Tw (foundation in software engineering principles and practical, end-to-end development.) Tj T* ET
-Q
-Q
-q
-1 0 0 1 49.2 605.5 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2.5 Tm /F2 8.5 Tf 11 TL (EDUCATION) Tj T* ET
-Q
-Q
-q
-1 0 0 1 49.2 603 cm
-q
-.5 w
-1 J
-0 0 0 RG
-n 0 0 m 513.6 0 l S
-Q
-Q
-q
-1 0 0 1 49.2 586 cm
-q
-0 0 0 rg
-BT /F1 10 Tf 12 TL ET
-q
-1 0 0 1 0 0 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 3.5 Tm /F2 9.5 Tf 13 TL (Umm Al-Qura University \227 B.S. in Software Engineering) Tj T* ET
-Q
-Q
-q
-1 0 0 1 324 0 cm
-q
-.333333 .333333 .333333 rg
-BT 1 0 0 1 0 5 Tm /F3 8 Tf 13 TL 101.744 0 Td (Makkah, Saudi Arabia) Tj T* -101.744 0 Td ET
-Q
-Q
-q
-Q
-Q
-Q
-q
-1 0 0 1 49.2 575 cm
-q
-.333333 .333333 .333333 rg
-BT 1 0 0 1 0 3 Tm /F1 8 Tf 11 TL (Expected Graduation: 2027 | GPA: 3.73 / 4.00) Tj T* ET
-Q
-Q
-q
-1 0 0 1 49.2 550 cm
-q
-BT 1 0 0 1 0 15 Tm 11.5 TL /F2 8 Tf .133333 .133333 .133333 rg (Relevant Coursework:) Tj /F1 8 Tf ( Operating Systems, Software Construction, Software Testing, Software Design, Object-Oriented Programming, Data) Tj T* (Structures, Databases, Linear Algebra & Differential Equations.) Tj T* ET
-Q
-Q
-q
-1 0 0 1 49.2 529 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2.5 Tm /F2 8.5 Tf 11 TL (PROJECTS) Tj T* ET
-Q
-Q
-q
-1 0 0 1 49.2 526.5 cm
-q
-.5 w
-1 J
-0 0 0 RG
-n 0 0 m 513.6 0 l S
-Q
-Q
-q
-1 0 0 1 49.2 509.5 cm
-q
-0 0 0 rg
-BT /F1 10 Tf 12 TL ET
-q
-1 0 0 1 0 0 cm
-q
-BT 1 0 0 1 0 3.5 Tm 13 TL /F2 9.5 Tf 0 0 0 rg (Wasl \227 Student Transportation & Accommodation Platform) Tj T* ET
-Q
-Q
-q
-1 0 0 1 316.8 0 cm
-q
-.333333 .333333 .333333 rg
-BT 1 0 0 1 0 5 Tm /F3 8 Tf 13 TL 76.024 0 Td (Graduation Project, 2025\2262026) Tj T* -76.024 0 Td ET
-Q
-Q
-q
-Q
-Q
-Q
-q
-1 0 0 1 49.2 498.5 cm
-q
-.333333 .333333 .333333 rg
-BT 1 0 0 1 0 3 Tm /F3 8 Tf 11 TL (Flutter, Dart, Spring Boot, Java, REST APIs, PostgreSQL, Git, Agile/Scrum) Tj T* ET
-Q
-Q
-q
-1 0 0 1 49.2 472.5 cm
-q
-.133333 .133333 .133333 rg
-BT 1 0 0 1 10 15.5 Tm /F1 8.5 Tf 12 TL -6 0 Td -0.035029 Tw (- Developed cross-platform mobile screens in Flutter from system design and SRS documentation, supporting three user roles \(Student,) Tj T* 0 Tw 6 0 Td (Provider, Admin\).) Tj T* ET
-Q
-Q
-q
-1 0 0 1 49.2 459 cm
-q
-.133333 .133333 .133333 rg
-BT 1 0 0 1 10 3.5 Tm /F1 8.5 Tf 12 TL -6 0 Td (- Integrated the Flutter front-end with Spring Boot RESTful APIs to handle data exchange, user flows, and service operations.) Tj T* 6 0 Td ET
-Q
-Q
-q
-1 0 0 1 49.2 445.5 cm
-q
-.133333 .133333 .133333 rg
-BT 1 0 0 1 10 3.5 Tm /F1 8.5 Tf 12 TL -6 0 Td (- Built booking and service-request workflows connecting students with transportation and accommodation providers.) Tj T* 6 0 Td ET
-Q
-Q
-q
-1 0 0 1 49.2 432 cm
-q
-.133333 .133333 .133333 rg
-BT 1 0 0 1 10 3.5 Tm /F1 8.5 Tf 12 TL -6 0 Td (- Collaborated within a Scrum team using sprint-based development, Git version control, and PostgreSQL through the API layer.) Tj T* 6 0 Td ET
-Q
-Q
-q
-1 0 0 1 49.2 425.5 cm
-Q
-q
-1 0 0 1 49.2 412.5 cm
-q
-0 0 0 rg
-BT /F1 10 Tf 12 TL ET
-q
-1 0 0 1 0 0 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 3.5 Tm /F2 9.5 Tf 13 TL (Daily Water Intake Tracker \227 iOS App) Tj T* ET
-Q
-Q
-q
-1 0 0 1 316.8 0 cm
-q
-.333333 .333333 .333333 rg
-BT 1 0 0 1 0 5 Tm /F3 8 Tf 13 TL 72.92 0 Td (Personal Learning Project, 2026) Tj T* -72.92 0 Td ET
-Q
-Q
-q
-Q
-Q
-Q
-q
-1 0 0 1 49.2 401.5 cm
-q
-.333333 .333333 .333333 rg
-BT 1 0 0 1 0 3 Tm /F3 8 Tf 11 TL (Swift, Xcode, Local Data Persistence, AI-Assisted Development) Tj T* ET
-Q
-Q
-q
-1 0 0 1 49.2 387.5 cm
-q
-.133333 .133333 .133333 rg
-BT 1 0 0 1 10 3.5 Tm /F1 8.5 Tf 12 TL -6 0 Td (- Self-taught Swift from scratch to build a working iOS prototype that calculates and tracks daily water-intake goals.) Tj T* 6 0 Td ET
-Q
-Q
-q
-1 0 0 1 49.2 374 cm
-q
-.133333 .133333 .133333 rg
-BT 1 0 0 1 10 3.5 Tm /F1 8.5 Tf 12 TL -6 0 Td (- Implemented core application logic and user-interface components using native iOS development patterns.) Tj T* 6 0 Td ET
-Q
-Q
-q
-1 0 0 1 49.2 360.5 cm
-q
-.133333 .133333 .133333 rg
-BT 1 0 0 1 10 3.5 Tm /F1 8.5 Tf 12 TL -6 0 Td (- Added local data storage to persist user entries across sessions.) Tj T* 6 0 Td ET
-Q
-Q
-q
-1 0 0 1 49.2 347 cm
-q
-.133333 .133333 .133333 rg
-BT 1 0 0 1 10 3.5 Tm /F1 8.5 Tf 12 TL -6 0 Td (- Applied AI-assisted development and rapid-prototyping techniques to accelerate self-learning and shorten iteration cycles.) Tj T* 6 0 Td ET
-Q
-Q
-q
-1 0 0 1 49.2 326 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2.5 Tm /F2 8.5 Tf 11 TL (TECHNICAL SKILLS) Tj T* ET
-Q
-Q
-q
-1 0 0 1 49.2 323.5 cm
-q
-.5 w
-1 J
-0 0 0 RG
-n 0 0 m 513.6 0 l S
-Q
-Q
-q
-1 0 0 1 49.2 305.5 cm
-q
-0 0 0 rg
-BT /F1 10 Tf 12 TL ET
-q
-1 0 0 1 0 1 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 3.5 Tm /F2 8.5 Tf 12 TL (Languages:) Tj T* ET
-Q
-Q
-q
-1 0 0 1 82.8 1 cm
-q
-.133333 .133333 .133333 rg
-BT 1 0 0 1 0 3.5 Tm /F1 8.5 Tf 12 TL (Java, Dart, Swift, SQL) Tj T* ET
-Q
-Q
-q
-Q
-Q
-Q
-q
-1 0 0 1 49.2 291.5 cm
-q
-0 0 0 rg
-BT /F1 10 Tf 12 TL ET
-q
-1 0 0 1 0 1 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 3.5 Tm /F2 8.5 Tf 12 TL (Mobile Dev:) Tj T* ET
-Q
-Q
-q
-1 0 0 1 82.8 1 cm
-q
-.133333 .133333 .133333 rg
-BT 1 0 0 1 0 3.5 Tm /F1 8.5 Tf 12 TL (Flutter, Dart, native iOS \(Swift\), UI implementation, local data persistence) Tj T* ET
-Q
-Q
-q
-Q
-Q
-Q
-q
-1 0 0 1 49.2 277.5 cm
-q
-0 0 0 rg
-BT /F1 10 Tf 12 TL ET
-q
-1 0 0 1 0 1 cm
-q
-BT 1 0 0 1 0 3.5 Tm 12 TL /F2 8.5 Tf 0 0 0 rg (Backend & APIs:) Tj T* ET
-Q
-Q
-q
-1 0 0 1 82.8 1 cm
-q
-.133333 .133333 .133333 rg
-BT 1 0 0 1 0 3.5 Tm /F1 8.5 Tf 12 TL (Spring Boot, RESTful API integration, Firebase) Tj T* ET
-Q
-Q
-q
-Q
-Q
-Q
-q
-1 0 0 1 49.2 263.5 cm
-q
-0 0 0 rg
-BT /F1 10 Tf 12 TL ET
-q
-1 0 0 1 0 1 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 3.5 Tm /F2 8.5 Tf 12 TL (Databases:) Tj T* ET
-Q
-Q
-q
-1 0 0 1 82.8 1 cm
-q
-.133333 .133333 .133333 rg
-BT 1 0 0 1 0 3.5 Tm /F1 8.5 Tf 12 TL (PostgreSQL, SQL) Tj T* ET
-Q
-Q
-q
-Q
-Q
-Q
-q
-1 0 0 1 49.2 249.5 cm
-q
-0 0 0 rg
-BT /F1 10 Tf 12 TL ET
-q
-1 0 0 1 0 1 cm
-q
-BT 1 0 0 1 0 3.5 Tm 12 TL /F2 8.5 Tf 0 0 0 rg (Tools & Practices:) Tj T* ET
-Q
-Q
-q
-1 0 0 1 82.8 1 cm
-q
-.133333 .133333 .133333 rg
-BT 1 0 0 1 0 3.5 Tm /F1 8.5 Tf 12 TL (Git, GitHub, Agile/Scrum, OOP, SDLC, rapid prototyping, AI-assisted development) Tj T* ET
-Q
-Q
-q
-Q
-Q
-Q
-q
-1 0 0 1 49.2 228.5 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 2.5 Tm /F2 8.5 Tf 11 TL (VOLUNTEERING) Tj T* ET
-Q
-Q
-q
-1 0 0 1 49.2 226 cm
-q
-.5 w
-1 J
-0 0 0 RG
-n 0 0 m 513.6 0 l S
-Q
-Q
-q
-1 0 0 1 49.2 209 cm
-q
-0 0 0 rg
-BT /F1 10 Tf 12 TL ET
-q
-1 0 0 1 0 0 cm
-q
-0 0 0 rg
-BT 1 0 0 1 0 3.5 Tm /F2 9.5 Tf 13 TL (Community Volunteer \227 National Volunteering Platform \(Saudi Arabia\)) Tj T* ET
-Q
-Q
-q
-1 0 0 1 352.8 0 cm
-q
-.333333 .333333 .333333 rg
-BT 1 0 0 1 0 5 Tm /F3 8 Tf 13 TL 101.392 0 Td (2024\226Present) Tj T* -101.392 0 Td ET
-Q
-Q
-q
-Q
-Q
-Q
-q
-1 0 0 1 49.2 197 cm
-q
-.133333 .133333 .133333 rg
-BT 1 0 0 1 10 3.5 Tm /F1 8.5 Tf 12 TL -6 0 Td (- Completed 262+ verified volunteering hours across multiple community initiatives.) Tj T* 6 0 Td ET
-Q
-Q
-q
-1 0 0 1 49.2 183.5 cm
-q
-.133333 .133333 .133333 rg
-BT 1 0 0 1 10 3.5 Tm /F1 8.5 Tf 12 TL -6 0 Td (- Supported event organization, coordination, and operational tasks.) Tj T* 6 0 Td ET
-Q
-Q
- 
-
-endstream
 endobj
 5 0 obj
 <<
-/F1 6 0 R
-/F2 7 0 R
-/F3 8 0 R
+/Contents 9 0 R /MediaBox [ 0 0 612 792 ] /Parent 8 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
 endobj
 6 0 obj
 <<
-/BaseFont /Helvetica
-/Encoding /WinAnsiEncoding
-/Name /F1
-/Subtype /Type1
-/Type /Font
+/PageMode /UseNone /Pages 8 0 R /Type /Catalog
 >>
 endobj
 7 0 obj
 <<
-/BaseFont /Helvetica-Bold
-/Encoding /WinAnsiEncoding
-/Name /F2
-/Subtype /Type1
-/Type /Font
+/Author (\(anonymous\)) /CreationDate (D:20260624173036+03'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20260624173036+03'00') /Producer (ReportLab PDF Library - \(opensource\)) 
+  /Subject (\(unspecified\)) /Title (\(anonymous\)) /Trapped /False
 >>
 endobj
 8 0 obj
 <<
-/BaseFont /Helvetica-Oblique
-/Encoding /WinAnsiEncoding
-/Name /F3
-/Subtype /Type1
-/Type /Font
+/Count 1 /Kids [ 5 0 R ] /Type /Pages
 >>
 endobj
 9 0 obj
 <<
-/Author (Ziyad Jaber Alhdriti)
-/CreationDate (D\07220260624173036\05303\04700\047)
-/Creator (\050unspecified\051)
-/Keywords ()
-/ModDate (D\07220260624173036\05303\04700\047)
-/Producer (ReportLab PDF Library \055 \050opensource\051)
-/Subject (\050unspecified\051)
-/Title (Ziyad Jaber Alhdriti \055 CV)
-/Trapped /False
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 2689
 >>
+stream
+GauHM>?BRh(4PFJm&."*-8rR`:=?$H+`5\"JW_^RZZo>`-.-+)XsCn=lhpOa-/67eKEMXH<>&XaD=,O@I9X5>i/_Z&LC(cd'TPAfi-I)JKA3\90HJ&MHLTt1/`1C;C_&R5$X^rdNk$YU#<:(9c%Vo*SAt`Xbi8kQQH"DEJ+ZUqC]AX(!WDPTPDdh1F9p@1@JV(Z`-;-)\;]_hbLjQ)#7j$@0'jA^]?iG/]4Tl;jSG;rRkQ"2`1Sd)N"Ph,r6brSBEumOo3.]FMmr[sG9eC&1(m9c?Pa#WYoWB<T>W:oV@cJojUk.HbaVZ+._`,pC73Dlj4,\B2Wp;gFQ"#8Ik?(onbF:b?P7%a^)c.@(ab_!#eL"661F5a'o&mj](3o&o%UYQ`EuDF(N^Z;<&hYk;?OU?22>B?m_S(]b],/6h3HN&,@dt4:<sA10YPFWn@?+VK#03IY`r&%dKN1,7l442'O2skoOI36/dP^Zm"Pkhe/_dO5+hSc[laRdbBBC&d!meh.N3m$Gb(m&\A]l5P,+5IG\WfW7amI9/8&su(RaH+Ce7(4lcO^;[`Gj\?,plkN-,H!Z'YU7ZC$>60qM"YV&oRacBY,u#q&->-K%3Eac,c1S1>N_4IL8aa:*j1<7-E8iV<%S318dKcp&Vo-6t^JZ+_4j7IWH"k>El7SU;NK3?MAcGeP8ANFa8o@l!*+X>mN#5YI.bTu[mDPU+\35"HU<Xb_hN2)-C$V#kP$*(NCRUT&EXHj:MsYp^a@?ujHQ$5>/kKJiflRm8=1ip&.kc,-^g,`gWiH&Xi1e&XL?gEWc7dTU%dLI.<G<#Ug/JqOIO)e8foaAUg1%uBEYNHph_C%dS:G1or"5-o9a-^TJbFED];CB=G_/#V24*ZJdCfdTPQ&M+^u^3**JrK_ckQ@-$8D3a++*B:JT[LUHWC>8"S+0!)%*bq%=q'Bbp_d(6i4"WVG1tiAsPm,amX"/P2DtIhCr<e35XAIr`+Am#spS1"cj8fCNNs9%N#W0O`SLNrLl)M-[?/lLJ/TB%3TjE./L-jpP`q5!.p^MI#,e`=!qP.2>AU=O)&C$*LTA3",'1A!`A-[of9&u]&9C;G;8j/hjkCcI9^fSfnJ"mOU1Q@IL($C/n==&fLqZLo<g3@+:k04'p`If%jqWetSM$V>="eB)iI=MthT2U<I0bVCn8)[O[UR'Y@mmWLhIW>((31*HaboZd>#pO/%6C[q2GuG.gohhdNC0G<K6"F5bm\Jp\W?A1a1o2%Br;cd-,mk8UEIAlAKnPY+Y@]_t]<>)XSH*r6.d-]?d<VK#WN#3]NMZsU)6?HB53hCTDY:U7bA,d=X6g-#?"<%EHmL_IBt1Yui]?OWB)"iT:7oh5<l]QY1ibH)CsYZ*BIbJnA3%*Y[iI"+9ro,]WhDh^c;8I/XfRI>PQF:.Jl:)F#k@#b@4kCE8coUFW4LIdO`E1-LkiNQ=&NFZbVPekg,j&+o:Wt:nUbPB^1ro.f3IA4d`_p8r.[Yoao)JGj6CSROgj&XB=c7Ci@/loW0CBI*OV\c#GfKJ$6r\gnQur<>3fjmLgDn^N;aLMjT:^-EPjp$\$FA)G^72'61P)*l];lE8F6"D\(]0RO?L%#Mul_iN:UhuYF:$.TKdIMHdLPVm"^\#.Fr**>Kal6C)p=H/7]2kZ80;oma_&<J#@paetkeh1!L$[9ANL/9-%GPBi\CNOf"khkTS^m\jBhC(EpIFH_(!q?S"nY@9u2mm\ncZdp<pMa%ot/jco:/rHEiVmN)3kFREX1ODCjV"*M:*Ld^S(I[7YL6$RS!WrN47c;Tr.A)2Lq.+N%+7M#6'G-HVZ^'Zrh5,S^:L=h'NK]1R:(ek+d@YUh<]cs3)aQcE>)-%NT1[8\9o=LR&W:u/:jV5NN<FqLt5^\B1&M@iNS#Lb`("PH*9PeOCELUBsjA@gC8gfE_i7"ZHX&I&J7HuE`M>+)s^XIK2:f";g9F=3,Ej=2J6d->t1`OdYX\G[%:(Wj+\MB`pGUkHk`;qpIGbTouO:b2!qZ=8L3,]DUIMD%Dgn^O8*iT_2(0$&E/$cD;+LE!)3C_5S5Jk'tqm2@@lF_]43Z)Nmed&2>U[DJ0)F6+o=]PG=F[<oVatu'A/L&MKX.qto32VK^KJ6B66r'I*0NE-FKQeRHP!/R+D.pNTkU!+D_3`WuTKe1QDkliI7o/)jr_N8&roOlQ*<b?h8J#[rCQ)-AjHs<Fj48X$4er)PGmAcPd\Tfslr&6JE/R-]B^Ld5n+GI[o?4U06R0=[P@GYU-8gan.X:4CYR-X@?kim36G3R<ff`!ql-N2gjUU,!]R$V'NJGdEYuVlI`#jrRIOD%roli9EIt.<p?206_WWhCR:(-uDbJMe\aufF"hXU#@QE?JnJ\3OlVOY[>F6L7r,^q\mR._VOIE?,;`rJgn4$,r>SW!fuK&!"gDU!$'\>NiMmO$!B_-+OFNA")*_r8Suo^gOZj]/DW@^bit%;0d$d``-("jKtoIf2?hF0+<"M`EYKN%hcQDjlRK49P\lG-H@:\@pX2H`tockVI"(eaHmEe'_l9kCUi[n?'+-Sk]HupBH3YrJ=cgr]V*B^Z]9sc*`)6WI&Wa:Rir#RH1X$J#Uha\dSb[hoq24SiY*_hCGDRm"C5u.l8?k%+Q[@$^.fF98F*=(D0<`.kN)L#<%r-MTG+#f#,?(!?P25XT~>endstream
 endobj
 xref
 0 10
 0000000000 65535 f 
-0000000015 00000 n 
-0000000083 00000 n 
-0000000142 00000 n 
+0000000061 00000 n 
+0000000112 00000 n 
+0000000219 00000 n 
 0000000331 00000 n 
-0000008369 00000 n 
-0000008420 00000 n 
-0000008527 00000 n 
-0000008639 00000 n 
-0000008754 00000 n 
+0000000446 00000 n 
+0000000639 00000 n 
+0000000707 00000 n 
+0000000987 00000 n 
+0000001046 00000 n 
 trailer
 <<
+/ID 
+[<3caa3d94f2173829d19a67a1408b76d1><3caa3d94f2173829d19a67a1408b76d1>]
+% ReportLab generated PDF document -- digest (opensource)
+
+/Info 7 0 R
+/Root 6 0 R
 /Size 10
-/Root 1 0 R
-/Info 9 0 R
-/ID [ <3caa3d94f2173829d19a67a1408b76d1> <3caa3d94f2173829d19a67a1408b76d1> ]
 >>
 startxref
-9092
+3826
 %%EOF

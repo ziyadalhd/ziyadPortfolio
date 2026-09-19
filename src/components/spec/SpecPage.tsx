@@ -1262,104 +1262,75 @@ export function SpecPage({
                 data-contact
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(3,minmax(0,1fr))",
+                  gridTemplateColumns: "repeat(2,minmax(0,1fr))",
                   borderTop: "2px solid var(--rule)",
                 }}
               >
-                <a
-                  href={`mailto:${personalInfo.email}`}
-                  style={{
-                    display: "block",
-                    padding: "20px",
-                    paddingInlineStart: 0,
-                    borderBottom: "1px solid var(--hair)",
-                  }}
-                >
-                  <div
+                {[
+                  {
+                    label: s.s7.emailLabel,
+                    value: personalInfo.email,
+                    href: `mailto:${personalInfo.email}`,
+                  },
+                  {
+                    label: s.s7.phoneLabel,
+                    value: personalInfo.phone,
+                    href: personalInfo.phoneHref,
+                    ltr: true,
+                  },
+                  {
+                    label: "LinkedIn",
+                    value: personalInfo.linkedinDisplay,
+                    href: personalInfo.linkedin,
+                    external: true,
+                  },
+                  {
+                    label: "GitHub",
+                    value: personalInfo.githubDisplay,
+                    href: personalInfo.github,
+                    external: true,
+                  },
+                ].map((tile, i) => (
+                  <a
+                    key={tile.label}
+                    href={tile.href}
+                    target={tile.external ? "_blank" : undefined}
+                    rel={tile.external ? "noreferrer" : undefined}
                     style={{
-                      fontSize: "10.5px",
-                      letterSpacing: ".12em",
-                      textTransform: "uppercase",
-                      fontFamily: "var(--mono)",
-                      color: "var(--muted)",
+                      display: "block",
+                      padding: "20px",
+                      // Two columns: every other tile opens a row, so it
+                      // sheds the divider and the leading indent.
+                      paddingInlineStart: i % 2 === 0 ? 0 : "20px",
+                      borderBottom: "1px solid var(--hair)",
+                      borderInlineStart:
+                        i % 2 === 0 ? undefined : "1px solid var(--hair)",
                     }}
                   >
-                    {s.s7.emailLabel}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "17px",
-                      fontWeight: 600,
-                      marginTop: "7px",
-                    }}
-                  >
-                    {personalInfo.email}
-                  </div>
-                </a>
-                <a
-                  href={personalInfo.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{
-                    display: "block",
-                    padding: "20px",
-                    borderBottom: "1px solid var(--hair)",
-                    borderInlineStart: "1px solid var(--hair)",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "10.5px",
-                      letterSpacing: ".12em",
-                      textTransform: "uppercase",
-                      fontFamily: "var(--mono)",
-                      color: "var(--muted)",
-                    }}
-                  >
-                    LinkedIn
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "17px",
-                      fontWeight: 600,
-                      marginTop: "7px",
-                    }}
-                  >
-                    {personalInfo.linkedinDisplay}
-                  </div>
-                </a>
-                <a
-                  href={personalInfo.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{
-                    display: "block",
-                    padding: "20px",
-                    borderBottom: "1px solid var(--hair)",
-                    borderInlineStart: "1px solid var(--hair)",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "10.5px",
-                      letterSpacing: ".12em",
-                      textTransform: "uppercase",
-                      fontFamily: "var(--mono)",
-                      color: "var(--muted)",
-                    }}
-                  >
-                    GitHub
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "17px",
-                      fontWeight: 600,
-                      marginTop: "7px",
-                    }}
-                  >
-                    {personalInfo.githubDisplay}
-                  </div>
-                </a>
+                    <div
+                      style={{
+                        fontSize: "10.5px",
+                        letterSpacing: ".12em",
+                        textTransform: "uppercase",
+                        fontFamily: "var(--mono)",
+                        color: "var(--muted)",
+                      }}
+                    >
+                      {tile.label}
+                    </div>
+                    <div
+                      dir={tile.ltr ? "ltr" : undefined}
+                      style={{
+                        fontSize: "17px",
+                        fontWeight: 600,
+                        marginTop: "7px",
+                        unicodeBidi: tile.ltr ? "isolate" : undefined,
+                      }}
+                    >
+                      {tile.value}
+                    </div>
+                  </a>
+                ))}
               </div>
             </ClauseRow>
           </section>

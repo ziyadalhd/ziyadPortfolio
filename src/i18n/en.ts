@@ -191,6 +191,7 @@ export const en = {
       subtext:
         "I read every message, and I reply in Arabic or English, whichever you write in.",
       emailLabel: "Email",
+      phoneLabel: "Phone",
     },
     footer: {
       end: "End of document — SPEC-2026 / Rev 4.0",
