@@ -1,11 +1,19 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 /**
  * Hover/focus preview for a §clause cross-reference. Positioning is
  * self-contained (no global listeners): each tag measures itself on
  * open and clamps the tooltip to the viewport.
+ *
+ * The card is portalled to <body> because the clause rows it sits inside
+ * carry a live transform from the scroll-driven .reveal animation. A
+ * transformed ancestor becomes the containing block for position:fixed
+ * children — which re-bases these viewport coordinates onto the row and
+ * throws the card far down the page — and opens a stacking context that
+ * traps z-index, letting later clauses paint over it.
  */
 export function RefTag({
   id,
@@ -57,61 +65,64 @@ export function RefTag({
       >
         §{id}
       </span>
-      {open ? (
-        <span
-          role="tooltip"
-          style={{
-            position: "fixed",
-            left: pos.left,
-            top: pos.top,
-            width: "320px",
-            maxWidth: "calc(100vw - 32px)",
-            zIndex: 80,
-            background: "var(--bg)",
-            border: "1px solid var(--accent)",
-            boxShadow: "0 12px 32px rgba(0,0,0,.18)",
-            padding: "16px",
-            pointerEvents: "none",
-          }}
-        >
-          <span
-            style={{
-              display: "block",
-              fontSize: "10.5px",
-              letterSpacing: ".12em",
-              textTransform: "uppercase",
-              fontFamily: "var(--mono)",
-              color: "var(--accent)",
-              fontWeight: 600,
-            }}
-          >
-            §{id}
-          </span>
-          <span
-            style={{
-              display: "block",
-              fontSize: "16px",
-              fontWeight: 800,
-              letterSpacing: "-.01em",
-              marginTop: "8px",
-              lineHeight: 1.25,
-            }}
-          >
-            {title}
-          </span>
-          <span
-            style={{
-              display: "block",
-              fontSize: "14px",
-              lineHeight: 1.55,
-              marginTop: "8px",
-              color: "var(--muted)",
-            }}
-          >
-            {body}
-          </span>
-        </span>
-      ) : null}
+      {open
+        ? createPortal(
+            <span
+              role="tooltip"
+              style={{
+                position: "fixed",
+                left: pos.left,
+                top: pos.top,
+                width: "320px",
+                maxWidth: "calc(100vw - 32px)",
+                zIndex: 80,
+                background: "var(--bg)",
+                border: "1px solid var(--accent)",
+                boxShadow: "0 12px 32px rgba(0,0,0,.18)",
+                padding: "16px",
+                pointerEvents: "none",
+              }}
+            >
+              <span
+                style={{
+                  display: "block",
+                  fontSize: "10.5px",
+                  letterSpacing: ".12em",
+                  textTransform: "uppercase",
+                  fontFamily: "var(--mono)",
+                  color: "var(--accent)",
+                  fontWeight: 600,
+                }}
+              >
+                §{id}
+              </span>
+              <span
+                style={{
+                  display: "block",
+                  fontSize: "16px",
+                  fontWeight: 800,
+                  letterSpacing: "-.01em",
+                  marginTop: "8px",
+                  lineHeight: 1.25,
+                }}
+              >
+                {title}
+              </span>
+              <span
+                style={{
+                  display: "block",
+                  fontSize: "14px",
+                  lineHeight: 1.55,
+                  marginTop: "8px",
+                  color: "var(--muted)",
+                }}
+              >
+                {body}
+              </span>
+            </span>,
+            document.body,
+          )
+        : null}
     </span>
   );
 }
