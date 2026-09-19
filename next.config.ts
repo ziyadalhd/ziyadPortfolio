@@ -11,7 +11,11 @@ const cspDirectives = [
   "default-src 'self'",
   "base-uri 'self'",
   "form-action 'self'",
-  "frame-ancestors 'none'",
+  // 'self', not 'none': these headers also ride on /public assets, so
+  // 'none' made the résumé PDF refuse to render inside the clause 5.2
+  // viewer on its own origin (200, then ERR_BLOCKED_BY_RESPONSE).
+  // Clickjacking needs a *foreign* ancestor, which this still forbids.
+  "frame-ancestors 'self'",
   "object-src 'none'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
@@ -48,8 +52,10 @@ const nextConfig: NextConfig = {
             value: "nosniff",
           },
           {
+            // Matches frame-ancestors above; the legacy header has no
+            // directive for "same origin only" other than SAMEORIGIN.
             key: "X-Frame-Options",
-            value: "DENY",
+            value: "SAMEORIGIN",
           },
           {
             key: "Permissions-Policy",

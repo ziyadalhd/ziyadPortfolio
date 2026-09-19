@@ -174,7 +174,10 @@ export const ar: Dictionary = {
       annexTitle: "الملحق أ — السيرة الذاتية",
       annexBody:
         "صفحة واحدة بصيغة PDF. الوقائع نفسها الواردة هنا، بالشكل الذي تتوقّعه أنظمة التوظيف.",
-      annexCta: "تحميل الملحق أ",
+      annexView: "عرض السيرة",
+      annexDownload: "تنزيل PDF",
+      annexClose: "إغلاق",
+      annexOpenTab: "فتح في تبويب جديد",
     },
     s6: {
       heading: "عرض المطابقة",

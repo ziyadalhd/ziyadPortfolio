@@ -21,6 +21,7 @@ import { LOCALES, type Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
 
 import { RefTag } from "./RefTag";
+import { ResumeActions } from "./ResumeActions";
 
 const RAIL_IDS = ["s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7"] as const;
 const THEME_KEY = "ziyad-spec-theme";
@@ -1173,41 +1174,7 @@ export function SpecPage({
               >
                 {s.s5.annexBody}
               </p>
-              <a
-                href={personalInfo.resume}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "12px",
-                  fontFamily: "var(--mono)",
-                  fontSize: "13px",
-                  fontWeight: 500,
-                  letterSpacing: ".05em",
-                  textTransform: "uppercase",
-                  padding: "13px 20px",
-                  background: "var(--accent)",
-                  color: "var(--bg)",
-                }}
-              >
-                <span>{s.s5.annexCta}</span>
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                  <polyline points="7 10 12 15 17 10" />
-                  <line x1="12" y1="15" x2="12" y2="3" />
-                </svg>
-              </a>
+              <ResumeActions content={s.s5} />
             </ClauseRow>
           </section>
 

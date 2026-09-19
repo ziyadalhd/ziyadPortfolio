@@ -173,7 +173,10 @@ export const en = {
       annexTitle: "Annex A — Résumé",
       annexBody:
         "One page, PDF. The same facts as this document, in the format an applicant tracking system expects.",
-      annexCta: "Download Annex A",
+      annexView: "View résumé",
+      annexDownload: "Download PDF",
+      annexClose: "Close",
+      annexOpenTab: "Open in a new tab",
     },
     s6: {
       heading: "Conformance demo",

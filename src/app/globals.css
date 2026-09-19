@@ -298,6 +298,27 @@ html[lang="ar"] h3 {
   }
 }
 
+/* ── Résumé actions (clause 5.2) ──────────────────────────────────────── */
+@media (hover: hover) {
+  .resume-view:hover {
+    background: var(--ink) !important;
+    border-color: var(--ink) !important;
+    transform: translateY(-2px);
+  }
+
+  .resume-download:hover {
+    background: color-mix(in srgb, var(--accent) 10%, transparent) !important;
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+    transform: translateY(-2px);
+  }
+}
+
+.resume-view:active,
+.resume-download:active {
+  transform: translateY(0);
+}
+
 /* Theme toggle shows both labels; the attribute the button itself flips
    decides which one is visible — no React state, no hydration mismatch. */
 :root:not([data-theme="dark"]) .theme-label-dark {
