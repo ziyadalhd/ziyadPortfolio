@@ -40,16 +40,19 @@ Use Node.js `^20.19.0`, `^22.13.0`, or `>=24.0.0`.
 
 ## Resume
 
-The download button (clause 5.2) points at
-`public/ziyad-jaber-alhdriti-cv.pdf`, set once in `personalInfo.resume`. That
-file is **not committed**; add it before deploying.
+Clause 5.2 serves `public/ziyad-jaber-alhdriti-cv.pdf`, set once in
+`personalInfo.resume`, through a viewer and a download button.
 
-Remove the phone number from it first. The file is served at a crawlable URL
-and gets indexed, while the site itself deliberately publishes only email,
-LinkedIn and GitHub. `Ziyad_Alhdriti_Resume.pdf` in the repo root is the old
-June revision: it still carries the number, and predates the Holy Makkah
-Municipality internship and the Bayn / Wedding Greetings projects, so it is
-not the file to copy across.
+That file is a **phone-free** derivative of `Ziyad_Alhdriti_Resume.pdf` in the
+repo root: the number was removed from the PDF content stream, not painted
+over, so it is absent from the file's bytes. Keep it that way when you replace
+it — the PDF sits at a crawlable, indexed URL, while the site itself
+deliberately publishes only email, LinkedIn and GitHub.
+
+To refresh it, drop the new export in the repo root and re-run the removal, or
+export a version that never had the number. Note the current PDF is the June
+revision: it predates the Holy Makkah Municipality internship and the Bayn and
+Wedding Greetings projects that §2 and §4 now describe.
 
 ## Deploying
 
