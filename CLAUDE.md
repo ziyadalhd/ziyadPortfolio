@@ -104,6 +104,35 @@ Dictionary`, so a missing or misspelt key is a **compile error**.
   When the whole bar scrolled, the language switch and theme toggle sat ~550px
   off-screen; `e2e/mobile-chat.spec.ts` asserts they stay in the viewport.
 
+### Theme contrast
+
+The dark palette is tuned to measured ratios, not picked by eye. It previously
+ran near-white on near-black at **17.88:1** — close to the 21:1 ceiling and 2.5x
+past AAA — which halates on the 104px 800-weight display face, and its 2px rules
+composited to **8.03:1**, brighter than AAA body text and repeated on every
+clause. Current targets, with light mode as the reference:
+
+|           | light                | dark                 |
+| --------- | -------------------- | -------------------- |
+| body text | 14.86:1              | 12.51:1              |
+| secondary | 5.83:1               | 7.08:1               |
+| 2px rules | 4.49:1 (30% of text) | 3.52:1 (28% of text) |
+
+Keep rules near 30% of the text contrast in both themes; that ratio, more than
+the absolute numbers, is what made dark mode feel loud. Raising `--ink` back
+toward white re-introduces the glare.
+
+### Clause rows
+
+- `ClauseRow` and `SectionHead` **must** render `data-clauserow`. Their grid is
+  an inline style, but `globals.css` narrows it to `44px`/`14px` under 900px and
+  fixes RTL alignment inside it — both keyed off that attribute. It was missing
+  for a while, so phones kept the 72px + 24px desktop gutter and the chat was
+  squeezed into a 243px shell with a 151px compose box.
+- `[data-demo]` cancels that indent on phones with a negative
+  `margin-inline-start` built from `--clause-gutter`/`--clause-gap`, so the live
+  chat gets the whole row. `e2e/mobile-chat.spec.ts` asserts both halves.
+
 ### Data flow for the Digital Twin chat
 
 ```

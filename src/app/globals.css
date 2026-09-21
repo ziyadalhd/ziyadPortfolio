@@ -5,7 +5,7 @@
    never run the theme script, so they stay fixed on the dark ink rather
    than reacting to data-theme. */
 @theme {
-  --color-base: #0e0e0d;
+  --color-base: #1a1918;
 }
 
 /* ── Design tokens — "personal specification" system ──────────────────────
@@ -45,20 +45,27 @@
   }
 }
 
+/* The clause indent on phones, shared by the rows and by anything that needs
+   to cancel it. */
+:root {
+  --clause-gutter: 44px;
+  --clause-gap: 14px;
+}
+
 :root[data-theme="dark"] {
-  --bg: #0e0e0d;
-  --ink: #f7f6f4;
+  --bg: #1a1918;
+  --ink: #ded9d2;
   --accent: #ff5f45;
-  --muted: #bcb9b5;
-  --rule: rgba(247, 246, 244, 0.66);
-  --hair: rgba(247, 246, 244, 0.24);
-  --surface: #191817;
-  --desk: #070706;
-  --paper: #26231f;
-  --paperedge: rgba(255, 255, 255, 0.11);
-  --paperink: #f4f2ef;
-  --paperrule: rgba(244, 242, 239, 0.8);
-  --papermute: #b0aba4;
+  --muted: #a8a49e;
+  --rule: rgba(222, 217, 210, 0.45);
+  --hair: rgba(222, 217, 210, 0.17);
+  --surface: #242220;
+  --desk: #100f0e;
+  --paper: #2a2723;
+  --paperedge: rgba(255, 255, 255, 0.1);
+  --paperink: #e8e4de;
+  --paperrule: rgba(232, 228, 222, 0.62);
+  --papermute: #a8a49e;
 }
 
 /* Arabic swaps every role: Cairo for headings and for the uppercase-mono
@@ -452,8 +459,14 @@ html[lang="ar"] h3 {
     border-color: color-mix(in srgb, var(--accent) 36%, transparent);
   }
   [data-clauserow] {
-    grid-template-columns: 44px minmax(0, 1fr) !important;
-    gap: 14px !important;
+    grid-template-columns: var(--clause-gutter) minmax(0, 1fr) !important;
+    gap: var(--clause-gap) !important;
+  }
+  /* The live demo is a full-width figure on a phone, not body prose. Held at
+     the clause indent, its compose box came out 151px wide next to a 96px-tall
+     textarea — the reason the chat read as cramped. */
+  [data-demo] {
+    margin-inline-start: calc(-1 * (var(--clause-gutter) + var(--clause-gap)));
   }
   [data-mast] {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -763,6 +776,28 @@ html[lang="ar"] h3 {
 }
 
 @media (max-width: 640px) {
+  /* Every inner block is inset by 16px on each side; on a phone that is
+     32px of a ~340px shell. */
+  .twin-header,
+  .twin-form {
+    padding-inline: 13px;
+  }
+
+  .twin-messages {
+    padding: 0 13px;
+  }
+
+  .twin-prompts,
+  .twin-error,
+  .twin-status {
+    margin-inline: 13px;
+  }
+
+  /* 96px tall beside a 151px-wide box was the worst of both. */
+  .twin-form textarea {
+    min-height: 4.5rem;
+  }
+
   .twin-prompts {
     display: grid;
     grid-template-columns: 1fr;

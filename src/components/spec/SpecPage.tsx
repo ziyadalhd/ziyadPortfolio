@@ -187,6 +187,7 @@ function ClauseRow({
   return (
     <div
       className="reveal"
+      data-clauserow
       style={{
         ...clauseRowStyle,
         padding: `${padTop ? "var(--pad)" : "0"} 0`,
@@ -214,6 +215,7 @@ function SectionHead({ n, title }: { n: string; title: string }) {
   return (
     <>
       <div
+        data-clauserow
         style={{ ...clauseRowStyle, alignItems: "end", paddingBottom: "16px" }}
       >
         <div
@@ -1239,7 +1241,10 @@ export function SpecPage({
               >
                 {s.s6.intro}
               </p>
-              <div style={{ border: "1px solid var(--rule)", minWidth: 0 }}>
+              <div
+                data-demo
+                style={{ border: "1px solid var(--rule)", minWidth: 0 }}
+              >
                 <div
                   style={{
                     display: "flex",

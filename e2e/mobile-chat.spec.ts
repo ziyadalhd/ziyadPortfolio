@@ -88,3 +88,27 @@ test("the clause index keeps its controls reachable", async ({ page }) => {
     .poll(() => page.evaluate(() => document.body.style.overflow))
     .toBe("");
 });
+
+test("the live demo cancels the clause indent on a phone", async ({ page }) => {
+  await page.goto("/en");
+
+  const viewport = page.viewportSize();
+  if (!viewport) throw new Error("no viewport");
+
+  const row = page.locator("[data-clauserow]:has([data-demo])");
+  const demo = page.locator("[data-demo]");
+  const rowBox = await row.boundingBox();
+  const demoBox = await demo.boundingBox();
+  if (!rowBox || !demoBox) throw new Error("missing box");
+
+  const indent = demoBox.x - rowBox.x;
+  if (viewport.width <= 900) {
+    // The chat is a full-width figure here. Held at the text indent it left a
+    // 151px compose box next to a 96px-tall textarea.
+    expect(indent).toBeLessThanOrEqual(1);
+    expect(demoBox.width).toBeGreaterThan(rowBox.width * 0.95);
+  } else {
+    // On desktop it stays aligned with the prose it belongs to.
+    expect(indent).toBeGreaterThan(50);
+  }
+});
