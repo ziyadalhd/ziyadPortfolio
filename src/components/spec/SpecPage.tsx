@@ -68,7 +68,7 @@ function useActiveSection() {
   // in-flight smooth scroll from clicking a clause link on desktop and
   // leaves the jump stranded halfway.
   useEffect(() => {
-    const rail = document.querySelector<HTMLElement>("[data-rail]");
+    const rail = document.querySelector<HTMLElement>("[data-rail-links]");
     const link = rail?.querySelector<HTMLElement>(`a[href="#${active}"]`);
     if (!rail || !link) return;
     if (rail.scrollWidth <= rail.clientWidth) return;
@@ -115,29 +115,62 @@ function toggleTheme() {
   }
 }
 
+type CoverPhase = "shut" | "turning" | "done";
+
+const COVER_HOLD_MS = 1150;
+const COVER_TURN_MS = 900;
+
+/**
+ * The title page turns like the cover of a bound document, then gets out of
+ * the way. Three rules keep it an intro rather than a toll gate: it runs for
+ * two seconds, any deliberate input skips the rest of it, and the boot script
+ * marks it seen so the locale switch and the back button do not replay it.
+ */
 function useCoverIntro() {
-  const [visible, setVisible] = useState(true);
-  const [closing, setClosing] = useState(false);
+  const [phase, setPhase] = useState<CoverPhase>("shut");
 
   useEffect(() => {
-    // Reduced-motion users get [data-cover]{display:none} from globals.css,
-    // so the timers below are harmless no-ops for them rather than a branch
-    // that would set state synchronously on mount.
+    // Two ways the cover never shows: the boot script stamped it as already
+    // seen this session, or the visitor asked for reduced motion and CSS
+    // hides it outright. Either way the scroll lock must not run — locking
+    // the page for two seconds behind a cover nobody can see is the version
+    // of this that reads as the site being broken.
+    if (
+      document.documentElement.hasAttribute("data-cover-seen") ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
     document.body.style.overflow = "hidden";
     window.scrollTo(0, 0);
-    const openTimer = setTimeout(() => setClosing(true), 2750);
-    const hideTimer = setTimeout(() => {
-      setVisible(false);
-      document.body.style.overflow = "";
-    }, 2750 + 1400);
+
+    let turned = false;
+    let turnTimer = 0;
+    const turn = () => {
+      if (turned) return;
+      turned = true;
+      clearTimeout(holdTimer);
+      setPhase("turning");
+      turnTimer = window.setTimeout(() => {
+        setPhase("done");
+        document.body.style.overflow = "";
+      }, COVER_TURN_MS);
+    };
+
+    const holdTimer = window.setTimeout(turn, COVER_HOLD_MS);
+    const skips = ["pointerdown", "keydown", "wheel", "touchstart"] as const;
+    skips.forEach((e) => window.addEventListener(e, turn, { passive: true }));
+
     return () => {
-      clearTimeout(openTimer);
-      clearTimeout(hideTimer);
+      clearTimeout(holdTimer);
+      clearTimeout(turnTimer);
+      skips.forEach((e) => window.removeEventListener(e, turn));
       document.body.style.overflow = "";
     };
   }, []);
 
-  return { visible, closing };
+  return phase;
 }
 
 function ClauseRow({
@@ -228,34 +261,33 @@ function RailLink({
     <a
       href={href}
       data-rail-link
+      data-active={active || undefined}
+      aria-current={active ? "true" : undefined}
       style={{
         display: "grid",
-        gridTemplateColumns: "22px minmax(0,1fr)",
-        gap: "10px",
+        gridTemplateColumns: "20px minmax(0,1fr)",
+        columnGap: "10px",
+        alignItems: "baseline",
         fontFamily: "var(--mono)",
         fontSize: "12.5px",
         padding: "7px 0",
-        color: active ? "var(--accent)" : "var(--muted)",
-        fontWeight: active ? 600 : 400,
-        transform: active ? "translateX(3px)" : "none",
-        transition: "color .25s ease, transform .25s ease",
+        paddingInlineStart: "11px",
       }}
     >
-      <span style={{ fontWeight: 500 }}>{index}</span>
-      <span>
-        {label}
-        <span
-          style={{
-            display: "block",
-            fontSize: "10.5px",
-            lineHeight: 1.3,
-            color: "var(--muted)",
-            opacity: 0.8,
-            marginTop: "3px",
-          }}
-        >
-          {sub}
-        </span>
+      <span data-rail-n>{index}</span>
+      <span
+        style={{
+          display: "flex",
+          alignItems: "baseline",
+          gap: "8px",
+          minWidth: 0,
+        }}
+      >
+        <span data-rail-label>{label}</span>
+        <span data-rail-leader aria-hidden="true" />
+      </span>
+      <span data-rail-sub style={{ gridColumn: 2 }}>
+        {sub}
       </span>
     </a>
   );
@@ -309,7 +341,7 @@ export function SpecPage({
   const otherLocale = LOCALES.find((l) => l !== locale) ?? locale;
   const active = useActiveSection();
   const progress = useScrollProgress();
-  const { visible: coverVisible, closing: coverClosing } = useCoverIntro();
+  const coverPhase = useCoverIntro();
 
   const rail = [
     { id: "s0", ...s.rail.s0 },
@@ -329,20 +361,6 @@ export function SpecPage({
       </a>
 
       <div
-        aria-hidden="true"
-        style={{
-          position: "fixed",
-          insetInlineStart: 0,
-          top: 0,
-          height: "2px",
-          width: `${progress}%`,
-          background: "var(--accent)",
-          zIndex: 60,
-          transition: "width .12s linear",
-        }}
-      />
-
-      <div
         data-shell
         style={{
           display: "grid",
@@ -355,18 +373,20 @@ export function SpecPage({
       >
         <nav
           data-rail
-          aria-label="Clause index"
-          style={{
-            position: "sticky",
-            top: 0,
-            alignSelf: "start",
-            height: "100vh",
-            display: "flex",
-            flexDirection: "column",
-            gap: "2px",
-            padding: "46px 0 40px",
-            borderInlineEnd: "1px solid var(--hair)",
-          }}
+          aria-label={s.railHeading}
+          style={
+            {
+              position: "sticky",
+              top: 0,
+              alignSelf: "start",
+              height: "100vh",
+              display: "flex",
+              flexDirection: "column",
+              padding: "46px 0 40px",
+              borderInlineEnd: "1px solid var(--hair)",
+              "--progress": `${progress}%`,
+            } as CSSProperties
+          }
         >
           <div
             data-rail-head
@@ -381,22 +401,29 @@ export function SpecPage({
           >
             {s.railHeading}
           </div>
-          {rail.map((item, i) => (
-            <RailLink
-              key={item.id}
-              href={`#${item.id}`}
-              active={active === item.id}
-              index={i}
-              label={item.label}
-              sub={item.sub}
-            />
-          ))}
           <div
+            data-rail-links
+            style={{ display: "flex", flexDirection: "column", gap: "2px" }}
+          >
+            {rail.map((item, i) => (
+              <RailLink
+                key={item.id}
+                href={`#${item.id}`}
+                active={active === item.id}
+                index={i}
+                label={item.label}
+                sub={item.sub}
+              />
+            ))}
+          </div>
+          <div
+            data-rail-controls
             style={{
               marginTop: "auto",
               display: "flex",
               gap: "8px",
-              paddingTop: "24px",
+              paddingTop: "22px",
+              borderTop: "1px solid var(--hair)",
             }}
           >
             <a
@@ -1361,29 +1388,39 @@ export function SpecPage({
         </main>
       </div>
 
-      {coverVisible && (
+      {coverPhase !== "done" && (
         <div
           data-cover
+          aria-hidden="true"
           style={{
             position: "fixed",
             inset: 0,
             zIndex: 200,
-            background: "var(--desk)",
-            clipPath: coverClosing ? "inset(0 0 100% 0)" : "inset(0 0 0 0)",
-            transition: "clip-path 1.2s cubic-bezier(.76,0,.24,1)",
             overflow: "hidden",
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
+            gap: "16px",
             padding: "18px",
-            pointerEvents: coverClosing ? "none" : "auto",
+            // The sheet turns on its binding edge, so it needs depth from
+            // a parent. The desk goes first and the sheet last: the page is
+            // then seen turning over the live document, instead of both
+            // dissolving together and leaving a beat of empty screen.
+            perspective: "2400px",
+            background:
+              coverPhase === "turning" ? "transparent" : "var(--desk)",
+            transition: `background-color ${COVER_TURN_MS * 0.38}ms ease ${COVER_TURN_MS * 0.09}ms`,
+            pointerEvents: coverPhase === "turning" ? "none" : "auto",
           }}
         >
           <div
+            data-cover-sheet
             style={{
-              background: "var(--paper)",
+              background:
+                "linear-gradient(to var(--spine-far), rgba(0,0,0,.17), rgba(0,0,0,0) 9%) var(--paper)",
               color: "var(--paperink)",
-              height: "min(94vh,1040px)",
+              height: "min(86vh,1000px)",
               aspectRatio: "1 / 1.4142",
               maxWidth: "calc(100vw - 36px)",
               boxSizing: "border-box",
@@ -1392,17 +1429,22 @@ export function SpecPage({
               flexDirection: "column",
               textAlign: "center",
               fontFamily: "var(--latex)",
-              fontSize: "clamp(7px,min(1.5vh,3.1vw),16px)",
+              fontSize: "clamp(9px,min(1.5vh,3.1vw),16px)",
               lineHeight: 1.45,
-              border: "1px solid rgba(0,0,0,.14)",
-              boxShadow: "0 14px 44px rgba(0,0,0,.22)",
-              transform: coverClosing ? "translateY(-44px)" : "none",
-              opacity: coverClosing ? 0 : 1,
-              transition:
-                "transform 1.05s cubic-bezier(.76,0,.24,1), opacity .8s ease",
-              animation: coverClosing
-                ? "none"
-                : "coverin .7s cubic-bezier(.2,.7,.2,1) both",
+              border: "1px solid var(--paperedge)",
+              boxShadow: "0 18px 52px rgba(0,0,0,.34)",
+              transformOrigin: "var(--spine) center",
+              backfaceVisibility: "hidden",
+              transform:
+                coverPhase === "turning"
+                  ? "rotateY(var(--turn))"
+                  : "rotateY(0deg)",
+              opacity: coverPhase === "turning" ? 0 : 1,
+              transition: `transform ${COVER_TURN_MS}ms cubic-bezier(.62,.03,.32,1), opacity ${COVER_TURN_MS * 0.38}ms ease ${COVER_TURN_MS * 0.62}ms`,
+              animation:
+                coverPhase === "turning"
+                  ? "none"
+                  : "coverin .6s cubic-bezier(.2,.7,.2,1) both",
             }}
           >
             <div
@@ -1540,6 +1582,16 @@ export function SpecPage({
                 1
               </div>
             </div>
+          </div>
+
+          <div
+            data-cover-hint
+            style={{
+              opacity: coverPhase === "turning" ? 0 : 1,
+              transition: "opacity .3s ease",
+            }}
+          >
+            {s.cover.hint}
           </div>
         </div>
       )}

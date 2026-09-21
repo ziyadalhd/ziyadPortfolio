@@ -27,6 +27,7 @@
     var(--font-garamond), Garamond, var(--font-source-serif), Georgia, serif;
   --desk: #dedcda;
   --paper: #fbfaf9;
+  --paperedge: rgba(0, 0, 0, 0.16);
   --paperink: #141312;
   --paperrule: rgba(20, 19, 18, 0.85);
   --papermute: #5f5c59;
@@ -53,10 +54,11 @@
   --hair: rgba(247, 246, 244, 0.24);
   --surface: #191817;
   --desk: #070706;
-  --paper: #171614;
+  --paper: #26231f;
+  --paperedge: rgba(255, 255, 255, 0.11);
   --paperink: #f4f2ef;
   --paperrule: rgba(244, 242, 239, 0.8);
-  --papermute: #a9a5a0;
+  --papermute: #b0aba4;
 }
 
 /* Arabic swaps every role: Cairo for headings and for the uppercase-mono
@@ -64,6 +66,18 @@
    reads better than a fallback at that size), Tajawal for running text.
    --latex covers the cover sheet, which has no Latin-serif equivalent in
    Arabic, so it borrows the body face rather than falling back silently. */
+:root {
+  --spine: left;
+  --spine-far: right;
+  --turn: -108deg;
+}
+
+html[dir="rtl"] {
+  --spine: right;
+  --spine-far: left;
+  --turn: 108deg;
+}
+
 html[lang="ar"] {
   --serif: var(--font-tajawal), var(--font-source-serif), sans-serif;
   --display: var(--font-cairo), var(--font-archivo), sans-serif;
@@ -213,6 +227,126 @@ html[lang="ar"] h3 {
   line-height: 1.4;
 }
 
+/* ── Clause index ─────────────────────────────────────────────────────────
+   Styled as a printed table of contents rather than a nav list: the clause
+   number anchors each row, a dotted leader carries the eye across, and the
+   rail's own rule doubles as the read-progress track (vertical beside the
+   index on desktop, along the bottom of the glass bar on mobile), so the
+   document needs no separate progress chrome.
+   Colour is set here and not inline because an inline colour would outrank
+   the :hover rule and leave every entry inert under the cursor.         */
+[data-rail]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  inset-inline-end: -1px;
+  width: 2px;
+  height: var(--progress, 0%);
+  background: var(--accent);
+  transition: height 0.12s linear;
+  pointer-events: none;
+}
+
+[data-rail-link] {
+  position: relative;
+  color: var(--ink);
+}
+
+[data-rail-n],
+[data-rail-label] {
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+[data-rail-n] {
+  color: var(--muted);
+}
+
+[data-rail-label] {
+  white-space: nowrap;
+}
+
+[data-rail-sub] {
+  font-size: 10.5px;
+  line-height: 1.35;
+  margin-top: 2px;
+  color: var(--muted);
+  opacity: 0.72;
+}
+
+[data-rail-leader] {
+  flex: 1 1 auto;
+  min-width: 10px;
+  align-self: flex-end;
+  margin-bottom: 4px;
+  border-bottom: 1px dotted var(--hair);
+}
+
+[data-rail-link][data-active],
+[data-rail-link][data-active] [data-rail-n] {
+  color: var(--accent);
+}
+
+[data-rail-link][data-active] [data-rail-label] {
+  font-weight: 600;
+}
+
+[data-rail-link][data-active] [data-rail-leader] {
+  border-bottom-color: color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+[data-rail-link][data-active] [data-rail-sub] {
+  color: var(--accent);
+  opacity: 0.68;
+}
+
+/* The marker sits on the index's outer edge and grows into place, so the
+   active clause is legible at a glance without moving the row. */
+[data-rail-link]::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 50%;
+  width: 2px;
+  height: 0;
+  background: var(--accent);
+  transform: translateY(-50%);
+  transition: height 0.25s ease;
+}
+
+[data-rail-link][data-active]::before {
+  height: 64%;
+}
+
+@media (hover: hover) {
+  [data-rail-link]:hover,
+  [data-rail-link]:hover [data-rail-n] {
+    color: var(--accent);
+  }
+
+  [data-rail-link]:not([data-active]):hover::before {
+    height: 38%;
+    background: var(--hair);
+  }
+}
+
+@media (max-width: 640px) {
+  [data-cover-sheet] {
+    padding: 3.2em 2.4em 2.2em !important;
+  }
+}
+
+/* ── Title page ───────────────────────────────────────────────────────── */
+[data-cover-hint] {
+  flex: 0 0 auto;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--papermute);
+}
+
 /* ── Responsive shell — mirrors the design's own breakpoints ────────────── */
 @media (max-width: 1300px) {
   [data-mast] {
@@ -246,16 +380,13 @@ html[lang="ar"] h3 {
     height: auto !important;
     /* The top inset keeps the bar clear of the iPhone notch / status bar
        once the page is added to the home screen or viewed in standalone. */
-    padding: calc(12px + env(safe-area-inset-top, 0px)) 0 12px !important;
+    padding: calc(10px + env(safe-area-inset-top, 0px)) 0 10px !important;
     margin-inline: calc(-1 * var(--gutter)) !important;
     padding-inline: var(--gutter) !important;
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
-    gap: 16px !important;
-    overflow-x: auto !important;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
+    gap: 12px !important;
     background: color-mix(in srgb, var(--bg) 72%, transparent) !important;
     -webkit-backdrop-filter: blur(20px) saturate(1.8);
     backdrop-filter: blur(20px) saturate(1.8);
@@ -263,21 +394,62 @@ html[lang="ar"] h3 {
     border-inline-end: 0 !important;
     white-space: nowrap;
   }
-  /* The bar is its own scroller; its scrollbar would cut across the glass. */
-  [data-rail]::-webkit-scrollbar {
+  /* Progress runs along the glass instead of down the side rule. */
+  [data-rail]::after {
+    top: auto;
+    bottom: -1px;
+    inset-inline: 0 auto;
+    width: var(--progress, 0%);
+    height: 2px;
+    transition: width 0.12s linear;
+  }
+  /* The links scroll, the controls do not: when the whole bar was the
+     scroller, the language switch and theme toggle sat 550px off-screen
+     and were reachable only by dragging the strip sideways. */
+  [data-rail-links] {
+    flex: 1 1 auto !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    min-width: 0;
+    gap: 4px !important;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  [data-rail-links]::-webkit-scrollbar {
     display: none;
+  }
+  [data-rail-controls] {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    border-top: 0 !important;
+    flex-shrink: 0;
   }
   [data-rail-head] {
     display: none !important;
   }
-  /* The 22px/1fr grid these links use for the desktop column has no
+  /* The 20px/1fr grid these links use for the desktop column has no
      definite width to resolve 1fr against once the rail is a
-     content-sized flex row, so it collapses to ~22px and the label spills
+     content-sized flex row, so it collapses to ~20px and the label spills
      into the next item. Flex sizes by content instead, no 1fr involved. */
   [data-rail] a[data-rail-link] {
     display: flex !important;
     align-items: baseline !important;
     gap: 6px !important;
+    padding: 6px 10px !important;
+    border: 1px solid transparent;
+    border-radius: 2px;
+  }
+  /* A strip is scanned, not read: the parentheticals and leaders belong to
+     the desktop index, and the active entry earns a chip instead. */
+  [data-rail-sub],
+  [data-rail-leader],
+  [data-rail-link]::before {
+    display: none !important;
+  }
+  [data-rail] a[data-rail-link][data-active] {
+    background: color-mix(in srgb, var(--accent) 13%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 36%, transparent);
   }
   [data-clauserow] {
     grid-template-columns: 44px minmax(0, 1fr) !important;
@@ -656,4 +828,8 @@ html[lang="ar"] h3 {
   [data-cover] {
     display: none !important;
   }
+}
+
+html[data-cover-seen] [data-cover] {
+  display: none !important;
 }

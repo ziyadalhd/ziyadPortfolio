@@ -62,3 +62,29 @@ test("loads styled and interactive on iPhone Safari/WebKit", async ({
     page.getByText(/Ziyad focuses on mobile engineering/i),
   ).toBeVisible();
 });
+
+test("the clause index keeps its controls reachable", async ({ page }) => {
+  await page.goto("/en");
+
+  // On a phone the index is a horizontally scrolling strip. The language
+  // switch and theme toggle used to live inside that scroller, which put
+  // them ~550px off-screen and reachable only by dragging the strip.
+  const viewport = page.viewportSize();
+  if (!viewport) throw new Error("no viewport");
+
+  for (const control of [
+    page.locator("[data-rail-controls] a[hreflang]"),
+    page.locator("[data-rail-controls] button"),
+  ]) {
+    const box = await control.boundingBox();
+    if (!box) throw new Error("control has no box");
+    expect(box.x).toBeGreaterThanOrEqual(0);
+    expect(box.x + box.width).toBeLessThanOrEqual(viewport.width);
+  }
+
+  // The title page is hidden under reduced motion, so it must not take the
+  // scroll with it.
+  await expect
+    .poll(() => page.evaluate(() => document.body.style.overflow))
+    .toBe("");
+});

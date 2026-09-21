@@ -66,6 +66,34 @@ Dictionary`, so a missing or misspelt key is a **compile error**.
   Components must reference those variables, never `--font-archivo` directly,
   or the swap silently does nothing.
 
+### Title page and clause index
+
+- `BOOT_SCRIPT` in `[locale]/layout.tsx` runs `beforeInteractive` and does two
+  things before first paint: applies the stored theme, and stamps
+  `data-cover-seen` when the title page already ran this session. CSS hides
+  `[data-cover]` on that attribute and `useCoverIntro` reads the same attribute
+  to skip its timers, so the intro costs nothing on a repeat load. Reading
+  `sessionStorage` in React instead would mean either a hydration mismatch or a
+  `set-state-in-effect` lint error.
+- The cover must never lock scrolling behind something the visitor cannot see:
+  `useCoverIntro` bails out for `data-cover-seen` **and** for
+  `prefers-reduced-motion`, which hides the cover in CSS but would otherwise
+  leave `body { overflow: hidden }` in place for two seconds.
+- The page turns on its binding edge: `--spine`/`--spine-far`/`--turn` flip in
+  `html[dir="rtl"]` because Arabic books bind on the right. During the turn the
+  desk fades **first** and the sheet **last**; reversing that leaves a beat of
+  empty screen between the two.
+- The rail's own rule is the read-progress track — vertical beside the index on
+  desktop, along the bottom of the glass bar on mobile — driven by a
+  `--progress` custom property set inline on `[data-rail]`. There is no separate
+  progress bar; do not add one back.
+- Rail link colour lives in `globals.css` keyed off `data-active`, not in inline
+  styles. An inline colour outranks the `:hover` rule and leaves every entry
+  inert under the cursor.
+- `[data-rail-links]` is the horizontal scroller on mobile, **not** `[data-rail]`.
+  When the whole bar scrolled, the language switch and theme toggle sat ~550px
+  off-screen; `e2e/mobile-chat.spec.ts` asserts they stay in the viewport.
+
 ### Data flow for the Digital Twin chat
 
 ```

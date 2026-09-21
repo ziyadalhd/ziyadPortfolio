@@ -211,6 +211,7 @@ export const ar: Dictionary = {
       colVersion: "الإصدار",
       colStatus: "الحالة",
       statusValue: "مُصدَّقة",
+      hint: "اضغط في أي مكان لفتح الوثيقة",
     },
   },
 };

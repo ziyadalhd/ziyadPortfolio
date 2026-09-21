@@ -71,7 +71,11 @@ const tajawal = Tajawal({
   display: "swap",
 });
 
-const THEME_INIT_SCRIPT = `(function(){try{var t=localStorage.getItem("ziyad-spec-theme");if(t!=="light"&&t!=="dark"){t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}document.documentElement.setAttribute("data-theme",t);}catch(e){}})();`;
+// Runs before paint. Two jobs, one script: apply the stored theme so there
+// is no flash, and mark the title page as already seen for the rest of the
+// session. The locale switch is a full document load, so without the second
+// half every language toggle and back-navigation replays the intro.
+const BOOT_SCRIPT = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("ziyad-spec-theme");if(t!=="light"&&t!=="dark"){t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}d.setAttribute("data-theme",t);}catch(e){}try{if(sessionStorage.getItem("ziyad-spec-cover")){d.setAttribute("data-cover-seen","");}sessionStorage.setItem("ziyad-spec-cover","1");}catch(e){}})();`;
 
 export async function generateMetadata({
   params,
@@ -150,8 +154,8 @@ export default async function LocaleLayout({
       className={`${archivo.variable} ${sourceSerif.variable} ${plexMono.variable} ${garamond.variable} ${cairo.variable} ${tajawal.variable}`}
     >
       <body>
-        <Script id="theme-init" strategy="beforeInteractive">
-          {THEME_INIT_SCRIPT}
+        <Script id="boot" strategy="beforeInteractive">
+          {BOOT_SCRIPT}
         </Script>
         <ScrollResetOnLoad />
         {children}

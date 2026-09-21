@@ -212,6 +212,7 @@ export const en = {
       colVersion: "Version",
       colStatus: "Status",
       statusValue: "Released",
+      hint: "Click anywhere to open",
     },
   },
 } as const;
