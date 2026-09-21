@@ -308,6 +308,21 @@ const pillStyle = (status: Project["status"]): CSSProperties => {
   return { padding: "4px 9px", border: "1px solid var(--rule)" };
 };
 
+/**
+ * A phone number or a GPA needs its own LTR run, or the bidi algorithm
+ * reorders the groups ("+966 56 926" comes out backwards) in an Arabic
+ * paragraph. It must stay an *inline* isolate: dir="ltr" on the block would
+ * also reset text-align to left, so the value would sit flush against the
+ * far edge while every label above it stays right-aligned.
+ */
+function Ltr({ children }: { children: string }) {
+  return (
+    <bdi dir="ltr" style={{ unicodeBidi: "isolate" }}>
+      {children}
+    </bdi>
+  );
+}
+
 function SlashList({ items }: { items: string[] }) {
   return (
     <div
@@ -587,11 +602,7 @@ export function SpecPage({
                       color: cell.accent ? "var(--accent)" : undefined,
                     }}
                   >
-                    {cell.ltr ? (
-                      <span dir="ltr">{cell.value}</span>
-                    ) : (
-                      cell.value
-                    )}
+                    {cell.ltr ? <Ltr>{cell.value}</Ltr> : cell.value}
                   </div>
                 </div>
               ))}
@@ -1346,15 +1357,13 @@ export function SpecPage({
                       {tile.label}
                     </div>
                     <div
-                      dir={tile.ltr ? "ltr" : undefined}
                       style={{
                         fontSize: "17px",
                         fontWeight: 600,
                         marginTop: "7px",
-                        unicodeBidi: tile.ltr ? "isolate" : undefined,
                       }}
                     >
-                      {tile.value}
+                      {tile.ltr ? <Ltr>{tile.value}</Ltr> : tile.value}
                     </div>
                   </a>
                 ))}

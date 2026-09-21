@@ -65,6 +65,16 @@ Dictionary`, so a missing or misspelt key is a **compile error**.
   `html[lang="ar"]` override of `--display`/`--serif`/`--mono`/`--latex`.
   Components must reference those variables, never `--font-archivo` directly,
   or the swap silently does nothing.
+- Arabic copy goes through the `ux-araby` skill in `.claude/skills/` (invoke it
+  with the Skill tool). It is vendored, not an npm dependency: the package ships
+  only Markdown, with no `main` or `exports`, so under `node_modules` nothing
+  would ever load it. Its non-obvious rules for this document: no em dash in
+  Arabic (use `،` or `:`), no `...`, and tanween before the alif (`مرحبًا`,
+  not `مرحباً`) — the English strings keep their own conventions.
+- A Latin-script value in an Arabic column uses the `Ltr` helper, which wraps it
+  in an inline `<bdi>`. It must stay inline: `dir="ltr"` on the block also resets
+  `text-align` to left, which left the phone number flush against the far edge
+  while its label stayed right-aligned.
 
 ### Title page and clause index
 

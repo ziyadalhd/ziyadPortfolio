@@ -79,7 +79,7 @@ export const journey: {
     },
     detail: {
       en: "Building a strong foundation in software architecture, data structures, requirements engineering, UML modelling and testing. Current GPA: 3.73/4.00.",
-      ar: "أبني أساساً متيناً في معمارية البرمجيات وهياكل البيانات وهندسة المتطلبات ونمذجة UML والاختبار. المعدل التراكمي الحالي 3.73 من 4.00.",
+      ar: "أبني أساسًا متينًا في معمارية البرمجيات وهياكل البيانات وهندسة المتطلبات ونمذجة UML والاختبار. المعدل التراكمي الحالي 3.73 من 4.00.",
     },
   },
 ];
@@ -120,7 +120,7 @@ export const projects: Project[] = [
         "Covered the access policies with pgTAP tests, so a broken rule fails the suite instead of leaking data quietly.",
       ],
       ar: [
-        "بنيت واجهة التسجيل والحجز العامة بتصميم عربي الاتجاه أولاً على Next.js App Router.",
+        "بنيت واجهة التسجيل والحجز العامة بتصميم عربي الاتجاه أولًا على Next.js App Router.",
         "حميت لوحة التحكم بمصادقة متعددة العوامل، وطبّقت صلاحيات كل دور داخل قاعدة البيانات عبر Postgres Row Level Security، لتبقى القواعد سارية حتى لو جرى تجاوز الواجهة.",
         "ربطت تنبيهات Telegram وWhatsApp بعمليات التسجيل والتأكيد وحركة قوائم الانتظار.",
         "غطّيت سياسات الوصول باختبارات pgTAP، فأي خلل في الصلاحيات يُسقِط الاختبارات بدل أن يسرّب البيانات بصمت.",
@@ -159,8 +159,8 @@ export const projects: Project[] = [
       ],
       ar: [
         "ولّدت بطاقات التهنئة بدقة 1080×1350 داخل المتصفح بالكامل عبر Canvas API، مع ضبط تشكيل الحروف العربية وكسر الأسطر.",
-        "شغّلت المنصة على خلفية Supabase بلا خوادم مع Postgres Row Level Security، بدل تجهيز خادم كامل من أجل أمسية واحدة.",
-        "حفظت المسوّدات محلياً عبر localStorage، فلا يفقد الضيف رسالته عند انقطاع شبكة القاعة أثناء الكتابة.",
+        "شغّلت المنصة على خلفية Supabase بلا خوادم مع Postgres Row Level Security، بدل تجهيز خادم كامل لأمسية واحدة.",
+        "حفظت المسوّدات محليًا عبر localStorage، فلا يفقد الضيف رسالته عند انقطاع شبكة القاعة أثناء الكتابة.",
         "صمّمت التطبيق وبنيته وشغّلته ضمن مهلة ضيّقة أمام موعد حدث ثابت لا يقبل التأجيل.",
       ],
     },
@@ -194,7 +194,7 @@ export const projects: Project[] = [
         "Implemented the booking and service-request workflows that connect students with providers.",
       ],
       ar: [
-        "بنيت شاشات جوال متعددة المنصات انطلاقاً من تصميم النظام ووثيقة المتطلبات SRS، بدعم ثلاثة أدوار: الطالب والمزوّد والمشرف.",
+        "بنيت شاشات جوال متعددة المنصات انطلاقًا من تصميم النظام ووثيقة المتطلبات SRS، بدعم ثلاثة أدوار: الطالب والمزوّد والمشرف.",
         "ربطت واجهة Flutter بواجهات Spring Boot البرمجية لتبادل البيانات وإدارة مسارات المستخدم وعمليات الخدمة.",
         "نفّذت مسارات الحجز وطلبات الخدمة التي تربط الطلاب بمزوّدي الخدمات.",
       ],
@@ -221,7 +221,7 @@ export const projects: Project[] = [
     status: "prototype",
     summary: {
       en: "A native iOS prototype that calculates and tracks a daily water-intake goal behind a dark neon interface, built while teaching myself Swift and SwiftUI.",
-      ar: "نموذج iOS أصلي يحسب هدف شرب الماء اليومي ويتتبّعه بواجهة نيون داكنة، طوّرته أثناء تعلّمي Swift وSwiftUI ذاتياً.",
+      ar: "نموذج iOS أصلي يحسب هدف شرب الماء اليومي ويتتبّعه بواجهة نيون داكنة، طوّرته أثناء تعلّمي Swift وSwiftUI ذاتيًا.",
     },
     highlights: {
       en: [
@@ -229,8 +229,8 @@ export const projects: Project[] = [
         "Persisted entries locally so progress survives across sessions.",
       ],
       ar: [
-        "تعلّمت Swift وSwiftUI ذاتياً من الصفر حتى أنجزت نموذجاً يعمل على iOS.",
-        "حفظت الإدخالات محلياً ليبقى تقدّم المستخدم محفوظاً بين الجلسات.",
+        "تعلّمت Swift وSwiftUI ذاتيًا من الصفر حتى أنجزت نموذجًا يعمل على iOS.",
+        "حفظت الإدخالات محليًا ليبقى تقدّم المستخدم محفوظًا بين الجلسات.",
       ],
     },
     stack: ["Swift", "SwiftUI", "Xcode", "Local Persistence"],

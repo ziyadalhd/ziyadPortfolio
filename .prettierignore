@@ -7,3 +7,7 @@ src/data/sources/*.pdf
 review.md
 playwright-report
 test-results
+
+# Vendored skills: reformatting them would conflict with upstream updates.
+.claude/skills
+.agents/skills
