@@ -27,7 +27,9 @@ E2E tests require a production build; they target `http://127.0.0.1:3100` and ru
 Copy `.env.example` to `.env` before running locally.
 
 - `OPENROUTER_API_KEY` — required; the chat API will 500 without it.
-- `OPENROUTER_MODEL` — optional; defaults to `cohere/north-mini-code:free`.
+- `OPENROUTER_MODEL` — optional; defaults to
+  `nvidia/nemotron-3-super-120b-a12b:free`, with qwen and cohere behind it in
+  `FALLBACK_MODELS` (OpenRouter caps that list at three entries in total).
   The request sets `reasoning: { enabled: false }`: current free models
   otherwise spend the whole `max_tokens` budget on hidden reasoning and
   return empty content.
@@ -153,6 +155,38 @@ its click handler are load-bearing and were each verified by breaking them:
   undone — `e2e/mobile-chat.spec.ts` fails on desktop without the deferral.
 - It is skipped unless `(hover: hover) and (pointer: fine)`. On a phone the
   focus opens the keyboard over the panel the link just jumped to.
+
+### Twin answer quality
+
+The model and the token budget were both set by measurement, not taste.
+Re-measure before changing either; `buildSystemPrompt("ar")` can be dumped from
+a throwaway vitest file and replayed against candidates.
+
+A **code model was writing the Arabic prose** and it showed. Five questions
+against the real prompt scored `cohere/north-mini-code` at 3/5 clean, 367-585
+characters, with one answer carrying Chinese characters mid-sentence (前端) and
+another using feminine forms for Ziyad. Nemotron scores 4-5/5 at 179-330. Qwen
+writes the best Arabic of the three but answered only 2 of 5 calls before
+rate-limiting, which is why it sits in the fallback list rather than first.
+
+The Arabic style rules in `LOCALE_RULES.ar` mirror the `ux-araby` skill, and
+each one exists because the model produced that fault: قم بـ in **both** tenses
+(a past-tense-only rule was ignored in the present), تم + مصدر, بشكل +
+adjective, tanween on the alif, and translating "shipped" as شحن (freight),
+which also produced the hybrid مُShipped. That phrase was removed from
+`CAREER_KNOWLEDGE` for the same reason: do not put untranslatable idioms in the
+grounding.
+
+`MAX_TOKENS` is the real length limit. The word cap in the prompt is obeyed
+maybe two times in three; on the third the model pads with generic filler until
+the budget runs out, which at 450 produced a 1636-character answer. At 170 a
+good answer (275-330 characters, about 75 tokens) still has 2x headroom.
+
+**Known and accepted.** On a free model, roughly one answer in three still
+translates Agile (أجايل, رشيقة) despite the glossary, and it occasionally fuses
+an Arabic word to an English one (وحمايةconsole). A deterministic fix is not
+safe: وTypeScript is correct Arabic typography, so a space-insertion rule would
+break more than it repairs. A paid model is the real answer if this matters.
 
 ### Data flow for the Digital Twin chat
 

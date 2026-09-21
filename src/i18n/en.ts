@@ -67,7 +67,7 @@ export const en = {
       s3: { label: "Interfaces", sub: "(Skills & Tech Stack)" },
       s4: { label: "Requirements", sub: "(Projects)" },
       s5: { label: "Verification", sub: "(Record & Résumé)" },
-      s6: { label: "Conformance demo", sub: "(Live Demo)" },
+      s6: { label: "Conformance demo", sub: "(Digital Twin)" },
       s7: { label: "Change requests", sub: "(Contact & Socials)" },
     },
     hero: {
@@ -91,8 +91,8 @@ export const en = {
         " and it opens right where you are, so you never lose your place.",
       abstract: {
         eyebrow: "Abstract",
-        body: "This document is eight clauses. If your time is shorter than that, ask the Digital Twin instead.",
-        cta: "Ask the Digital Twin",
+        body: "Eight clauses is more than most visitors have time for. The Digital Twin has read all of them.",
+        cta: "Open the chat",
       },
     },
     s1: {
@@ -185,9 +185,9 @@ export const en = {
     },
     s6: {
       heading: "Conformance demo",
-      title: "Digital Twin — live",
+      title: "Digital Twin",
       intro:
-        "I built an assistant that answers questions about my background and projects in the language of the page. It runs on a live model, so replies vary each time you ask — try it below.",
+        "I built it to answer for my background and projects in the language of the page itself. Replies are composed on the spot, so the same wording will not come back twice.",
     },
     s7: {
       heading: "Change requests",

@@ -3,16 +3,33 @@ import type { ChatMessage } from "@/types/chat";
 import { normalizeWhitespace } from "./text";
 
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
-// openai/gpt-oss-120b:free was retired by OpenRouter (404: "unavailable for
-// free"). Verified directly against the API (Sept 2026): most other free
-// models either sit behind a shared-pool 429 right now or are
-// reasoning-heavy and burn the token budget on <think> chatter before
-// producing any content=null. This one answered cleanly in both Arabic and
-// English across repeated calls, honored the locale system-prompt rule, and
-// kept tech terms in Latin script.
-const DEFAULT_MODEL = "cohere/north-mini-code:free";
+// Measured against the real Arabic system prompt (Sept 2026), five questions
+// each, scored for عرنجية and length. A code model was writing the Arabic
+// prose and it showed: cohere/north-mini-code answered 3/5 clean at 367-585
+// chars and once emitted Chinese characters mid-sentence. Nemotron scored 4/5
+// at 188-370 and reads like a person. Qwen was the best writer of the three
+// but 3 of 5 calls came back 429, which matters more on a live page.
+const DEFAULT_MODEL = "nvidia/nemotron-3-super-120b-a12b:free";
+// Free models rate-limit from a shared pool and go 503 under load, and the
+// retry above only covers network faults. OpenRouter walks this list itself
+// when the primary errors, so a busy provider degrades to a slightly weaker
+// answer instead of an error card. Ordered by measured availability, not by
+// prose quality: qwen writes the best Arabic of the three but answered only
+// 2 of 5 calls, while north-mini answered 5 of 5. The API caps this list at
+// three entries in total, primary included.
+const FALLBACK_MODELS = [
+  "qwen/qwen3.8-27b:free",
+  "cohere/north-mini-code:free",
+];
 const MODEL_TEMPERATURE = 0.5;
-const MAX_TOKENS = 450;
+// The length rule in the prompt is obeyed most of the time and ignored perhaps
+// once in three, when the model pads with generic filler until it runs out of
+// budget. So the budget is the real limit. Measured on this locale: a good
+// Arabic answer is 275-330 characters, and these models spend roughly four
+// characters per token, so ~75 tokens. 170 leaves better than 2x headroom for
+// a complete answer while capping a runaway near 700 characters instead of the
+// 1636 that 450 allowed.
+const MAX_TOKENS = 170;
 const REQUEST_TIMEOUT_MS = 30_000;
 const MAX_RETRIES = 1;
 
@@ -227,6 +244,7 @@ async function fetchOpenRouter({
     },
     body: JSON.stringify({
       model,
+      models: [model, ...FALLBACK_MODELS.filter((m) => m !== model)],
       messages: [
         {
           role: "system",
@@ -236,12 +254,11 @@ async function fetchOpenRouter({
       ],
       temperature: MODEL_TEMPERATURE,
       max_tokens: MAX_TOKENS,
-      // Verified against the API: this model's hidden reasoning scales with
+      // Verified against the API: these models' hidden reasoning scales with
       // the system prompt's length, not a token cap — reasoning.max_tokens
       // is silently ignored and it still burns the whole MAX_TOKENS budget
-      // on <think> chatter once the real ~4.5K-char persona prompt is used,
-      // leaving content empty. Disabling reasoning outright is what
-      // actually works.
+      // on <think> chatter once the real persona prompt is used, leaving
+      // content empty. Disabling reasoning outright is what actually works.
       reasoning: { enabled: false },
       stream,
     }),
