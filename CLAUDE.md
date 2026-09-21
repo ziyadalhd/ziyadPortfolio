@@ -99,9 +99,16 @@ Dictionary`, so a missing or misspelt key is a **compile error**.
   desktop, along the bottom of the glass bar on mobile — driven by a
   `--progress` custom property set inline on `[data-rail]`. There is no separate
   progress bar; do not add one back.
-- Rail link colour lives in `globals.css` keyed off `data-active`, not in inline
-  styles. An inline colour outranks the `:hover` rule and leaves every entry
-  inert under the cursor.
+- **Anything whose colour changes on hover or on a state keeps that colour in
+  `globals.css`, never in an inline style.** An inline colour outranks every
+  selector without `!important`, so the state rule silently loses. This has
+  bitten twice: rail links went inert under the cursor, and the masthead CTA
+  repainted its background to the accent while the inline rule held the label at
+  the same accent, rendering a solid unreadable block at 1.00:1. Both now key
+  off an attribute (`data-active`, `data-ask-twin`), and
+  `e2e/mobile-chat.spec.ts` asserts the hovered CTA's label and dot differ from
+  its background — after waiting out the 160ms fill, or the assertion passes
+  against a background that has not arrived yet.
 - `[data-rail-links]` is the horizontal scroller on mobile, **not** `[data-rail]`.
   When the whole bar scrolled, the language switch and theme toggle sat ~550px
   off-screen; `e2e/mobile-chat.spec.ts` asserts they stay in the viewport.

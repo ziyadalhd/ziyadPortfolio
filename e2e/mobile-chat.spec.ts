@@ -140,3 +140,30 @@ test("the masthead offers a fast path to the twin", async ({ page }) => {
     expect(focused).toBe(true);
   }
 });
+
+test("the masthead CTA stays readable while hovered", async ({ page }) => {
+  await page.goto("/en");
+
+  const cta = page.locator("[data-ask-twin]");
+  await cta.hover();
+  // The fill transitions over 160ms. Reading before it lands compares the
+  // label against a background that is still transparent, which passes for
+  // the wrong reason.
+  await page.waitForTimeout(400);
+
+  // The hover rule fills the button with the accent and repaints the label.
+  // A colour set inline outranks that rule, which left the label the same
+  // accent as its new background: a solid, unreadable block.
+  const paint = await cta.evaluate((el) => {
+    const s = getComputedStyle(el);
+    const dot = el.querySelector("[data-ask-dot]");
+    return {
+      color: s.color,
+      background: s.backgroundColor,
+      dot: dot ? getComputedStyle(dot).backgroundColor : null,
+    };
+  });
+
+  expect(paint.color).not.toBe(paint.background);
+  expect(paint.dot).not.toBe(paint.background);
+});

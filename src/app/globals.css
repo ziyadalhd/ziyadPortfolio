@@ -354,16 +354,30 @@ html[lang="ar"] h3 {
   }
 }
 
+/* Both colours live here, not inline: an inline colour outranks every
+   selector without !important, so the hover rule repainted the background and
+   left the label the same accent, giving an unreadable accent-on-accent
+   block. The dot has to flip with it for the same reason. */
 [data-ask-twin] {
+  color: var(--accent);
   transition:
     background 160ms ease,
     color 160ms ease;
+}
+
+[data-ask-dot] {
+  background: var(--accent);
+  transition: background 160ms ease;
 }
 
 @media (hover: hover) {
   [data-ask-twin]:hover {
     background: var(--accent);
     color: var(--bg);
+  }
+
+  [data-ask-twin]:hover [data-ask-dot] {
+    background: var(--bg);
   }
 }
 

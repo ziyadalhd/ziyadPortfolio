@@ -361,7 +361,6 @@ function AskTwinLink({ label }: { label: string }) {
         flex: "none",
         padding: "12px 16px",
         border: "1px solid var(--accent)",
-        color: "var(--accent)",
         fontFamily: "var(--mono)",
         fontSize: "12.5px",
         fontWeight: 500,
@@ -369,11 +368,11 @@ function AskTwinLink({ label }: { label: string }) {
       }}
     >
       <span
+        data-ask-dot
         aria-hidden="true"
         style={{
           width: "6px",
           height: "6px",
-          background: "var(--accent)",
           animation: "caret 1.6s steps(1) infinite",
         }}
       />
