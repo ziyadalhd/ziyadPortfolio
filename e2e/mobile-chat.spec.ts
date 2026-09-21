@@ -112,3 +112,31 @@ test("the live demo cancels the clause indent on a phone", async ({ page }) => {
     expect(indent).toBeGreaterThan(50);
   }
 });
+
+test("the masthead offers a fast path to the twin", async ({ page }) => {
+  await page.goto("/en");
+
+  const cta = page.locator("[data-ask-twin]");
+  await expect(cta).toBeVisible();
+  await expect(cta).toHaveAttribute("href", "#s6");
+
+  // Clause 6 sits ~13 screens down; the index is on screen throughout, so it
+  // carries the same live marker.
+  await expect(page.locator("[data-rail-live]")).toHaveCount(1);
+  await expect(
+    page.locator('[data-rail-link][href="#s6"] [data-rail-live]'),
+  ).toBeAttached();
+
+  await cta.click();
+  await expect(page).toHaveURL(/#s6$/);
+
+  const input = page.getByLabel(/Ask about Ziyad's career/i);
+  const focused = await input.evaluate((el) => el === document.activeElement);
+
+  if (page.viewportSize()!.width <= 900) {
+    // Focusing here would open the keyboard over the panel just jumped to.
+    expect(focused).toBe(false);
+  } else {
+    expect(focused).toBe(true);
+  }
+});

@@ -89,6 +89,11 @@ export const en = {
         "Every part of this document has a clause number. Hover any reference like ",
       intro2Post:
         " and it opens right where you are, so you never lose your place.",
+      abstract: {
+        eyebrow: "Abstract",
+        body: "This document is eight clauses. If your time is shorter than that, ask the Digital Twin instead.",
+        cta: "Ask the Digital Twin",
+      },
     },
     s1: {
       heading: "Scope",

@@ -281,6 +281,17 @@ html[lang="ar"] h3 {
   opacity: 0.72;
 }
 
+/* Borrows the live badge treatment from clause 6 itself, so the two read as
+   the same thing in two places. */
+[data-rail-live] {
+  flex: none;
+  width: 5px;
+  height: 5px;
+  background: var(--accent);
+  align-self: center;
+  animation: caret 1.6s steps(1) infinite;
+}
+
 [data-rail-leader] {
   flex: 1 1 auto;
   min-width: 10px;
@@ -340,6 +351,33 @@ html[lang="ar"] h3 {
 @media (max-width: 640px) {
   [data-cover-sheet] {
     padding: 3.2em 2.4em 2.2em !important;
+  }
+}
+
+[data-ask-twin] {
+  transition:
+    background 160ms ease,
+    color 160ms ease;
+}
+
+@media (hover: hover) {
+  [data-ask-twin]:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+}
+
+/* The strip stacks on a phone, where the button should span the row rather
+   than sit in a half-width column. */
+@media (max-width: 640px) {
+  [data-abstract] {
+    display: block !important;
+  }
+
+  [data-ask-twin] {
+    display: flex !important;
+    justify-content: center;
+    margin-top: 16px;
   }
 }
 

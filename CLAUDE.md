@@ -133,6 +133,27 @@ toward white re-introduces the glare.
   `margin-inline-start` built from `--clause-gutter`/`--clause-gap`, so the live
   chat gets the whole row. `e2e/mobile-chat.spec.ts` asserts both halves.
 
+### Reaching the twin
+
+Clause 6 is ~13 screens down on a phone, and the twin exists for readers who
+will not scroll that far. Rather than renumber the document (a conformance demo
+before the requirements it demonstrates is nonsense in a spec), two entry points
+lead to it and clause 6 stays put:
+
+- `[data-abstract]` in the masthead — a real SRS opens with an Abstract for
+  readers who skip the body, so this fits the conceit rather than fighting it.
+- `[data-rail-live]` on the index entry for `#s6`, which is on screen at every
+  scroll position.
+
+`AskTwinLink` stays an `<a href="#s6">` so it works without JS. Two things about
+its click handler are load-bearing and were each verified by breaking them:
+
+- The focus is deferred with `setTimeout(…, 0)`. Fragment navigation runs after
+  the handler and moves the focus target itself, so a synchronous `focus()` is
+  undone — `e2e/mobile-chat.spec.ts` fails on desktop without the deferral.
+- It is skipped unless `(hover: hover) and (pointer: fine)`. On a phone the
+  focus opens the keyboard over the panel the link just jumped to.
+
 ### Data flow for the Digital Twin chat
 
 ```

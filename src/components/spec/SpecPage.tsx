@@ -252,12 +252,14 @@ function RailLink({
   index,
   label,
   sub,
+  live = false,
 }: {
   href: string;
   active: boolean;
   index: number;
   label: string;
   sub: string;
+  live?: boolean;
 }) {
   return (
     <a
@@ -286,6 +288,9 @@ function RailLink({
         }}
       >
         <span data-rail-label>{label}</span>
+        {/* The index is on screen at every scroll position, so it is where a
+            reader who skipped ahead can still find the live demo. */}
+        {live ? <span data-rail-live aria-hidden="true" /> : null}
         <span data-rail-leader aria-hidden="true" />
       </span>
       <span data-rail-sub style={{ gridColumn: 2 }}>
@@ -322,6 +327,61 @@ function Ltr({ children }: { children: string }) {
     <bdi dir="ltr" style={{ unicodeBidi: "isolate" }}>
       {children}
     </bdi>
+  );
+}
+
+/**
+ * The fast path for a reader who will not scroll thirteen screens to find
+ * clause 6. It stays an <a href="#s6"> so it works without JS and the hash
+ * lands in history; the handler only places the caret.
+ */
+function AskTwinLink({ label }: { label: string }) {
+  return (
+    <a
+      href="#s6"
+      data-ask-twin
+      onClick={() => {
+        // A phone would answer the focus by opening the keyboard over the
+        // panel the link just jumped to, so only a pointer device gets it.
+        if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches)
+          return;
+        // The fragment navigation runs after this handler and moves the focus
+        // target itself, so the caret has to be placed after it. preventScroll
+        // keeps it from fighting the smooth scroll already under way.
+        window.setTimeout(() => {
+          document
+            .querySelector<HTMLTextAreaElement>(".twin-form textarea")
+            ?.focus({ preventScroll: true });
+        }, 0);
+      }}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "9px",
+        flex: "none",
+        padding: "12px 16px",
+        border: "1px solid var(--accent)",
+        color: "var(--accent)",
+        fontFamily: "var(--mono)",
+        fontSize: "12.5px",
+        fontWeight: 500,
+        letterSpacing: ".04em",
+      }}
+    >
+      <span
+        aria-hidden="true"
+        style={{
+          width: "6px",
+          height: "6px",
+          background: "var(--accent)",
+          animation: "caret 1.6s steps(1) infinite",
+        }}
+      />
+      <span>{label}</span>
+      <span aria-hidden="true" dir="ltr" style={{ opacity: 0.7 }}>
+        §6
+      </span>
+    </a>
   );
 }
 
@@ -430,6 +490,7 @@ export function SpecPage({
                 index={i}
                 label={item.label}
                 sub={item.sub}
+                live={item.id === "s6"}
               />
             ))}
           </div>
@@ -610,6 +671,45 @@ export function SpecPage({
               ))}
             </div>
             <div style={{ height: "2px", background: "var(--rule)" }} />
+
+            <div
+              data-abstract
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "16px 24px",
+                padding: "20px 0",
+                borderBottom: "1px solid var(--hair)",
+              }}
+            >
+              <div style={{ minWidth: 0 }}>
+                <div
+                  style={{
+                    fontSize: "10.5px",
+                    letterSpacing: ".12em",
+                    textTransform: "uppercase",
+                    fontFamily: "var(--mono)",
+                    color: "var(--muted)",
+                  }}
+                >
+                  {s.hero.abstract.eyebrow}
+                </div>
+                <p
+                  style={{
+                    fontSize: "15.5px",
+                    lineHeight: 1.6,
+                    margin: "6px 0 0",
+                    maxWidth: "52ch",
+                    color: "var(--muted)",
+                  }}
+                >
+                  {s.hero.abstract.body}
+                </p>
+              </div>
+              <AskTwinLink label={s.hero.abstract.cta} />
+            </div>
 
             <ClauseRow n="0.1" border={false}>
               <p
