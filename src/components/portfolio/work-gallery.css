@@ -1,0 +1,325 @@
+.work-exhibition.page-width {
+  width: 100%;
+  padding-inline: max(clamp(16px, 2vw, 32px), env(safe-area-inset-left));
+  padding-top: 72px;
+}
+.project-gallery {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+.project-gallery > article {
+  min-width: 0;
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: stretch;
+  padding-block: 104px 32px;
+  scroll-margin-top: 0;
+}
+.project-gallery > article:has(.identity-preview) {
+  grid-column: 1 / -1;
+}
+.identity-card {
+  display: grid;
+  grid-template-areas: "meta" "body" "footer" "preview";
+  overflow: hidden;
+  width: 100%;
+  border: 1px solid var(--hair);
+  border-radius: 18px;
+  background: var(--paper);
+}
+.identity-meta,
+.identity-body,
+.identity-footer {
+  padding-inline: 24px;
+}
+.identity-meta {
+  grid-area: meta;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-top: 20px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.identity-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.identity-brand > img,
+.identity-logo,
+.identity-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+}
+.identity-logo,
+.identity-mark {
+  display: grid;
+  place-items: center;
+}
+.identity-logo {
+  background: #fffefa;
+  border: 1px solid #dddfd6;
+}
+.identity-logo img {
+  width: 32px;
+  height: auto;
+}
+.identity-mark {
+  border: 1px solid var(--hair);
+}
+.identity-index {
+  font:
+    10px var(--font-plex-mono),
+    monospace;
+}
+.identity-body {
+  grid-area: body;
+  align-self: center;
+  padding-block: clamp(28px, 6vh, 72px) 24px;
+}
+.identity-body h3 {
+  font-size: clamp(36px, 4.5vw, 64px);
+  line-height: 1.25;
+  font-weight: 500;
+}
+.identity-body p {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 14px;
+  text-wrap: pretty;
+}
+.identity-footer {
+  grid-area: footer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 20px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.identity-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+}
+.identity-link > span {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--hair);
+  border-radius: 50%;
+  transition:
+    background var(--motion-quick) ease,
+    color var(--motion-quick) ease;
+}
+.project-gallery > article:has(.identity-preview) .identity-card {
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: "meta preview" "body preview" "footer preview";
+  min-height: 320px;
+}
+.identity-preview {
+  grid-area: preview;
+  position: relative;
+  min-width: 0;
+  min-height: 320px;
+  height: 100%;
+  aspect-ratio: auto;
+  border-radius: 0;
+  background: var(--surface);
+}
+.identity-preview::before {
+  display: none;
+}
+.preview-window {
+  direction: ltr;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.preview-track {
+  flex: none;
+  display: flex;
+  width: max-content;
+  height: calc(100% - 24px);
+  direction: ltr;
+  animation: project-images 28s linear infinite;
+}
+.preview-group {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  flex: none;
+  gap: 12px;
+  padding-right: 12px;
+}
+.preview-group img {
+  flex: none;
+  height: 100%;
+  width: auto;
+  border-radius: 14px;
+  border: 1px solid var(--hair);
+}
+.project-gallery > article[data-paused="true"] .preview-track,
+.project-gallery > article:has(a:focus-visible) .preview-track {
+  animation-play-state: paused;
+}
+.identity-tools {
+  margin-top: 16px;
+}
+.identity-tools ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.identity-tools li {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+}
+.identity-tools img {
+  display: block;
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+}
+:root[data-theme="dark"] .identity-tools [data-brand="Vercel"] img {
+  filter: invert(1);
+}
+@keyframes project-images {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .preview-track {
+    animation: none;
+  }
+  .preview-group + .preview-group {
+    display: none;
+  }
+  .preview-window {
+    overflow-x: auto;
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .identity-card:hover .identity-link > span {
+    background: var(--ink);
+    color: var(--bg);
+  }
+}
+/* A short reveal follows the element into view; it never holds the scroll. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not([data-input-mode="keyboard"]) .identity-card {
+      animation: project-arrive linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 30%;
+    }
+  }
+}
+@keyframes project-arrive {
+  from {
+    opacity: 0.7;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (max-width: 900px) {
+  .identity-meta,
+  .identity-body,
+  .identity-footer {
+    padding-inline: 22px;
+  }
+  .identity-meta {
+    font-size: 11px;
+  }
+  .identity-body h3 {
+    font-size: 30px;
+  }
+}
+@media (max-width: 640px) {
+  .project-gallery {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .project-gallery > article {
+    padding-block: 88px 80px;
+  }
+  .project-gallery > article:has(.identity-preview) {
+    grid-column: auto;
+  }
+  .project-gallery > article:has(.identity-preview) .identity-card {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(230px, 1fr) auto auto auto;
+    grid-template-areas: "preview" "meta" "body" "footer";
+    min-height: 0;
+  }
+  .identity-card {
+    border-radius: 14px;
+  }
+  .identity-meta {
+    padding-top: 20px;
+    font-size: 10px;
+  }
+  .identity-brand > img,
+  .identity-logo,
+  .identity-mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+  }
+  .identity-logo img {
+    width: 28px;
+  }
+  .identity-body {
+    padding-block: 16px 14px;
+  }
+  .identity-body h3 {
+    font-size: 29px;
+  }
+  .identity-body p {
+    font-size: 13px;
+    margin-top: 10px;
+  }
+  .identity-footer {
+    padding-bottom: 20px;
+    font-size: 10px;
+  }
+  .identity-preview {
+    height: 100%;
+    min-height: 0;
+  }
+  .preview-group {
+    gap: 10px;
+    padding-right: 10px;
+  }
+  .identity-tools {
+    margin-top: 14px;
+  }
+  .identity-tools li {
+    width: 44px;
+    height: 44px;
+  }
+  .identity-tools img {
+    width: 44px;
+    height: 44px;
+  }
+}

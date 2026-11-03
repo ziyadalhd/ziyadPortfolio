@@ -1,0 +1,377 @@
+.stack-study {
+  padding-top: clamp(20px, 3svh, 36px);
+}
+.stack-study-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  margin-bottom: clamp(20px, 3svh, 36px);
+  padding-block: 12px;
+}
+.stack-study-heading h2 {
+  min-width: 0;
+  padding-block: 0.12em 0.24em;
+  font-size: clamp(22px, 4.2vw, 60px);
+  line-height: 1.5;
+  font-weight: 700;
+  white-space: nowrap;
+}
+html[lang="en"] .stack-study-heading h2 {
+  font-size: clamp(16px, 3.8vw, 54px);
+}
+.stack-title-word {
+  display: inline-block;
+  white-space: pre;
+}
+.stack-study-heading > span {
+  align-self: flex-end;
+  font: 11px var(--mono);
+  color: var(--muted);
+}
+.stack-study-flow {
+  --stack-pin: calc(var(--header-height) + var(--header-float-top) * 2 + 12px);
+  display: grid;
+  gap: clamp(72px, 12svh, 140px);
+  isolation: isolate;
+  padding-bottom: 12svh;
+  timeline-scope:
+    --incoming-project-2, --incoming-project-3, --incoming-project-4;
+}
+.stack-study-card {
+  position: relative;
+  top: var(--stack-pin);
+  min-width: 0;
+  scroll-margin-top: 112px;
+}
+.stack-study-flow[data-ready="true"] .stack-study-card {
+  position: sticky;
+}
+.stack-study-card:nth-child(2) {
+  view-timeline: --incoming-project-2 block;
+}
+.stack-study-card:nth-child(3) {
+  view-timeline: --incoming-project-3 block;
+}
+.stack-study-card:nth-child(4) {
+  view-timeline: --incoming-project-4 block;
+}
+.stack-study-card:nth-child(1) {
+  --next-project: --incoming-project-2;
+}
+.stack-study-card:nth-child(2) {
+  --next-project: --incoming-project-3;
+}
+.stack-study-card:nth-child(3) {
+  --next-project: --incoming-project-4;
+}
+.stack-study-surface {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: clamp(
+    520px,
+    calc(100svh - var(--header-height) - var(--header-float-top) * 2 - 108px),
+    800px
+  );
+  overflow: hidden;
+  border: 1px solid var(--hair);
+  border-radius: 24px;
+  background: var(--paper);
+  box-shadow: 0 12px 32px #00000007;
+  transform-origin: center top;
+  position: relative;
+}
+.stack-study-art {
+  direction: ltr;
+  position: relative;
+  overflow: hidden;
+  background: var(--surface);
+  padding-block: 24px;
+}
+.stack-study-track {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  animation: stack-image-loop 28s linear infinite;
+}
+.stack-study-image-group {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding-right: 24px;
+  height: 100%;
+  flex: none;
+}
+.stack-study-image-group img {
+  height: 100%;
+  width: auto;
+  flex: none;
+  border: 1px solid #25282212;
+  border-radius: 18px;
+  box-shadow: 0 8px 18px #18221809;
+}
+.stack-study-card[data-paused="true"] .stack-study-track,
+.stack-study-card[data-covered="true"] .stack-study-track {
+  animation-play-state: paused;
+}
+.stack-study-summary {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 20px 48px;
+  padding: 24px 28px;
+}
+.stack-study-identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.stack-study-identity img {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: 9px;
+  object-fit: contain;
+}
+.stack-study-mark {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: var(--surface);
+}
+.stack-study-mark svg {
+  width: 22px;
+  height: 22px;
+}
+.stack-study-identity img.stack-study-bayn-logo {
+  padding: 4px;
+  background: #fffefa;
+  border-radius: 4px;
+}
+.stack-study-identity h3 {
+  font-size: clamp(26px, 2.7vw, 38px);
+  font-weight: 500;
+  line-height: 1.4;
+}
+.stack-study-identity bdi {
+  margin-inline-start: auto;
+  font: 10px var(--mono);
+  color: var(--muted);
+}
+.stack-study-description > p {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--muted);
+}
+.stack-study-role {
+  border-inline-start: 1px solid var(--hair);
+  padding-inline-start: 28px;
+}
+.stack-study-role > span {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 9px;
+}
+.stack-study-role > p {
+  font-size: 13px;
+  line-height: 1.85;
+}
+.stack-study-bottom {
+  --tech-size: 34px;
+  --tech-more-size: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  border-top: 1px solid var(--hair);
+  padding: 16px 28px;
+}
+.stack-study-tools {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  flex-wrap: nowrap;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.stack-study-bottom li {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--tech-size);
+  height: var(--tech-size);
+}
+.stack-study-bottom img {
+  width: var(--tech-size);
+  height: var(--tech-size);
+  object-fit: contain;
+}
+.stack-study-bottom .stack-study-more {
+  width: var(--tech-more-size);
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+:root[data-theme="dark"] .stack-study-bottom [data-brand="Vercel"] img {
+  filter: invert(1);
+}
+.stack-study-open {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 44px;
+  flex: none;
+  font-size: 13px;
+}
+.stack-study-open svg {
+  width: 22px;
+  height: 22px;
+}
+@keyframes stack-image-loop {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not([data-input-mode="keyboard"])
+      .stack-study-flow[data-ready="true"]
+      .stack-study-card:not(:last-child)
+      .stack-study-surface {
+      animation: stack-recede linear both;
+      animation-timeline: var(--next-project);
+      animation-range: entry 0% entry 100%;
+    }
+    .stack-study-heading {
+      view-timeline: --project-heading block;
+    }
+    .stack-study-heading h2 > span {
+      animation: stack-title-clarify linear both;
+      animation-timeline: --project-heading;
+      animation-range: entry 0% entry 45%;
+    }
+  }
+}
+@keyframes stack-recede {
+  to {
+    transform: scale(0.95);
+  }
+}
+@keyframes stack-title-clarify {
+  from {
+    opacity: 0.18;
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+html[data-input-mode="keyboard"] .stack-study-flow .stack-study-card {
+  position: relative;
+  top: auto;
+}
+html[data-input-mode="keyboard"] .stack-study-heading h2 > span {
+  animation: none;
+}
+@media (max-width: 640px) {
+  .stack-study-heading {
+    gap: 8px;
+  }
+  .stack-study-heading h2 {
+    font-size: clamp(22px, 6.25vw, 36px);
+  }
+  .stack-study-heading > span {
+    font-size: 9px;
+    padding-top: 0;
+  }
+  .stack-study-surface {
+    height: auto;
+    grid-template-rows: auto clamp(180px, 32svh, 300px) auto;
+    border-radius: 18px;
+  }
+  .stack-study-art {
+    padding-block: 16px;
+  }
+  .stack-study-image-group {
+    gap: 14px;
+    padding-right: 14px;
+  }
+  .stack-study-image-group img {
+    border-radius: 12px;
+  }
+  .stack-study-summary {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    padding: 18px;
+  }
+  .stack-study-identity {
+    gap: 10px;
+  }
+  .stack-study-identity h3 {
+    font-size: 26px;
+  }
+  .stack-study-identity img {
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+  }
+  .stack-study-description > p {
+    font-size: 12px;
+    margin-top: 8px;
+  }
+  .stack-study-role {
+    border-inline-start: 0;
+    padding-inline-start: 0;
+  }
+  .stack-study-role > span {
+    margin-bottom: 4px;
+  }
+  .stack-study-role > p {
+    font-size: 11px;
+    line-height: 1.75;
+  }
+  .stack-study-bottom {
+    --tech-size: 28px;
+    --tech-more-size: 20px;
+    gap: 12px;
+    padding: 12px 18px;
+  }
+  .stack-study-tools {
+    gap: 10px;
+  }
+  .stack-study-open {
+    gap: 8px;
+    font-size: 11px;
+    min-height: 44px;
+  }
+  .stack-study-open svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stack-study-flow[data-ready="true"] .stack-study-card {
+    position: relative;
+    top: auto;
+  }
+  .stack-study-flow {
+    gap: 32px;
+    padding-bottom: 0;
+  }
+  .stack-study-track {
+    animation: none;
+  }
+  .stack-study-art {
+    overflow-x: auto;
+  }
+  .stack-study-image-group + .stack-study-image-group {
+    display: none;
+  }
+}

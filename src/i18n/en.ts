@@ -4,7 +4,7 @@ export const en = {
     description:
       "Portfolio of Ziyad Jaber Alhdriti, Software Engineering student and full-stack and mobile application engineer in Makkah, Saudi Arabia.",
     ogDescription:
-      "Full-stack and mobile engineering portfolio, written as a specification document.",
+      "Selected software projects by Ziyad Alhdriti. Web and mobile experiences, built with care.",
   },
 
   localeSwitch: {
@@ -56,168 +56,111 @@ export const en = {
   },
 
   spec: {
-    eyebrowSpec: "Personal specification",
-    eyebrowControlled: "Controlled copy",
-    theme: { switchToDark: "DARK", switchToLight: "LIGHT" },
-    railHeading: "Clause index",
-    rail: {
-      s0: { label: "Preface", sub: "(Introduction)" },
-      s1: { label: "Scope", sub: "(Approach & Status)" },
-      s2: { label: "Context", sub: "(Experience & Journey)" },
-      s3: { label: "Interfaces", sub: "(Skills & Tech Stack)" },
-      s4: { label: "Requirements", sub: "(Projects)" },
-      s5: { label: "Verification", sub: "(Record & Résumé)" },
-      s6: { label: "Conformance demo", sub: "(Digital Twin)" },
-      s7: { label: "Change requests", sub: "(Contact & Socials)" },
+    navigation: "Main navigation",
+    theme: {
+      switchToDark: "Dark mode",
+      switchToLight: "Light mode",
     },
     hero: {
       name: "Ziyad Jaber Alhdriti",
-      subtitle:
-        "Software Engineering student, full-stack and mobile application engineer. Makkah, Saudi Arabia.",
-      mast: {
-        statusLabel: "Status",
-        statusValue: "Open to work",
-        gpaLabel: "GPA",
-        graduationLabel: "Graduation",
-        volunteerLabel: "Volunteer hours",
-        effectiveLabel: "Effective",
-        effectiveValue: "Sept 2026",
-      },
-      intro1:
-        "My name is Ziyad. I study software engineering in Makkah, and most of my day goes into turning vague requirements into things that actually run. So instead of another page telling you I am passionate about technology, I wrote myself the way I write a system: numbered clauses, a stated scope, and acceptance criteria you can check.",
-      intro2Pre:
-        "Every part of this document has a clause number. Hover any reference like ",
-      intro2Post:
-        " and it opens right where you are, so you never lose your place.",
-      abstract: {
-        eyebrow: "Abstract",
-        body: "Eight clauses is more than most visitors have time for. The Digital Twin has read all of them.",
-        cta: "Open the chat",
-      },
+      shortName: "Ziyad",
+      firstName: "Ziyad",
+      lastName: "Alhdriti",
+      intro: "I understand ideas and build experiences",
+      introLead: "I understand ideas",
+      introStrong: "and build experiences",
+      greeting: "Hello, I’m",
+      role: "Web & mobile development",
+      explore: "Explore projects",
+      sceneDescription:
+        "An artistic composite inspired by archival photographs of Makkah, the Holy Mosque and rawashin, with a digital color treatment.",
+      sceneCaption:
+        "Old Makkah, an artistic composite with a digital treatment",
+      note: "For web and mobile, from the first idea to an app that feels easy to use.",
+      available: "Open to opportunities",
+      location: "Makkah, Saudi Arabia",
     },
     s1: {
-      heading: "Scope",
-      purposeTitle: "Purpose",
-      purposeBody:
-        "I am a Software Engineering student who builds full-stack products end to end — web platforms on Next.js and Supabase, mobile apps in Flutter and Swift. I work where architecture meets user impact: defining the requirement, shaping the system design, shipping a production-ready feature, and proving it holds with tests.",
-      growthTitle: "Engineering Mindset & Growth",
-      growthIntro:
-        "How I work, stated up front, because the stack will change and the way you approach it will not.",
-      growthItems: [
-        {
-          title: "Rapid learning",
-          body: "I pick up a new framework when the problem calls for it, not when it trends. Swift and SwiftUI for an iOS prototype, Next.js and Supabase for a live event platform — each one was learned against a real deadline and a real user.",
-        },
-        {
-          title: "Production readiness",
-          body: "Security and correctness are part of the feature, not a later pass. Access rules live in the database with Postgres Row Level Security so bypassing the UI changes nothing, and pgTAP and Vitest keep those rules honest as the schema moves.",
-        },
-        {
-          title: "User-centric execution",
-          body: "I turn operational requirements into products people can actually use — an event flow that works in Arabic first, a greeting card that still saves when the venue Wi-Fi drops. Shipped and used beats elegant and theoretical.",
-        },
-      ],
-      definitionsTitle: "Definitions",
-      definitions: [
-        {
-          term: "Shipped",
-          def: "It runs, and somebody other than me has used it.",
-        },
-        {
-          term: "In active development",
-          def: "It partly runs, and I am working on it this week.",
-        },
-        {
-          term: "Prototype",
-          def: "I wrote it myself to learn, then fixed it when it broke.",
-        },
-      ],
+      heading: "About",
+      intro: "From understanding the idea to building the experience",
+      body: "Software Engineering student at Umm Al-Qura University. I build web and mobile apps, turning requirements into clear, considered experiences.",
     },
     s2: {
-      heading: "Context",
-      seeFullPre: "Specified in full at ",
+      heading: "Education & experience",
     },
     s3: {
-      heading: "Interfaces",
-      introPre:
-        "Listed by what I have actually built with, not what I have read about. Most of these came out of ",
-      categories: {
-        web: "Web",
-        mobile: "Mobile",
-        backend: "Backend",
-        data: "Data",
-        quality: "Quality",
-        process: "Process",
-      },
+      heading: "Tools I work with",
     },
     s4: {
-      heading: "Requirements",
-      acceptanceCriteria: "Acceptance criteria",
-      dependencies: "Dependencies",
+      heading: "Projects",
+      displayHeading: "Projects I built or helped build",
+      eyebrow: "Projects I build and contribute to",
+      details: "Explore project",
+      back: "All projects",
+      navigation: "Project navigation",
+      problem: "The idea",
+      role: "My role",
+      outcome: "The result",
+      process: "How I built it",
+      challenge: "The challenge",
+      decision: "A decision behind the experience",
+      dependencies: "Built with",
+      engineering: "Behind the interface",
+      next: "Next project",
+      screens: "Inside the app",
+      weddingScreensIntro: "From a personal message to a greeting card.",
+      waslScreensIntro: "From booking a service to managing the platform.",
+      screenIntro: "A simple entry. A clearer picture of your day.",
+      screenLabels: ["Today", "Bottle tracking", "History", "Reminders"],
       statusLabels: {
-        activeDevelopment: "In active development",
-        liveEvent: "Shipped for a live event",
+        completed: "Completed",
+        activeDevelopment: "In development",
+        liveEvent: "Used at a real event",
         graduation: "Graduation project",
-        prototype: "iOS prototype",
+        prototype: "Prototype",
+      },
+      irtiwa: {
+        eyebrow: "A detail from the experience",
+        name: "Irtiwa",
+        tagline: "Every sip, a little closer.",
+        scroll: "Scroll to fill the cup",
+        details: "Meet the app",
+        artworkLabel:
+          "The original Irtiwa bottle and cup, pouring water as you scroll.",
+        screenLabel: "The bottle tracking screen in Irtiwa",
+        screenCaption: "From the app",
+        title: "One sip. Then another.",
+        body: "Water logging and bottle tracking, at your pace.",
       },
     },
     s5: {
-      heading: "Verification",
-      evidenceTitle: "Evidence record",
-      evidenceIntro:
-        "Every number in this document can be traced to a source. This is the source.",
-      tableItem: "Item",
-      tableValue: "Value",
-      tableMethod: "Method",
-      rowGpaMethod: "Umm Al-Qura transcript",
-      rowGraduationLabel: "Expected graduation",
-      rowGraduationMethod: "Registered study plan",
-      rowVolunteerMethod: "National Volunteering Platform log",
-      rowLocationLabel: "Location",
-      rowLocationMethod: "On site, or remote on Riyadh time",
-      annexTitle: "Annex A — Résumé",
-      annexBody:
-        "One page, PDF. The same facts as this document, in the format an applicant tracking system expects.",
+      heading: "Résumé",
+      pageCount: "One page",
+      previewAlt: "Preview of Ziyad Alhdriti’s résumé",
+      annexTitle: "My experience, on one page",
+      annexBody: "Education and experience, in one file.",
       annexView: "View résumé",
       annexDownload: "Download PDF",
       annexClose: "Close",
       annexOpenTab: "Open in a new tab",
     },
     s6: {
-      heading: "Conformance demo",
-      title: "Digital Twin",
-      intro:
-        "I built it to answer for my background and projects in the language of the page itself. Replies are composed on the spot, so the same wording will not come back twice.",
+      title: "Digital twin",
+      open: "My digital twin",
+      close: "Close chat",
     },
     s7: {
-      heading: "Change requests",
-      headline:
-        "The fastest path to a new revision of this document is a message from you.",
-      subtext:
-        "I read every message, and I reply in Arabic or English, whichever you write in.",
+      heading: "Start a conversation",
+      headline: "An idea in mind?\nLet’s make it happen.",
+      contact: "Let’s talk",
+      whatsapp: "Talk on WhatsApp",
       emailLabel: "Email",
-      phoneLabel: "Phone",
     },
     footer: {
-      end: "End of document — SPEC-2026 / Rev 4.0",
-      prepared: "Prepared in Makkah",
-      backTo0: "Back to §0",
-    },
-    cover: {
-      kicker: "Software Requirements Specification",
-      title: "Ziyad’s Personal Specification",
-      subtitle: "SRS Report",
-      dept: "Department of Software Engineering",
-      location: "Makkah, Saudi Arabia",
-      month: "September 2026",
-      blurb:
-        "A software engineering portfolio structured as an official specification document: every section a clause, every project a requirement with acceptance criteria.",
-      colId: "Document ID",
-      colDate: "Date",
-      colVersion: "Version",
-      colStatus: "Status",
-      statusValue: "Released",
-      hint: "Click anywhere to open",
+      navigation: "Explore",
+      contact: "Contact",
+      prepared: "Made in Makkah",
+      backTo0: "Back to top",
     },
   },
-} as const;
+};

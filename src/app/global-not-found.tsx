@@ -1,13 +1,10 @@
-import {
-  Archivo,
-  Cairo,
-  IBM_Plex_Mono,
-  Source_Serif_4,
-  Tajawal,
-} from "next/font/google";
+import { Archivo, IBM_Plex_Mono, Source_Serif_4 } from "next/font/google";
 
+import { arabic, arabicDisplay, arabicText } from "@/app/fonts/arabic";
 import { DEFAULT_LOCALE, LOCALE_DIR } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
+import { THEME_BOOT_SCRIPT } from "@/lib/theme";
+import Script from "next/script";
 
 import "./globals.css";
 
@@ -32,20 +29,6 @@ const plexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
-const cairo = Cairo({
-  subsets: ["arabic", "latin"],
-  weight: ["600", "800"],
-  variable: "--font-cairo",
-  display: "swap",
-});
-
-const tajawal = Tajawal({
-  subsets: ["arabic", "latin"],
-  weight: ["400"],
-  variable: "--font-tajawal",
-  display: "swap",
-});
-
 /**
  * Rendered for any unmatched route. The app has no root layout (it lives in
  * [locale]), so this must emit the whole document itself.
@@ -57,20 +40,19 @@ export default function GlobalNotFound() {
     <html
       lang={DEFAULT_LOCALE}
       dir={LOCALE_DIR[DEFAULT_LOCALE]}
-      className={`${archivo.variable} ${sourceSerif.variable} ${plexMono.variable} ${cairo.variable} ${tajawal.variable}`}
+      suppressHydrationWarning
+      className={`${archivo.variable} ${sourceSerif.variable} ${plexMono.variable} ${arabic.variable} ${arabicDisplay.variable} ${arabicText.variable}`}
     >
       <body>
-        <main className="flex min-h-screen items-center justify-center bg-base px-6 text-slate-100">
-          <div className="max-w-lg rounded-3xl border border-white/10 bg-white/5 p-8 text-center">
+        <Script id="boot" strategy="beforeInteractive">
+          {THEME_BOOT_SCRIPT}
+        </Script>
+        <main className="route-state page-width">
+          <div>
             <p className="eyebrow">{content.eyebrow}</p>
-            <h1 className="mt-3 text-3xl font-semibold text-white">
-              {content.title}
-            </h1>
-            <p className="mt-4 text-slate-300">{content.body}</p>
-            <a
-              href={`/${DEFAULT_LOCALE}`}
-              className="button-primary mt-6 inline-flex"
-            >
+            <h1>{content.title}</h1>
+            <p>{content.body}</p>
+            <a href={`/${DEFAULT_LOCALE}`} className="contact-button">
               {content.cta}
             </a>
           </div>

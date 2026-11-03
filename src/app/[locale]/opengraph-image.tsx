@@ -1,41 +1,11 @@
 import { ImageResponse } from "next/og";
-
-import { personalInfo } from "@/data/portfolio";
+import { galleryProjects } from "@/data/portfolio";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "Ziyad Jaber Alhdriti — Software Engineer";
+export const alt = "Ziyad Alhdriti — Selected work";
 
-const ACCENT = "#ff5f45";
-const INK = "#f7f6f4";
-const MUTED = "#bcb9b5";
-const RULE = "rgba(247,246,244,.66)";
-const HAIR = "rgba(247,246,244,.24)";
-
-const label = {
-  display: "flex",
-  fontSize: 17,
-  letterSpacing: "0.14em",
-  textTransform: "uppercase",
-  color: MUTED,
-} as const;
-
-/**
- * The card is the document's masthead: same clause framing, rules and
- * status strip as clause §0, so a shared link looks like the page it opens.
- *
- * Latin-only for both locales on purpose: Satori does no system font
- * fallback, so Arabic glyphs would require shipping a font binary, and the
- * name carries the value in a social card either way.
- */
 export default function OpenGraphImage() {
-  const mast = [
-    { k: "Status", v: "Open to work", accent: true },
-    { k: "GPA", v: personalInfo.gpa },
-    { k: "Graduation", v: personalInfo.expectedGraduation },
-    { k: "Based in", v: "Makkah, SA" },
-  ];
-
   return new ImageResponse(
     <div
       style={{
@@ -43,103 +13,51 @@ export default function OpenGraphImage() {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        background: "#0e0e0d",
+        justifyContent: "space-between",
+        background: "#f8f8f5",
+        color: "#242724",
         padding: "56px 64px",
       }}
     >
-      <div style={{ display: "flex", alignItems: "baseline", gap: 24 }}>
-        <div style={{ ...label, color: ACCENT }}>SPEC-2026 / REV 4.0</div>
-        <div style={label}>Personal specification</div>
-      </div>
-
-      <div
-        style={{ display: "flex", height: 2, background: RULE, marginTop: 22 }}
-      />
-
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
-          flex: 1,
-          justifyContent: "center",
+          justifyContent: "space-between",
+          alignItems: "center",
+          fontSize: 20,
         }}
       >
+        <span>ZIYAD / SELECTED WORK</span>
+        <span style={{ color: "#74766f" }}>MAKKAH, SA · 2026</span>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
         <div
           style={{
             display: "flex",
-            fontSize: 92,
-            fontWeight: 800,
-            letterSpacing: "-0.035em",
-            color: INK,
-            lineHeight: 1,
+            fontSize: 98,
+            fontWeight: 600,
+            letterSpacing: "-.05em",
           }}
         >
-          Ziyad Jaber Alhdriti
+          Ziyad Alhdriti.
         </div>
-        <div
-          style={{
-            display: "flex",
-            marginTop: 22,
-            fontSize: 34,
-            color: MUTED,
-            letterSpacing: "-0.01em",
-          }}
-        >
-          Software Engineering student, full-stack &amp; mobile engineer
-        </div>
-        <div
-          style={{
-            display: "flex",
-            marginTop: 26,
-            gap: 14,
-            fontSize: 24,
-            color: ACCENT,
-          }}
-        >
-          <div style={{ display: "flex" }}>Next.js</div>
-          <div style={{ display: "flex", color: HAIR }}>/</div>
-          <div style={{ display: "flex" }}>Supabase</div>
-          <div style={{ display: "flex", color: HAIR }}>/</div>
-          <div style={{ display: "flex" }}>Flutter</div>
-          <div style={{ display: "flex", color: HAIR }}>/</div>
-          <div style={{ display: "flex" }}>Swift</div>
+        <div style={{ display: "flex", fontSize: 32, color: "#74766f" }}>
+          Ideas, made into experiences.
         </div>
       </div>
-
-      <div style={{ display: "flex", height: 2, background: RULE }} />
-      <div style={{ display: "flex" }}>
-        {mast.map((cell, i) => (
-          <div
-            key={cell.k}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              flex: 1,
-              padding: "20px 24px",
-              paddingLeft: i === 0 ? 0 : 24,
-              borderLeft: i === 0 ? "none" : `1px solid ${HAIR}`,
-            }}
-          >
-            <div style={{ ...label, fontSize: 15 }}>{cell.k}</div>
-            <div
-              style={{
-                display: "flex",
-                marginTop: 10,
-                fontSize: 24,
-                color: cell.accent ? ACCENT : INK,
-              }}
-            >
-              {cell.v}
-            </div>
-          </div>
+      <div
+        style={{
+          display: "flex",
+          gap: 36,
+          paddingTop: 26,
+          borderTop: "1px solid #dedfd8",
+          fontSize: 20,
+          color: "#74766f",
+        }}
+      >
+        {galleryProjects.map((project) => (
+          <span key={project.slug}>{project.name.en}</span>
         ))}
-      </div>
-      <div style={{ display: "flex", height: 2, background: RULE }} />
-
-      <div style={{ ...label, marginTop: 20, gap: 20 }}>
-        <div style={{ display: "flex" }}>{personalInfo.githubDisplay}</div>
-        <div style={{ display: "flex", color: HAIR }}>|</div>
-        <div style={{ display: "flex" }}>{personalInfo.linkedinDisplay}</div>
       </div>
     </div>,
     size,
