@@ -20,10 +20,15 @@ describe("portfolio data", () => {
   it("translates every project field into both locales", () => {
     const gaps = projects.flatMap((p) => [
       ...missingLocales(p.title, `${p.slug}.title`),
+      ...missingLocales(p.name, `${p.slug}.name`),
+      ...missingLocales(p.tagline, `${p.slug}.tagline`),
       ...missingLocales(p.kind, `${p.slug}.kind`),
       ...missingLocales(p.period, `${p.slug}.period`),
       ...missingLocales(p.summary, `${p.slug}.summary`),
       ...missingLocales(p.highlights, `${p.slug}.highlights`),
+      ...Object.entries(p.caseStudy).flatMap(([field, value]) =>
+        missingLocales(value, `${p.slug}.caseStudy.${field}`),
+      ),
     ]);
     expect(gaps).toEqual([]);
   });

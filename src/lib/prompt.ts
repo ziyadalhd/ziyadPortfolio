@@ -14,6 +14,12 @@ const projectFacts = projects
     [
       `- ${project.title.en} (${project.period.en}, ${project.kind.en})`,
       `  Summary: ${project.summary.en}`,
+      `  Problem: ${project.caseStudy.problem.en}`,
+      `  My role: ${project.caseStudy.role.en}`,
+      `  Outcome: ${project.caseStudy.outcome.en}`,
+      `  Challenge: ${project.caseStudy.challenge.en}`,
+      `  Decision: ${project.caseStudy.decision.en}`,
+      ...project.caseStudy.process.en.map((step) => `  Process: ${step}`),
       `  Stack: ${project.stack.join(", ")}`,
       ...project.highlights.en.map((highlight) => `  Work: ${highlight}`),
     ].join("\n"),

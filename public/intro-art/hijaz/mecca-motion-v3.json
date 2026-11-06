@@ -1,0 +1,11 @@
+{
+  "source": "User-provided ASCII Magic exports, 3 November 2026",
+  "posterOriginal": "ascii-magic-4.png",
+  "poster": "mecca-motion-poster-v3.webp",
+  "posterSize": [3962, 1588],
+  "videoOriginal": "ascii-animation-3.mp4",
+  "video": "mecca-ascii-motion-v3.mp4",
+  "mobileVideo": "mecca-ascii-motion-v3-mobile.mp4",
+  "processing": "Poster converted to WebP at quality 94 without resizing; mobile video transcoded locally with macOS AVFoundation Preset1920x1080. Desktop video is the supplied file.",
+  "composition": "Additional sky supplied by the user; taller responsive image frame with text below."
+}
